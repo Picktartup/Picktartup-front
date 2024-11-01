@@ -29,7 +29,7 @@ input:checked.defaultCheckbox::before {
 }
 
 @font-face {
-  font-family: "Pretendard-Regular";
-  font-weight: normal;
-  src: url("./assets/fonts/Pretendard-Regular.otf") format("truetype");
+  	font-family: "Pretendard-Regular";
+  	font-weight: normal;
+  	src: url("./assets/fonts/Pretendard-Regular.otf") format("truetype");
 }
