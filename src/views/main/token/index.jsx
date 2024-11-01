@@ -1,5 +1,3 @@
-import CheckTable from "./components/CheckTable";
-
 import {
   columnsDataDevelopment,
   columnsDataCheck,
@@ -13,10 +11,17 @@ import tableDataComplex from "./variables/tableDataComplex.json";
 import DevelopmentTable from "./components/DevelopmentTable";
 import ColumnsTable from "./components/ColumnsTable";
 import ComplexTable from "./components/ComplexTable";
+import CheckTable from "./components/CheckTable";
+import Menubar from "components/menubar";
 
 const Tables = () => {
   return (
     <div>
+      {/* menu bar 추가하기 */}
+      <div className="mt-5">
+        <Menubar />
+      </div>
+
       <div className="mt-5 grid h-full grid-cols-1 gap-5 md:grid-cols-2">
         <DevelopmentTable
           columnsData={columnsDataDevelopment}
