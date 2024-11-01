@@ -1,10 +1,10 @@
 import React from "react";
 
-// Admin Imports
-import MainDashboard from "views/admin/default";
-import NFTMarketplace from "views/admin/investment";
-import Profile from "views/admin/history";
-import DataTables from "views/admin/token";
+// Main Imports
+import MainDashboard from "views/main/default";
+import NFTMarketplace from "views/main/investment";
+import Profile from "views/main/history";
+import DataTables from "views/main/token";
 import RTLDefault from "views/rtl/default";
 
 // Auth Imports
@@ -22,14 +22,14 @@ import {
 const routes = [
   {
     name: "",
-    layout: "/admin",
+    layout: "/main",
     path: "default",
     icon: <MdHome className="h-6 w-6" />,
     component: <MainDashboard />,
   },
   {
     name: "스타트업 투자",
-    layout: "/admin",
+    layout: "/main",
     path: "investment",
     icon: <MdOutlineShoppingCart className="h-6 w-6" />,
     component: <NFTMarketplace />,
@@ -37,14 +37,14 @@ const routes = [
   },
   {
     name: "My 토큰",
-    layout: "/admin",
+    layout: "/main",
     icon: <MdBarChart className="h-6 w-6" />,
     path: "token",
     component: <DataTables />,
   },
   {
     name: "투자 내역",
-    layout: "/admin",
+    layout: "/main",
     path: "history",
     icon: <MdPerson className="h-6 w-6" />,
     component: <Profile />,

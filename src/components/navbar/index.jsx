@@ -22,7 +22,7 @@ const Navbar = (props) => {
         <div className="ml-[6px]">
           <p className="shrink text-[33px] capitalize text-navy-700 dark:text-white">
             <Link
-              to="/admin"
+              to="/main"
               className="font-bold capitalize hover:text-navy-700 dark:hover:text-white"
             >
               PicktartUp
@@ -34,7 +34,7 @@ const Navbar = (props) => {
           <div className="ml-[80px]">
             <p className="shrink text-[20px] capitalize text-navy-700 dark:text-white">
               <Link
-                to="/admin/investment"
+                to="/main/investment"
                 className={`font-KR font-bold capitalize hover:text-navy-700 dark:hover:text-white ${
                   brandText === "스타트업 투자" ? "text-navy-700" : "text-[#7885ad]"
                 }`}
@@ -46,7 +46,7 @@ const Navbar = (props) => {
           <div className="ml-[56px]">
             <p className="shrink text-[20px] capitalize text-navy-700 dark:text-white">
               <Link
-                to="/admin/token"
+                to="/main/token"
                 className={`font-KR font-bold capitalize hover:text-navy-700 dark:hover:text-white ${
                   brandText === "My 토큰" ? "text-navy-700" : "text-[#7885ad]"
                 }`}
@@ -58,7 +58,7 @@ const Navbar = (props) => {
           <div className="ml-[56px]">
             <p className="shrink text-[20px] capitalize text-navy-700 dark:text-white">
               <Link
-                to="/admin/history"
+                to="/main/history"
                 className={`font-KR font-bold capitalize hover:text-navy-700 dark:hover:text-white ${
                   brandText === "투자 내역" ? "text-navy-700" : "text-[#7885ad]"
                 }`}
