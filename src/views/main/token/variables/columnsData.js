@@ -38,20 +38,20 @@ export const columnsDataCheck = [
 
 export const columnsDataColumns = [
   {
-    Header: "NAME",
-    accessor: "name",
-  },
-  {
-    Header: "PROGRESS",
-    accessor: "progress",
-  },
-  {
-    Header: "QUANTITY",
-    accessor: "quantity",
-  },
-  {
-    Header: "DATE",
+    Header: "구매 날짜",
     accessor: "date",
+  },
+  {
+    Header: "구매 토큰",
+    accessor: "token",
+  },
+  {
+    Header: "결제 금액",
+    accessor: "money",
+  },
+  {
+    Header: "결제처",
+    accessor: "pg",
   },
 ];
 
