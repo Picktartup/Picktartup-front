@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Card from "components/card";
 
 const Menubar = ({ onSelectMenu }) => {
-  const [selectedMenu, setSelectedMenu] = useState(null);
+  const [selectedMenu, setSelectedMenu] = useState("purchase");
 
   const handleMenuClick = (menu) => {
     setSelectedMenu(menu);
