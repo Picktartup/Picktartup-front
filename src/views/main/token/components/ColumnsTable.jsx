@@ -20,44 +20,48 @@ function ColumnsTable(props) {
     columnHelper.accessor("date", {
       id: "date",
       header: () => (
-        <p className="text-sm font-bold text-gray-600 dark:text-white">DATE</p>
+        <p className="font-KR text-sm font-bold text-gray-600 dark:text-white">구매 날짜</p>
       ),
-      cell: (info) => (
-        <p className="text-sm font-bold text-navy-700 dark:text-white">
-          {info.getValue()}
-        </p>
-      ),
-    }),
+      cell: (info) => {
+        const date = new Date(info.getValue());
+        const formattedDate = date.toISOString().split("T")[0]; // 날짜만 추출
+        return (
+          <p className="text-sm font-bold text-navy-700 dark:text-white">
+            {formattedDate}
+          </p>
+        );
+      },
+    }),    
     columnHelper.accessor("type", {
       id: "type",
       header: () => (
-        <p className="text-sm font-bold text-gray-600 dark:text-white">TYPE</p>
+        <p className="font-KR text-sm font-bold text-gray-600 dark:text-white">거래 유형</p>
       ),
       cell: (info) => (
         <p className="text-sm font-bold text-navy-700 dark:text-white">
-          {info.getValue()}
+          {info.getValue() === "PAYMENT" ? "결제" : "현금화"}
         </p>
       ),
     }),
     columnHelper.accessor("token", {
       id: "token",
       header: () => (
-        <p className="text-sm font-bold text-gray-600 dark:text-white">TOKEN</p>
+        <p className="font-KR text-sm font-bold text-gray-600 dark:text-white">거래 토큰</p>
       ),
       cell: (info) => (
         <p className="text-sm font-bold text-navy-700 dark:text-white">
-          {info.getValue()}
+          {info.getValue()} <span className="pl-1">PCK</span>
         </p>
       ),
     }),
     columnHelper.accessor("balance", {
       id: "balance",
       header: () => (
-        <p className="text-sm font-bold text-gray-600 dark:text-white">BALANCE</p>
+        <p className="font-KR text-sm font-bold text-gray-600 dark:text-white">잔액</p>
       ),
       cell: (info) => (
         <p className="text-sm font-bold text-navy-700 dark:text-white">
-          {info.getValue()}
+          {info.getValue()} <span className="pl-1">PCK</span>
         </p>
       ),
     }),
