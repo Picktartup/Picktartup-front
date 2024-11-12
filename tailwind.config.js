@@ -4,6 +4,16 @@ module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {
+      animation: {
+        'bounce-slow': 'bounce-slow 6s infinite',
+      },
+      keyframes: {
+        'bounce-slow': {
+          '0%, 100%': { transform: 'translateY(-10%)' },
+          '50%': { transform: 'translateY(10%)' },
+        },
+      },
+
       width: {
         "1p": "1%",
         "2p": "2%",
