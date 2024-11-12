@@ -41,7 +41,7 @@ const StartupInvestment = () => {
       {/* 검색바와 타이틀 */}
       <div className="flex flex-col mb-8">
         <h2 className="text-3xl font-bold text-navy-700 dark:text-white mb-4 self-start">
-          스타트업 리스트
+          Startup List
         </h2>
 
         <div className="flex w-full justify-center">
