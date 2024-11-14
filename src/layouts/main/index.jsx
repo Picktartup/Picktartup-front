@@ -1,7 +1,6 @@
 import React from "react";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import Navbar from "components/navbar";
-// import Sidebar from "components/sidebar";
 import Footer from "components/footer/Footer";
 import routes from "routes.js";
 
@@ -59,9 +58,8 @@ export default function Admin(props) {
   document.documentElement.dir = "ltr";
   return (
     <div className="flex h-full w-full">
-      {/* <Sidebar open={open} onClose={() => setOpen(false)} />  */}
       {/* Navbar & Main Content */}
-      <div className="h-full w-full bg-lightPrimary dark:!bg-navy-900">
+      <div className="font-pretendard h-full w-full bg-white dark:!bg-navy-900">
         {/* Main Content */}
         <main
           className={`mx-[56px] h-full flex-none transition-all md:pr-2`}
