@@ -13,7 +13,7 @@ import { FaSort, FaSortUp, FaSortDown } from "react-icons/fa";
 
 const columnHelper = createColumnHelper();
 
-function ActiveInvest(props) {
+function CompletedInvest(props) {
   const { tableTitle, tableData } = props;
   const [sorting, setSorting] = useState([{ id: "contractAt", desc: true }]);
   const [pageSize, setPageSize] = useState(10);
@@ -24,7 +24,7 @@ function ActiveInvest(props) {
       id: "contractAt",
       header: ({ column }) => (
         <div className="flex items-center justify-center gap-2">
-          <p className="text-sm font-bold text-gray-600 dark:text-white">투자 날짜</p>
+          <p className="text-sm font-bold text-gray-600 dark:text-white">완료 날짜</p>
           {column.getIsSorted() === "desc" ? (
             <FaSortDown className="text-violet-500" />
           ) : column.getIsSorted() === "asc" ? (
@@ -68,7 +68,7 @@ function ActiveInvest(props) {
       id: "tokenAmount",
       header: ({ column }) => (
         <div className="flex items-center justify-center gap-2">
-          <p className="text-sm font-bold text-gray-600 dark:text-white">투자 토큰 수량</p>
+          <p className="text-sm font-bold text-gray-600 dark:text-white">반환 토큰 수량</p>
           {column.getIsSorted() === "desc" ? (
             <FaSortDown className="text-violet-500" />
           ) : column.getIsSorted() === "asc" ? (
@@ -104,22 +104,22 @@ function ActiveInvest(props) {
           <div className="flex items-center justify-center">
             <p
               className={`px-3 py-1 rounded-full text-sm font-bold text-center
-                ${status === "ACTIVE"
-                  ? "bg-violet-100 text-violet-700"
-                  : "bg-green-100 text-green-700"
+                ${status === "COMPLETED"
+                  ? "bg-blue-100 text-blue-700"
+                  : "bg-gray-100 text-gray-700"
                 }`}
             >
-              {status === "ACTIVE" ? "진행 중" : "모금 중"}
+              {status === "COMPLETED" ? "완료됨" : "취소됨"}
             </p>
           </div>
         );
       },
     }),
-    columnHelper.accessor("startupGoalProgress", {
-      id: "startupGoalProgress",
+    columnHelper.accessor("roi", {
+      id: "roi",
       header: ({ column }) => (
         <div className="flex items-center justify-center gap-2">
-          <p className="text-sm font-bold text-gray-600 dark:text-white">목표 진행률</p>
+          <p className="text-sm font-bold text-gray-600 dark:text-white">수익률</p>
           {column.getIsSorted() === "desc" ? (
             <FaSortDown className="text-violet-500" />
           ) : column.getIsSorted() === "asc" ? (
@@ -237,4 +237,4 @@ function ActiveInvest(props) {
   );
 }
 
-export default ActiveInvest;
+export default CompletedInvest;

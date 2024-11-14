@@ -1,0 +1,107 @@
+[
+  {
+    "contractAt": "2024-01-02T10:00:00",
+    "tokenAmount": 5.5,
+    "contractStatus": "ACTIVE",
+    "startupName": "나인에이엠",
+    "startupGoalProgress": 40
+  },
+  {
+    "contractAt": "2024-01-16T14:30:00",
+    "tokenAmount": 10.0,
+    "contractStatus": "ACTIVE",
+    "startupName": "레브잇",
+    "startupGoalProgress": 40
+  },
+  {
+    "contractAt": "2024-02-10T09:00:00",
+    "tokenAmount": 7.2,
+    "contractStatus": "ACTIVE",
+    "startupName": "두잇",
+    "startupGoalProgress": 60
+  },
+  {
+    "contractAt": "2024-03-05T15:00:00",
+    "tokenAmount": 12.5,
+    "contractStatus": "ACTIVE",
+    "startupName": "버킷플레이스",
+    "startupGoalProgress": 80
+  },
+  {
+    "contractAt": "2024-04-01T11:00:00",
+    "tokenAmount": 15.0,
+    "contractStatus": "ACTIVE",
+    "startupName": "뤼튼테크놀로지스",
+    "startupGoalProgress": 100
+  },
+  {
+    "contractAt": "2024-05-03T13:15:00",
+    "tokenAmount": 8.3,
+    "contractStatus": "ACTIVE",
+    "startupName": "에이블랩",
+    "startupGoalProgress": 50
+  },
+  {
+    "contractAt": "2024-06-10T09:45:00",
+    "tokenAmount": 9.0,
+    "contractStatus": "BEGIN",
+    "startupName": "큐브넷",
+    "startupGoalProgress": 30
+  },
+  {
+    "contractAt": "2024-07-14T16:20:00",
+    "tokenAmount": 13.5,
+    "contractStatus": "ACTIVE",
+    "startupName": "트레벨",
+    "startupGoalProgress": 70
+  },
+  {
+    "contractAt": "2024-08-22T08:30:00",
+    "tokenAmount": 6.4,
+    "contractStatus": "ACTIVE",
+    "startupName": "스윗메이트",
+    "startupGoalProgress": 55
+  },
+  {
+    "contractAt": "2024-09-09T10:00:00",
+    "tokenAmount": 20.0,
+    "contractStatus": "BEGIN",
+    "startupName": "제노하우스",
+    "startupGoalProgress": 90
+  },
+  {
+    "contractAt": "2024-10-10T14:50:00",
+    "tokenAmount": 18.2,
+    "contractStatus": "ACTIVE",
+    "startupName": "클린스페이스",
+    "startupGoalProgress": 85
+  },
+  {
+    "contractAt": "2024-11-15T17:05:00",
+    "tokenAmount": 10.6,
+    "contractStatus": "ACTIVE",
+    "startupName": "페이업",
+    "startupGoalProgress": 65
+  },
+  {
+    "contractAt": "2024-12-12T12:30:00",
+    "tokenAmount": 4.0,
+    "contractStatus": "BEGIN",
+    "startupName": "픽스파이",
+    "startupGoalProgress": 25
+  },
+  {
+    "contractAt": "2025-01-08T11:15:00",
+    "tokenAmount": 17.5,
+    "contractStatus": "ACTIVE",
+    "startupName": "해피넷",
+    "startupGoalProgress": 95
+  },
+  {
+    "contractAt": "2025-02-20T10:45:00",
+    "tokenAmount": 11.7,
+    "contractStatus": "ACTIVE",
+    "startupName": "비바톡",
+    "startupGoalProgress": 75
+  }
+]
