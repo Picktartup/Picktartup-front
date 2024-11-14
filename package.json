@@ -2,6 +2,7 @@
   "name": "horizon-ui-tailwind-react",
   "version": "1.1.0",
   "private": true,
+  "proxy": "http://localhost:8080",
   "dependencies": {
     "@chakra-ui/hooks": "^2.1.4",
     "@chakra-ui/modal": "^2.2.9",
@@ -11,6 +12,7 @@
     "@chakra-ui/tooltip": "^2.2.6",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
+    "@portone/browser-sdk": "^0.0.10",
     "@tanstack/react-table": "^8.7.9",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.3.0",

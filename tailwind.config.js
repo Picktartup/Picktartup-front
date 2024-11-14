@@ -1,4 +1,6 @@
 /** @type {import('tailwindcss').Config} */
+const colors = require('tailwindcss/colors')
+
 module.exports = {
   darkMode: "class",
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
@@ -118,7 +120,8 @@ module.exports = {
       fontFamily: {
         poppins: ["Poppins", "sans-serif"],
         dm: ["DM Sans", "sans-serif"],
-        KR: ["KR", "sans-serif"],
+        pretendard: ["Pretendard", "sans-serif"],
+        tenada: ["Tenada", "sans-serif"],
       },
       boxShadow: {
         "3xl": "14px 17px 40px 4px",
@@ -127,6 +130,11 @@ module.exports = {
       },
       borderRadius: {
         primary: "20px",
+      },
+      margin: {
+        '5vw': '5vw',
+        '10vw': '10vw',
+        '15vw': '15vw',
       },
     },
     screens: {
@@ -330,6 +338,7 @@ module.exports = {
         800: "#190793",
         900: "#11047A",
       },
+      violet: colors.violet,
       shadow: {
         500: "rgba(112, 144, 176, 0.08)",
       },
