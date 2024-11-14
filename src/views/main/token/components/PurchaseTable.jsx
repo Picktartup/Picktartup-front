@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Card from "components/card";
-import { FaCoins } from "react-icons/fa";
+import { FaBitcoin } from "react-icons/fa";
 import * as PortOne from "@portone/browser-sdk/v2";
 
 const products = [
@@ -20,8 +20,9 @@ const products = [
 const PurchaseTable = () => {
   const navigate = useNavigate();
 
-  async function requestPayment(amount) {
+  async function requestPayment(coin, price) {
     const paymentId = `payment-${crypto.randomUUID().slice(0, 30)}`;
+    const payMethod = "CARD";
 
     // PortOne에 결제 요청
     const response = await PortOne.requestPayment({
@@ -29,14 +30,14 @@ const PurchaseTable = () => {
       channelKey: process.env.REACT_APP_CHANNEL_KEY,
       paymentId: paymentId,
       orderName: "PCK",
-      totalAmount: amount, // 선택한 결제 금액 
+      totalAmount: price, // 선택한 결제 금액 
       currency: "CURRENCY_KRW",
-      payMethod: "CARD",
+      payMethod: payMethod,
       customer: {          // TODO: 로그인한 유저 정보로 수정
         customerId: 'testId1234',
         fullName: '테스트유저',
         phoneNumber: '010-1234-5678',
-        email: 'test@portone.io',
+        email: 'yummytomato7@gmail.com',
       },
     }); // 응답 - (공통) paymentId: 결제 건 ID, (실패 시) code: 오류 코드, message: 오류 문구
     
@@ -57,8 +58,10 @@ const PurchaseTable = () => {
       // paymentId와 주문 정보를 서버에 전달합니다
       body: JSON.stringify({
         walletId: 1,          // TODO: 로그인한 유저 정보로 수정
+        amount: price,
+        coin: Number(coin),
         paymentId: paymentId,
-        amount: amount
+        paymentMethod: payMethod,
       }),
     });
     
@@ -74,14 +77,8 @@ const PurchaseTable = () => {
   }
   
   return (
-    <Card extra="!flex-row flex items-center justify-center rounded-[20px] py-8 lg:px-12 md:px-8 sm:px-6 py-6">
+    <Card extra="bg-white !flex-row flex items-center justify-center rounded-[20px] pt-2 pb-6 lg:px-12 md:px-8 sm:px-6 py-2">
       <div className="max-w-5xl w-full mx-auto">
-        {/* Banner */}
-        <div className="bg-navy-300 text-white p-6 text-center rounded-lg mb-6 lg:mx-36 md:mx-20 sm:mx-4">
-          <p className="mb-2 font-semibold text-lg flex justify-center items-center space-x-2 whitespace-nowrap">토큰이란?</p>
-          <p className="text-md">원하는 스타트업에게 투자를 할 수 있도록 해주는 가상의 자산입니다.</p>
-        </div>
-
         {/* Product List */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5 whitespace-nowrap">
           {products.map(product => (
@@ -90,12 +87,12 @@ const PurchaseTable = () => {
               className="flex justify-between items-center p-4 border border-gray-200 rounded-lg shadow-sm w-full"
             >
               <div className="flex items-center space-x-2 pr-4">
-                <FaCoins className="text-yellow-400 mr-1" />
-                <span className="text-lg font-medium">{product.name} <span className="pl-1">PCK</span></span>
+                <FaBitcoin className="text-yellow-400 mr-1" />
+                <span className="text-[16px] font-medium">{product.name} <span className="pl-1">PCK</span></span>
               </div>
               <button
-                onClick={() => requestPayment(product.price)}
-                className="bg-blue-600 opacity-80 text-white px-3 py-1 rounded-lg w-24 text-center"
+                onClick={() => requestPayment(product.name, product.price)}
+                className="text-[16px] bg-violet-600 text-white px-3 py-1 rounded-lg w-24 text-center"
               >
                 {product.price.toLocaleString()}원
               </button>

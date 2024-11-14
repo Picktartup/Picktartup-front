@@ -1,68 +1,50 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-import { columnsDataColumns } from "./variables/columnsData";
-import ColumnsTable from "./components/ColumnsTable";
-import PurchaseTable from "./components/PurchaseTable";
 import Menubar from "components/menubar";
+import VideoWithTransparency from "components/VideoWithTransparency";
+import PurchaseTable from "./components/PurchaseTable";
+import HistoryTable from "./components/HistoryTable";
+import ExchangeTable from "./components/ExchangeTable";
 
 const Tables = () => {
   const historyTableTitle = "토큰 구매/현금화 내역";
-  const [apiData, setApiData] = useState(null);                   // API 데이터 상태
-  const [error, setError] = useState(null);                       // 오류 상태
-  const [selectedMenu, setSelectedMenu] = useState("purchase");   // 기본 메뉴를 'purchase'로 설정
-  const [tableData, setTableData] = useState([]);                 // ColumnsTable에 전달할 데이터
+  const [apiData, setApiData] = useState(null);
+  const [error, setError] = useState(null);
+  const [selectedMenu, setSelectedMenu] = useState("purchase");
+  const [tableData, setTableData] = useState([]);
+  const [balance, setBalance] = useState(null);
 
-  // 초기 실행 시 history 데이터 한번 호출
   useEffect(() => {
     fetchMenuData("history");
+
+    const fetchBalance = async () => {
+      try {
+        const response = await fetch('/api/v1/coins/balance?walletId=1'); // TODO: 수정
+        const data = await response.json();
+        setBalance(data.data);
+      } catch (error) {
+        console.error('잔액 데이터를 가져오는 중 오류 발생:', error);
+      }
+    };
+    fetchBalance();
   }, []);
 
-  // 메뉴 클릭 시 API 요청 처리 (history 메뉴 제외)
   const fetchMenuData = async (menu) => {
-    if (menu === "history" && tableData.length > 0) return; // 이미 호출된 경우, history 재호출 방지
+    if (menu === "history" && tableData.length > 0) return;
 
-    let endpoint;
-    let method = "get";
-    let payload = {}; // POST 요청 시 사용할 payload 데이터
-
-    // 각 메뉴에 따라 엔드포인트 설정
-    if (menu === "history") {
-      endpoint = "/api/v1/coins/purchases?userId=1";
-      method = "get";
-    } else if (menu === "purchase") {
-      endpoint = "/api/v1/coins/purchase";
-      method = "post";
-      payload = {
-        walletId: 1,
-        amount: 100,
-      };
-    } else if (menu === "exchange") {
-      endpoint = "/api/v1/coins/exchange";
-      method = "post";
-      payload = {
-        walletId: 1,
-        exchangeAmount: 50,
-      };
-    } else {
-      return;
-    }
+    const endpoint = "/api/v1/coins/purchases?userId=1";
 
     try {
-      const response =
-        method === "get"
-          ? await axios.get(endpoint)
-          : await axios.post(endpoint, payload);
-
+      const response = await axios.get(endpoint);
       setApiData(response.data);
 
-      // 'history' 데이터를 테이블 형식으로 변환
       if (menu === "history") {
         const formattedData = response.data.data.map((transaction) => ({
-          date: transaction.createdAt,
-          type: transaction.transactionType,
-          token: transaction.coinAmount,
-          balance: transaction.users.wallet.balance,
+          date: transaction.tCreatedAt,
+          type: transaction.tType,
+          token: transaction.tCoinAmount,
+          method: transaction.tType === "PAYMENT" ? transaction.tPayMethod : transaction.tExcBank,
         }));
         setTableData(formattedData);
       }
@@ -71,40 +53,23 @@ const Tables = () => {
     }
   };
 
-  // 메뉴에 따른 데이터 렌더링 로직
   const renderApiData = () => {
     if (error) return <p className="text-red-500">{error}</p>;
 
-    // 선택한 메뉴에 따른 데이터 렌더링
     switch (selectedMenu) {
       case "purchase":
-        return (
-          <div>
-            <PurchaseTable />
-          </div>
-        );
+        return <PurchaseTable />;
       case "history":
         return (
           <div className="grid h-full grid-cols-1 gap-5 md:grid-cols-1">
-            <ColumnsTable
+            <HistoryTable
               tableTitle={historyTableTitle}
-              columnsData={columnsDataColumns}
               tableData={tableData}
             />
           </div>
         );
       case "exchange":
-        return (
-          <div>
-            <h2>환전 신청</h2>
-            <button
-              onClick={() => alert("환전 API 호출은 버튼 클릭 시 이루어집니다.")}  // 환전 예시 버튼
-              className="bg-blue-600 opacity-80 text-white px-4 py-2 rounded-lg mt-2"
-            >
-              환전 요청
-            </button>
-          </div>
-        );
+        return <ExchangeTable balance={balance} />;
       default:
         return <p>Select a menu to see the data.</p>;
     }
@@ -112,12 +77,23 @@ const Tables = () => {
 
   return (
     <div>
-      {/* Menubar 컴포넌트 추가 및 onSelectMenu 핸들러 설정 */}
+      <h1 className="p-8 text-2xl font-bold text-gray-800 mt-1 mb-2">보유 토큰</h1>
+      <div className="flex items-center space-x-4 px-4 pb-4">
+        <VideoWithTransparency className="w-1/3 md:w-1/4 hidden md:inline" />
+        <div className="text-center border-r border-gray-300 pr-8">
+          <h2 className="text-md font-medium text-gray-600 mb-2">총 보유 토큰</h2>
+          <p className="text-2xl font-bold text-gray-800">
+            {balance !== null ? `${balance} PCK` : '잔액을 불러오는 중...'}
+          </p>
+        </div>
+        <div className="bg-white text-violet-800 p-6 text-center rounded-lg lg:mx-36 md:mx-20 sm:mx-4">
+          <p className="mb-2 font-semibold text-xl">토큰이란?</p>
+          <p className="text-md">원하는 스타트업에게 투자를 할 수 있도록 해주는 가상의 자산입니다.</p>
+        </div>
+      </div>
       <div className="mt-5">
         <Menubar onSelectMenu={(menu) => setSelectedMenu(menu)} />
       </div>
-
-      {/* API 결과 출력 */}
       <div className="mt-2 p-4 rounded-md">{renderApiData()}</div>
     </div>
   );
