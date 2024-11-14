@@ -11,6 +11,12 @@
 		-webkit-font-smoothing: antialiased;
 		letter-spacing: -0.5px;
 	}
+
+	body {
+		max-width: 1200px;  /* 원하는 최대 너비 설정 */
+		margin: 0 auto;      /* 화면 중앙에 정렬 */
+		padding: 0 16px;     /* 좌우 여백 추가 (필요에 따라 조절) */
+	}
 }
 
 input.defaultCheckbox::before {
@@ -29,7 +35,14 @@ input:checked.defaultCheckbox::before {
 }
 
 @font-face {
-  	font-family: "Pretendard-Regular";
+  	font-family: 'Pretendard';
+  	src: url('./assets/fonts/Pretendard-Regular.otf') format('truetype');
   	font-weight: normal;
-  	src: url("./assets/fonts/Pretendard-Regular.otf") format("truetype");
+}
+
+@font-face {
+    font-family: 'Tenada';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2210-2@1.0/Tenada.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
 }
