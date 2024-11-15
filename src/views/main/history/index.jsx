@@ -1,38 +1,25 @@
-import Banner from "./components/Banner";
-import General from "./components/General";
-import Notification from "./components/Notification";
-import Project from "./components/Project";
-import Storage from "./components/Storage";
-import Upload from "./components/Upload";
+import React, { useState } from "react";
+import ActiveInvest from "./components/ActiveInvest";
+import CompletedInvest from "./components/CompletedInvest"; // 추가
+import Menubar from "./components/Menubar";
+import activeTableData from "./variables/activeTableData.json";
+import completedTableData from "./variables/completedTableData.json";
 
 const ProfileOverview = () => {
+  const [selectedMenu, setSelectedMenu] = useState("contractActive");
+
   return (
     <div className="flex w-full flex-col gap-5">
       <div className="w-ful mt-3 flex h-fit flex-col gap-5 lg:grid lg:grid-cols-12">
-        <div className="col-span-4 lg:!mb-0">
-          <Banner />
-        </div>
-
-        <div className="col-span-3 lg:!mb-0">
-          <Storage />
-        </div>
-
-        <div className="z-0 col-span-5 lg:!mb-0">
-          <Upload />
-        </div>
-      </div>
-      {/* all project & ... */}
-
-      <div className="grid h-full grid-cols-1 gap-5 lg:!grid-cols-12">
-        <div className="col-span-5 lg:col-span-6 lg:mb-0 3xl:col-span-4">
-          <Project />
-        </div>
-        <div className="col-span-5 lg:col-span-6 lg:mb-0 3xl:col-span-5">
-          <General />
-        </div>
-
-        <div className="col-span-5 lg:col-span-12 lg:mb-0 3xl:!col-span-3">
-          <Notification />
+        <div className="col-span-12 lg:!mb-0">
+          <div className="mt-3">
+            <Menubar onSelectMenu={(menu) => setSelectedMenu(menu)} />
+          </div>
+          {selectedMenu === "contractActive" ? (
+            <ActiveInvest tableData={activeTableData} />
+          ) : (
+            <CompletedInvest tableData={completedTableData} />
+          )}
         </div>
       </div>
     </div>
