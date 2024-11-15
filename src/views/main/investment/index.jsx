@@ -27,8 +27,9 @@ const StartupInvestment = () => {
 
   const fetchStartups = async () => {
     try {
+
       const response = await axios.get(`/api/v1/startups`, {
-        params: { keyword: keyword }
+        params: { keyword: keyword , source : 'elk'}
       });
       setStartups(response.data.data);
     } catch (error) {
@@ -62,7 +63,8 @@ const StartupInvestment = () => {
       <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
         {startups.map((startup) => (
           <NftCard
-            key={startup.name}
+            startupId={startup.startupId}
+            key={startup.startupId}
             name={startup.name}
             category={startup.category}
             contractStartDate={startup.contractStartDate}

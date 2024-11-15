@@ -4,8 +4,8 @@ import axios from 'axios';
 import HeroSection from 'components/HeroSection';
 import NftCard from 'components/card/NftCard';
 import defaultImage from 'assets/img/nfts/default.png';
+import { useNavigate } from 'react-router-dom';
 
-// 모든 이미지를 객체로 미리 가져오기
 const importAllImages = (requireContext) => {
   const images = {};
   requireContext.keys().forEach((key) => {
@@ -15,27 +15,39 @@ const importAllImages = (requireContext) => {
   return images;
 };
 
-// 모든 png 파일을 가져와 `nftImages` 객체 생성
 const nftImages = importAllImages(require.context("assets/img/nfts", false, /\.png$/));
 
-// 이름에 따라 이미지를 반환하는 함수
 const getImageByName = (name) => nftImages[name] || defaultImage;
 
 const Marketplace = () => {
   const [startups, setStartups] = useState([]);
+  const navigate = useNavigate();
 
-  // fetchStartups 함수 정의
   const fetchStartups = async () => {
     try {
-      const response = await axios.get('/api/v1/startups/top');
+
+      const response = await axios.get('/api/v1/startups/top',{
+        params: {source: 'jpa'}
+      });
+      console.log("Fetched startups:", response.data.data); // 데이터 구조 확인
       setStartups(response.data.data);
     } catch (error) {
       console.error('Error fetching startups:', error);
+      alert("Failed to fetch startups data"); // 실패 시 알림
     }
   };
 
-  // 컴포넌트가 처음 렌더링될 때 API 호출
+  const handleCardClick = (startupId) => {
+    console.log("Clicked startupId:", startupId); // ID가 제대로 넘어오는지 확인
+    if (startupId) {
+      navigate(`/main/default/details/${startupId}`);
+    } else {
+      console.error("startupId is undefined.");
+    }
+  };
+
   useEffect(() => {
+    console.log("useEffect is called");
     fetchStartups();
   }, []);
 
@@ -52,20 +64,25 @@ const Marketplace = () => {
 
         {/* 스타트업 리스트 */}
         <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {startups.map((startup) => (
-            <NftCard
-              key={startup.name}
-              name={startup.name}
-              category={startup.category}
-              contractStartDate={startup.contractStartDate}
-              contractTargetDeadline={startup.contractTargetDeadline}
-              progress={startup.progress}
-              currentCoin={startup.currentCoin}
-              goalCoin={startup.goalCoin}
-              fundingProgress={startup.fundingProgress}
-              image={getImageByName(startup.name)}
-            />
-          ))}
+          {startups.map((startup) => {
+            console.log("startup.id:", startup.id); // 각 startup 객체의 id 확인
+            return (
+              <NftCard
+                key={startup.startupId} // 고유한 key 설정
+                startupId={startup.startupId}
+                name={startup.name}
+                category={startup.category}
+                contractStartDate={startup.contractStartDate}
+                contractTargetDeadline={startup.contractTargetDeadline}
+                progress={startup.progress}
+                currentCoin={startup.currentCoin}
+                goalCoin={startup.goalCoin}
+                fundingProgress={startup.fundingProgress}
+                image={getImageByName(startup.name)}
+                onClick={() => handleCardClick(startup.startupId)}
+              />
+            );
+          })}
         </div>
       </div>
     </div>
