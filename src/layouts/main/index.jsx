@@ -1,3 +1,4 @@
+// src/layouts/main/index.jsx
 import React from "react";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import Navbar from "components/navbar";
@@ -15,6 +16,7 @@ export default function Admin(props) {
       window.innerWidth < 1200 ? setOpen(false) : setOpen(true)
     );
   }, []);
+  
   React.useEffect(() => {
     getActiveRoute(routes);
   }, [location.pathname]);
@@ -32,6 +34,7 @@ export default function Admin(props) {
     }
     return activeRoute;
   };
+  
   const getActiveNavbar = (routes) => {
     let activeNavbar = false;
     for (let i = 0; i < routes.length; i++) {
@@ -43,6 +46,7 @@ export default function Admin(props) {
     }
     return activeNavbar;
   };
+  
   const getRoutes = (routes) => {
     return routes.map((prop, key) => {
       if (prop.layout === "/main") {
@@ -56,15 +60,11 @@ export default function Admin(props) {
   };
 
   document.documentElement.dir = "ltr";
+  
   return (
     <div className="flex h-full w-full">
-      {/* Navbar & Main Content */}
       <div className="font-pretendard h-full w-full bg-white dark:!bg-navy-900">
-        {/* Main Content */}
-        <main
-          className={`mx-[56px] h-full flex-none transition-all md:pr-2`}
-        >
-          {/* Routes */}
+        <main className={`mx-[56px] h-full flex-none transition-all md:pr-2`}>
           <div className="h-full">
             <Navbar
               onOpenSidenav={() => setOpen(true)}
@@ -76,7 +76,6 @@ export default function Admin(props) {
             <div className="pt-5s mx-auto mb-auto h-full min-h-[84vh] p-2 md:pr-2">
               <Routes>
                 {getRoutes(routes)}
-
                 <Route
                   path="/"
                   element={<Navigate to="/main/default" replace />}

@@ -4,6 +4,7 @@ import React from "react";
 import MainDashboard from "views/main/default";
 import NFTMarketplace from "views/main/investment";
 import Profile from "views/main/history";
+import ContractDetail from "views/main/history/ContractDetail";
 import DataTables from "views/main/token";
 import RTLDefault from "views/rtl/default";
 
@@ -48,6 +49,12 @@ const routes = [
     path: "history",
     icon: <MdPerson className="h-6 w-6" />,
     component: <Profile />,
+  },
+  {
+    name: "투자 상세 내역",
+    layout: "/main",
+    path: "history/:id",
+    component: <ContractDetail />,
   },
   {
     name: "Sign In",
