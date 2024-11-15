@@ -27,7 +27,7 @@ const StartupInvestment = () => {
 
   const fetchStartups = async () => {
     try {
-      const response = await axios.get(`http://localhost:8999/api/v1/startups`, {
+      const response = await axios.get(`/api/v1/startups`, {
         params: { keyword: keyword }
       });
       setStartups(response.data.data);

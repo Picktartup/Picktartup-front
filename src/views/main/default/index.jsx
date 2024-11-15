@@ -27,7 +27,7 @@ const Marketplace = () => {
   // fetchStartups 함수 정의
   const fetchStartups = async () => {
     try {
-      const response = await axios.get('http://localhost:8999/api/v1/startups/top');
+      const response = await axios.get('/api/v1/startups/top');
       setStartups(response.data.data);
     } catch (error) {
       console.error('Error fetching startups:', error);
