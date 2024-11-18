@@ -1,250 +1,140 @@
 import React, { useState } from 'react';
-import { 
-  Users, 
-  Package, 
-  TrendingUp, 
-  Rocket,
-  ChevronDown, 
-  ChevronUp,
-  CheckCircle,
-  AlertCircle,
-  Clock,
-  XCircle
-} from 'lucide-react';
+import { TrendingUp, Users, Box, Lightbulb } from 'lucide-react';
 
 const EvaluationDashboard = () => {
-  const [expandedCard, setExpandedCard] = useState(null);
-  
-  const evaluationData = [
+  const [selectedCriteria, setSelectedCriteria] = useState('default');
+
+  const evaluationItems = [
     {
       category: 'People',
       icon: Users,
       status: '우수',
       score: 95,
-      trend: 'up',
+      description: '창업자와 핵심 팀원이 해당 산업에서 5년 이상 활동했으며, 팀 내 협업이 매우 원활하고 역할 분담이 명확함',
       keyMetrics: [
-        { label: '팀 경력', value: '5년+', status: '우수' },
-        { label: '협업 지수', value: '95%', status: '우수' },
-        { label: '리더십', value: '90%', status: '우수' }
-      ],
-      details: [
-        '산업 경력 5년 이상 보유',
-        'IPO 성공 경험 보유',
-        '팀 협업 시스템 구축',
-        '명확한 역할 분담'
-      ],
-      criteriaDetails: {
-        우수: '5년+ 경력, IPO 경험',
-        양호: '2-5년 경력',
-        보통: '1-2년 경력',
-        진행중: '경력/협업 부족'
-      }
+        '팀 경력: 5년 이상',
+        '협업 지수: 95%',
+        '역할 분담: 완료'
+      ]
     },
     {
       category: 'Product',
-      icon: Package,
+      icon: Box,
       status: '양호',
       score: 80,
-      trend: 'up',
+      description: '베타 버전이 출시되었고 MAU가 20% 증가 중이며, 초기 사용자 피드백이 긍정적임',
       keyMetrics: [
-        { label: 'MAU 성장률', value: '20%', status: '양호' },
-        { label: '유저 만족도', value: '4.5/5', status: '우수' },
-        { label: '유지율', value: '45%', status: '양호' }
-      ],
-      details: [
-        '베타 버전 출시 완료',
-        '긍정적 초기 피드백',
-        'MAU 20% 성장',
-        '핵심 기능 안정화'
-      ],
-      criteriaDetails: {
-        우수: 'MAU 30%+, 유지율 60%+',
-        양호: 'MAU 10%+, 유지율 30-50%',
-        보통: '초기 개발 단계',
-        진행중: '아이디어 단계'
-      }
+        'MAU 증가율: 20%',
+        '사용자 피드백: 긍정적',
+        '개발 단계: 베타'
+      ]
     },
     {
       category: 'Performance',
       icon: TrendingUp,
       status: '보통',
       score: 60,
-      trend: 'up',
+      description: '초기 매출이 발생하고 있으며 거래량이 증가 추세에 있으나, 수익성 개선이 필요함',
       keyMetrics: [
-        { label: '매출 성장률', value: '8%', status: '보통' },
-        { label: '거래량', value: '↑15%', status: '양호' },
-        { label: '수익률', value: '5%', status: '보통' }
-      ],
-      details: [
-        '초기 매출 발생',
-        '거래량 증가 추세',
-        '수익성 개선 필요',
-        '시장 점유율 확대 중'
-      ],
-      criteriaDetails: {
-        우수: '월 성장률 10%+',
-        양호: '예상 대비 80%',
-        보통: '예상 대비 50%',
-        진행중: '매출 미발생'
-      }
+        '월 거래량: 증가',
+        '수익성: 개선 필요',
+        '성장률: 5%'
+      ]
     },
     {
       category: 'Potential',
-      icon: Rocket,
+      icon: Lightbulb,
       status: '진행 중',
       score: 40,
-      trend: 'stable',
+      description: '시장 성장률은 15% 예상되나 경쟁력 확보가 진행 중이며 장기 비전 수립이 필요함',
       keyMetrics: [
-        { label: '시장 성장률', value: '15%', status: '우수' },
-        { label: '경쟁력 지수', value: '진행중', status: '진행 중' },
-        { label: '비전 완성도', value: '40%', status: '진행 중' }
-      ],
-      details: [
-        '시장 성장률 15% 예상',
-        '경쟁력 확보 진행 중',
-        '장기 비전 수립 중',
-        '시장 진입 전략 개발'
-      ],
-      criteriaDetails: {
-        우수: '시장 성장률 15%+',
-        양호: '성장률 10-15%',
-        보통: '성장률 5-10%',
-        진행중: '성장률 5% 미만'
-      }
+        '시장 성장률: 15%',
+        '경쟁력: 확보 중',
+        '비전: 수립 중'
+      ]
     }
   ];
 
-  const getStatusIcon = (status) => {
+  const criteriaGuide = {
+    우수: '해당 분야에서 탁월한 성과나 잠재력을 보유 (상위 20%)',
+    양호: '업계 평균 이상의 성과나 잠재력 보유 (상위 40%)',
+    보통: '업계 평균 수준의 성과나 잠재력 보유 (상위 60%)',
+    진행중: '아직 평가하기 이르거나 개선이 필요한 상태'
+  };
+
+  const getStatusStyle = (status) => {
+    const baseStyle = 'text-xs font-semibold px-3 py-1 rounded-full';
     switch (status) {
-      case '우수': return <CheckCircle className="w-5 h-5 text-blue-500" />;
-      case '양호': return <CheckCircle className="w-5 h-5 text-green-500" />;
-      case '보통': return <AlertCircle className="w-5 h-5 text-yellow-500" />;
-      case '진행 중': return <Clock className="w-5 h-5 text-purple-500" />;
-      default: return <XCircle className="w-5 h-5 text-gray-500" />;
+      case '우수':
+        return `${baseStyle} bg-blue-100 text-blue-800`;
+      case '양호':
+        return `${baseStyle} bg-emerald-100 text-emerald-800`;
+      case '보통':
+        return `${baseStyle} bg-amber-100 text-amber-800`;
+      case '진행 중':
+        return `${baseStyle} bg-purple-100 text-purple-800`;
+      default:
+        return `${baseStyle} bg-gray-100 text-gray-800`;
     }
   };
 
-  const getStatusColor = (status) => {
-    switch (status) {
-      case '우수': return 'bg-blue-500';
-      case '양호': return 'bg-green-500';
-      case '보통': return 'bg-yellow-500';
-      case '진행 중': return 'bg-purple-500';
-      default: return 'bg-gray-500';
-    }
-  };
-
-  const getStatusBg = (status) => {
-    switch (status) {
-      case '우수': return 'bg-blue-50';
-      case '양호': return 'bg-green-50';
-      case '보통': return 'bg-yellow-50';
-      case '진행 중': return 'bg-purple-50';
-      default: return 'bg-gray-50';
-    }
+  const getScoreColor = (score) => {
+    if (score >= 90) return 'text-blue-600';
+    if (score >= 70) return 'text-emerald-600';
+    if (score >= 50) return 'text-amber-600';
+    return 'text-purple-600';
   };
 
   return (
-    <div className="p-6 max-w-6xl mx-auto bg-white rounded-xl shadow-lg">
-      <h2 className="text-2xl font-bold mb-6">스타트업 평가 대시보드</h2>
-      
-      <div className="grid grid-cols-1 gap-6">
-        {evaluationData.map((item) => {
-          const Icon = item.icon;
-          return (
-            <div 
-              key={item.category}
-              className={`rounded-xl shadow-sm transition-all duration-200 ${
-                getStatusBg(item.status)
-              } border-l-4 ${getStatusColor(item.status)} hover:shadow-md`}
-            >
-              <div 
-                className="p-6 cursor-pointer"
-                onClick={() => setExpandedCard(expandedCard === item.category ? null : item.category)}
-              >
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-4">
-                    <div className={`p-3 rounded-lg ${getStatusBg(item.status)}`}>
-                      <Icon className={`w-6 h-6 ${getStatusColor(item.status)} bg-opacity-20`} />
-                    </div>
-                    <div>
-                      <h3 className="text-lg font-semibold">{item.category}</h3>
-                      <div className="flex items-center space-x-2 mt-1">
-                        {getStatusIcon(item.status)}
-                        <span className="text-sm font-medium">{item.status}</span>
-                      </div>
-                    </div>
-                  </div>
+    <div className="p-8 bg-gray-50 min-h-screen">
+      <div className="max-w-6xl mx-auto">
+        <div className="mb-8">
+          <h2 className="text-2xl font-bold text-gray-800 mb-2">스타트업 평가 현황</h2>
+          <p className="text-gray-600">각 항목별 평가 결과와 주요 지표</p>
+        </div>
 
-                  <div className="flex items-center space-x-6">
-                    <div className="text-right">
-                      <div className="text-2xl font-bold">{item.score}</div>
-                      <div className="text-sm text-gray-500">총점</div>
-                    </div>
-                    {expandedCard === item.category ? (
-                      <ChevronUp className="w-6 h-6 text-gray-400" />
-                    ) : (
-                      <ChevronDown className="w-6 h-6 text-gray-400" />
-                    )}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          {evaluationItems.map((item) => {
+            const IconComponent = item.icon;
+            return (
+              <div key={item.category} className="bg-white rounded-xl shadow-sm p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center space-x-3">
+                    <IconComponent className="w-6 h-6 text-gray-600" />
+                    <h3 className="text-lg font-semibold text-gray-800">{item.category}</h3>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <span className={getStatusStyle(item.status)}>{item.status}</span>
+                    <span className={`font-bold ${getScoreColor(item.score)}`}>{item.score}점</span>
                   </div>
                 </div>
-
-                {/* Progress bar */}
-                <div className="mt-4 h-2 bg-gray-200 rounded-full">
-                  <div
-                    className={`h-2 rounded-full transition-all duration-500 ${getStatusColor(item.status)}`}
-                    style={{ width: `${item.score}%` }}
-                  />
-                </div>
-
-                {/* Key Metrics */}
-                <div className="mt-4 grid grid-cols-3 gap-4">
-                  {item.keyMetrics.map((metric, idx) => (
-                    <div
-                      key={idx}
-                      className={`p-3 rounded-lg ${getStatusBg(metric.status)} border border-opacity-20 ${
-                        getStatusColor(metric.status)
-                      }`}
-                    >
-                      <div className="text-sm text-gray-600">{metric.label}</div>
-                      <div className="text-lg font-semibold mt-1">{metric.value}</div>
-                    </div>
-                  ))}
+                
+                <p className="text-gray-600 text-sm mb-4">{item.description}</p>
+                
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <h4 className="font-medium text-gray-700 mb-2">주요 지표</h4>
+                  <ul className="space-y-2">
+                    {item.keyMetrics.map((metric, index) => (
+                      <li key={index} className="text-sm text-gray-600">• {metric}</li>
+                    ))}
+                  </ul>
                 </div>
               </div>
+            );
+          })}
+        </div>
 
-              {expandedCard === item.category && (
-                <div className="px-6 pb-6 pt-2">
-                  <div className="grid grid-cols-2 gap-6">
-                    <div>
-                      <h4 className="font-semibold mb-3">현재 상태</h4>
-                      <ul className="space-y-2">
-                        {item.details.map((detail, idx) => (
-                          <li key={idx} className="flex items-center space-x-2">
-                            <CheckCircle className="w-4 h-4 text-green-500" />
-                            <span>{detail}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                    <div>
-                      <h4 className="font-semibold mb-3">평가 기준</h4>
-                      <div className="space-y-2">
-                        {Object.entries(item.criteriaDetails).map(([grade, criterion]) => (
-                          <div key={grade} className="flex items-start space-x-2">
-                            {getStatusIcon(grade)}
-                            <span className="font-medium min-w-[60px]">{grade}:</span>
-                            <span>{criterion}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-          );
-        })}
+        <div className="bg-white rounded-xl shadow-sm p-6">
+          <h3 className="text-lg font-semibold text-gray-800 mb-4">평가 기준 가이드</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {Object.entries(criteriaGuide).map(([status, description]) => (
+              <div key={status} className="flex items-start space-x-3">
+                <span className={getStatusStyle(status)}>{status}</span>
+                <span className="text-sm text-gray-600">{description}</span>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );
