@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Coins, ChevronRight, TrendingUp, Shield } from 'lucide-react';
 import backgroundImage from 'assets/img/profile/img1.jpg';
-import {useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const FeatureCard = ({ icon: Icon, title, description }) => (
   <motion.div
@@ -22,7 +22,7 @@ const HeroSection = () => {
   return (
     <div className="relative min-h-[90vh] overflow-hidden">
       {/* Background */}
-      <div 
+      <div
         className="absolute inset-0 z-0"
         style={{
           backgroundImage: `url(${backgroundImage})`,
@@ -42,19 +42,21 @@ const HeroSection = () => {
           animate={{ opacity: 1, y: 0 }}
           className="absolute top-8 left-8 md:left-[10%]"
         >
-      
+
         </motion.div>
 
         {/* Main content container */}
         <div className="container mx-auto px-4 pt-32 pb-20">
           <div className="max-w-4xl mx-auto text-center mb-16">
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="inline-flex items-center px-4 py-2 bg-white/10 backdrop-blur-md rounded-full mb-6 border border-white/20"
+              className="absolute top-8 left-4 md:left-[5%] z-20" // 위치 수정
             >
-              <Coins className="w-5 h-5 text-white mr-2" />
-              <span className="text-sm font-medium text-white">토큰 분산 투자 플랫폼</span>
+              <div className="inline-flex items-center px-4 py-2 bg-white/10 backdrop-blur-md rounded-full border border-white/20">
+                <Coins className="w-5 h-5 text-white mr-2" />
+                <span className="text-sm font-medium text-white">토큰 분산 투자 플랫폼</span>
+              </div>
             </motion.div>
 
             <motion.h1
@@ -84,7 +86,7 @@ const HeroSection = () => {
               transition={{ delay: 0.3 }}
               className="flex flex-wrap justify-center gap-4"
             >
-              <button 
+              <button
                 onClick={() => navigate('/main/investment')}
                 className="group px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold transition-all flex items-center backdrop-blur-sm">
                 지금 시작하기
