@@ -67,8 +67,8 @@ const StartupInvestment = () => {
             key={startup.startupId}
             name={startup.name}
             category={startup.category}
-            contractStartDate={startup.contractStartDate}
-            contractTargetDeadline={startup.contractTargetDeadline}
+            investmentStartDate={startup.investmentStartDate}
+            investmentTargetDeadline={startup.investmentTargetDeadline}
             progress={startup.progress}
             currentCoin={startup.currentCoin}
             goalCoin={startup.goalCoin}
