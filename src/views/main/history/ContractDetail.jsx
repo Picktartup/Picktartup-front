@@ -33,7 +33,7 @@ const ContractDetail = () => {
   }
 
   return (
-    <div className="mt-2 p-8 max-w-4xl mx-auto space-y-4">
+    <div className="mt-2 p-8 max-w-4xl mx-auto space-y-4 mb-16">
       <StartupProfile investmentData={investmentData} profileData={profileData} />
       <ProgressBar investmentData={investmentData} />
       <InvestmentInfo investmentData={investmentData} profileData={profileData} />
