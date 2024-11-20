@@ -5,6 +5,7 @@ import RtlLayout from "layouts/rtl";
 import AdminLayout from "layouts/main";
 import AuthLayout from "layouts/auth";
 import DetailPage from "./views/main/default/details"; // DetailPage import
+
 const App = () => {
   return (
     <Routes>

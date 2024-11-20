@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Card from "components/card";
+import { useNavigate } from "react-router-dom";
 import {
   createColumnHelper,
   flexRender,
@@ -11,9 +11,13 @@ import {
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { FaSort, FaSortUp, FaSortDown } from "react-icons/fa";
 
+import Card from "components/card";
+
 const columnHelper = createColumnHelper();
 
 function ActiveInvest(props) {
+  const navigate = useNavigate();
+
   const { tableTitle, tableData } = props;
   const [sorting, setSorting] = useState([{ id: "contractAt", desc: true }]);
   const [pageSize, setPageSize] = useState(10);
@@ -186,15 +190,14 @@ function ActiveInvest(props) {
             ))}
           </thead>
           <tbody>
-            {table.getRowModel().rows.map((row, rowIndex) => (
-              <tr key={row.id} 
-                  className={`hover:bg-gray-50 dark:hover:bg-navy-700/50 transition-colors duration-200
-                    ${rowIndex % 2 === 0 ? 'bg-gray-50/50 dark:bg-navy-700/20' : ''}`}>
+            {table.getRowModel().rows.map((row) => (
+              <tr
+                key={row.id}
+                onClick={() => navigate(`/main/history/${Number(row.id) + 1}`)}
+                className="cursor-pointer hover:bg-gray-50 dark:hover:bg-navy-700/50 transition-colors duration-200"
+              >
                 {row.getVisibleCells().map((cell) => (
-                  <td
-                    key={cell.id}
-                    className="min-w-[150px] border-white/0 py-3 pr-4"
-                  >
+                  <td key={cell.id} className="min-w-[150px] border-white/0 py-3 pr-4">
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </td>
                 ))}
