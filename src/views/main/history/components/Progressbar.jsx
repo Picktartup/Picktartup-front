@@ -16,22 +16,62 @@ const ProgressBar = ({ investmentData }) => {
     }
   };
 
-  const formatDate = (dateString, isCancelled) =>
-    isCancelled
-      ? dateString
-        ? new Date(dateString).toLocaleDateString("ko-KR")
-        : "취소됨"
-      : dateString
-      ? new Date(dateString).toLocaleDateString("ko-KR")
-      : "미정";
-
+  const formatDate = (dateString, status, step) => {
+    if (status === "CANCELLED") {
+      return dateString ? new Date(dateString).toLocaleDateString("ko-KR") : "취소됨";
+    } else if (status === "ACTIVE" && step === "계약 완료") {
+      return dateString ? `${new Date(dateString).toLocaleDateString("ko-KR")} 예정` : "미정";
+    } else {
+      return dateString ? new Date(dateString).toLocaleDateString("ko-KR") : "미정";
+    }
+  };
+  
   const currentStage = getProgressStage();
-
+  
   const steps = [
-    { label: "투자 등록", date: formatDate(investmentData.investAt, investmentData.contractStatus === "CANCELLED") },
-    { label: "계약 체결", date: formatDate(investmentData.contractBeginAt, investmentData.contractStatus === "CANCELLED") },
-    { label: "계약 완료", date: formatDate(investmentData.contractEndAt, investmentData.contractStatus === "CANCELLED") },
+    {
+      label: "투자 등록",
+      date: formatDate(investmentData.investAt, investmentData.contractStatus, "투자 등록"),
+    },
+    {
+      label: "계약 체결",
+      date:
+        investmentData.contractStatus === "BEGIN"
+          ? "미정"
+          : formatDate(investmentData.contractBeginAt, investmentData.contractStatus, "계약 체결"),
+    },
+    {
+      label: "계약 완료",
+      date:
+        investmentData.contractStatus === "BEGIN"
+          ? "미정"
+          : investmentData.contractStatus === "ACTIVE"
+          ? formatDate(investmentData.contractEndAt, investmentData.contractStatus, "계약 완료")
+          : formatDate(investmentData.contractEndAt, investmentData.contractStatus, "계약 완료"),
+    },
   ];
+  
+  // BEGIN 조건 추가
+  if (investmentData.contractStatus === "BEGIN") {
+    steps[1].date = "미정"; // 계약 체결
+    steps[2].date = "미정"; // 계약 완료
+  }
+  
+  // ACTIVE 조건 추가
+  if (investmentData.contractStatus === "ACTIVE") {
+    steps[2].date = formatDate(investmentData.contractEndAt, investmentData.contractStatus, "계약 완료");
+  }
+  
+  // COMPLETED 조건은 기본 포맷으로 처리
+  // CANCELLED 조건 추가
+  if (investmentData.contractStatus === "CANCELLED") {
+    steps[1].date = investmentData.contractBeginAt
+      ? new Date(investmentData.contractBeginAt).toLocaleDateString("ko-KR")
+      : "취소됨";
+    steps[2].date = investmentData.contractEndAt
+      ? new Date(investmentData.contractEndAt).toLocaleDateString("ko-KR")
+      : "취소됨";
+  }
 
   return (
     <div className="bg-white rounded-lg p-6">

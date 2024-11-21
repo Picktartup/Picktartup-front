@@ -7,8 +7,8 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   import.meta.url,
 ).toString();
 
-const ContractPaper = () => {
-  const pdfUrl = "https://contract-image.s3.ap-northeast-2.amazonaws.com/contracts/1732066556550.pdf";
+const ContractPaper = ({ investmentData }) => {
+  const pdfUrl = investmentData.contractPdfUrl;
   const [numPages, setNumPages] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
 
