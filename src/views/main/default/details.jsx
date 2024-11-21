@@ -27,6 +27,8 @@ const DetailPage = () => {
   const [ssiData, setSsiData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [activeSection, setActiveSection] = useState("dashboard"); 
+
 
   // 스타트업 상세 데이터와 SSI 데이터 가져오기
   useEffect(() => {
@@ -66,8 +68,8 @@ const DetailPage = () => {
     const fetchArticles = async () => {
       if (!startup?.name) return;
       try {
-        const response = await axios.get(`/api/v1/articles/${startup.name}`);
-        setArticles(response.data.data);
+        const response = await axios.get(`/api/v1/articles/startup/${startup.startupId}`);
+        setArticles(response.data);
       } catch (err) {
         console.error("Error fetching articles:", err);
         setError(err.message);
@@ -81,6 +83,7 @@ const DetailPage = () => {
 
   // 스무스 스크롤 함수
   const scrollToSection = (sectionId) => {
+    setActiveSection(sectionId); 
     const section = document.getElementById(sectionId);
     const navbarHeight = 96;
     if (section) {
@@ -119,19 +122,31 @@ const DetailPage = () => {
               <nav className="flex items-center space-x-6 ml-8">
                 <button
                   onClick={() => scrollToSection('dashboard')}
-                  className="text-sm font-medium text-gray-500 hover:text-navy-700"
+                  className={`text-sm font-medium ${
+                    activeSection === "dashboard"
+                      ? "text-navy-700 font-bold"
+                      : "text-gray-500"
+                  } hover:text-navy-700`}
                 >
                   대시보드
                 </button>
                 <button
                   onClick={() => scrollToSection('ssi')}
-                  className="text-sm font-medium text-gray-500 hover:text-navy-700"
+                  className={`text-sm font-medium ${
+                    activeSection === "ssi"
+                      ? "text-navy-700 font-bold"
+                      : "text-gray-500"
+                  } hover:text-navy-700`}
                 >
                   SSI
                 </button>
                 <button
                   onClick={() => scrollToSection('articles')}
-                  className="text-sm font-medium text-gray-500 hover:text-navy-700"
+                  className={`text-sm font-medium ${
+                    activeSection === "articles"
+                      ? "text-navy-700 font-bold"
+                      : "text-gray-500"
+                  } hover:text-navy-700`}
                 >
                   최근 기사
                 </button>
@@ -150,17 +165,19 @@ const DetailPage = () => {
       <div className="container mx-auto px-4 pt-8">
         <div className="space-y-8">
           {/* 대시보드 섹션 */}
-        
-          <CompanyOverview
-            description={startup.description}
-            investmentStatus={startup.investmentStatus}
-            investmentRound={startup.investmentRound}
-            ceoName={startup.ceoName}
-            address={startup.address}
-            page={startup.page}
-            establishmentDate={startup.establishmentDate}
 
-          />
+          <section id="dashboard" className="bg-white p-6 rounded-lg shadow-md">
+            <CompanyOverview
+              description={startup.description}
+              investmentStatus={startup.investmentStatus}
+              investmentRound={startup.investmentRound}
+              ceoName={startup.ceoName}
+              address={startup.address}
+              page={startup.page}
+              establishmentDate={startup.establishmentDate}
+
+            />
+          </section>
 
           {/* SSI 분석 섹션 */}
           <section id="ssi" className="bg-white p-6 rounded-lg shadow-md">
