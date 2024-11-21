@@ -1,25 +1,30 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import NftCard from "components/card/NftCard";
 import defaultImage from "assets/img/nfts/default.png";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 // 모든 이미지를 동적으로 가져오기
 const importAllImages = (requireContext) => {
   const images = {};
   requireContext.keys().forEach((key) => {
-    const imageName = key.replace('./', '').replace('.png', '');
+    const imageName = key.replace("./", "").replace(".png", "");
     images[imageName] = requireContext(key);
   });
   return images;
 };
 
-const nftImages = importAllImages(require.context("assets/img/nfts", false, /\.png$/));
+const nftImages = importAllImages(
+  require.context("assets/img/nfts", false, /\.png$/)
+);
 
 const getImageByName = (name) => nftImages[name] || defaultImage;
 
 const StartupInvestment = () => {
   const [startups, setStartups] = useState([]);
   const [keyword, setKeyword] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6; // 한 페이지에 표시할 스타트업 수
 
   useEffect(() => {
     fetchStartups();
@@ -27,12 +32,25 @@ const StartupInvestment = () => {
 
   const fetchStartups = async () => {
     try {
-      const response = await axios.get(`http://localhost:8999/api/v1/startups`, {
-        params: { keyword: keyword }
+      const response = await axios.get(`/api/v1/startups`, {
+        params: { keyword: keyword, source: "elk" },
       });
       setStartups(response.data.data);
     } catch (error) {
       console.error("Error fetching startups:", error);
+    }
+  };
+
+  // 페이지에 표시할 데이터 계산
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = startups.slice(indexOfFirstItem, indexOfLastItem);
+
+  const totalPages = Math.ceil(startups.length / itemsPerPage);
+
+  const handlePageChange = (newPage) => {
+    if (newPage > 0 && newPage <= totalPages) {
+      setCurrentPage(newPage);
     }
   };
 
@@ -52,7 +70,10 @@ const StartupInvestment = () => {
             onChange={(e) => setKeyword(e.target.value)}
             className="flex-grow p-3 max-w-2xl border border-gray-300 rounded-md mr-2"
           />
-          <button onClick={fetchStartups} className="px-4 py-2 bg-blue-500 text-white rounded-md">
+          <button
+            onClick={fetchStartups}
+            className="px-4 py-2 bg-blue-500 text-white rounded-md"
+          >
             검색
           </button>
         </div>
@@ -60,13 +81,14 @@ const StartupInvestment = () => {
 
       {/* Startup List */}
       <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
-        {startups.map((startup) => (
+        {currentItems.map((startup) => (
           <NftCard
-            key={startup.name}
+            startupId={startup.startupId}
+            key={startup.startupId}
             name={startup.name}
             category={startup.category}
-            contractStartDate={startup.contractStartDate}
-            contractTargetDeadline={startup.contractTargetDeadline}
+            investmentStartDate={startup.investmentStartDate}
+            investmentTargetDeadline={startup.investmentTargetDeadline}
             progress={startup.progress}
             currentCoin={startup.currentCoin}
             goalCoin={startup.goalCoin}
@@ -74,6 +96,31 @@ const StartupInvestment = () => {
             image={getImageByName(startup.name)}
           />
         ))}
+      </div>
+
+      {/* 페이지네이션 */}
+      <div className="flex justify-center items-center mt-8 gap-6">
+        <button
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+          className="px-4 py-2 text-sm font-medium text-white bg-violet-500 rounded-lg hover:bg-violet-600 
+            disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200 
+            focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2"
+        >
+          <FaChevronLeft size={16} />
+        </button>
+        <span className="font-bold text-sm text-gray-700 dark:text-gray-300">
+          {currentPage} / {totalPages}
+        </span>
+        <button
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          className="px-4 py-2 text-sm font-medium text-white bg-violet-500 rounded-lg hover:bg-violet-600 
+            disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200 
+            focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2"
+        >
+          <FaChevronRight size={16} />
+        </button>
       </div>
     </div>
   );
