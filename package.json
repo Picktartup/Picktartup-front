@@ -10,8 +10,6 @@
     "@chakra-ui/portal": "^2.0.15",
     "@chakra-ui/system": "^2.3.5",
     "@chakra-ui/tooltip": "^2.2.6",
-    "@emotion/react": "^11.10.5",
-    "@emotion/styled": "^11.10.5",
     "@portone/browser-sdk": "^0.0.10",
     "@tanstack/react-table": "^8.7.9",
     "@testing-library/jest-dom": "^5.16.5",
@@ -29,6 +27,7 @@
     "react-pdf": "^9.1.1",
     "react-router-dom": "^6.4.0",
     "react-scripts": "5.0.1",
+    "react-signature-canvas": "^1.0.6",
     "react-toastify": "^10.0.6",
     "tailwindcss-rtl": "^0.9.0",
     "web-vitals": "^2.1.4"

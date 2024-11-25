@@ -78,7 +78,6 @@ const StartupCard = ({ startup, onClick }) => {
 };
 
 const Marketplace = () => {
-  /*
   // 임시 스타트업 정보
   const [startups, setStartups] = useState([
     {
@@ -94,10 +93,9 @@ const Marketplace = () => {
   ]);
   
   const [isLoading, setIsLoading] = useState(false);
-  */
-  const [isLoading, setIsLoading] = useState(true);
+  //const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
-
+  /*
   const fetchStartups = async () => {
     try {
       setIsLoading(true);
@@ -115,7 +113,7 @@ const Marketplace = () => {
   useEffect(() => {
     fetchStartups();
   }, []);
-  
+  */
 
   return (
     <div className="w-full min-h-screen bg-gray-50">
