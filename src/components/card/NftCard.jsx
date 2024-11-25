@@ -1,7 +1,8 @@
-import React from "react";
+import React ,{ useState} from "react";
 import Card from "components/card";
 import { useNavigate } from "react-router-dom";
 import { ArrowRight } from 'lucide-react';
+import defaultImage from 'assets/img/nfts/default.png';
 
 const NftCard = ({
   startupId,
@@ -15,6 +16,7 @@ const NftCard = ({
   image,
 }) => {
   const navigate = useNavigate();
+  const [imageError, setImageError] = useState(false);  // 이미지 에러 상태 추가
 
   // 상세 페이지로 이동하는 핸들러
   const handleCardClick = (e) => {
@@ -44,7 +46,13 @@ const NftCard = ({
       <div className="relative h-60 bg-gradient-to-b from-gray-50 to-white p-8 flex items-center justify-center">
         <img
           src={image}
-          alt={name}
+          alt={`${name} 로고`}
+          onError={(e) => {
+            console.log('Image load error for:', name, image);
+            setImageError(true);
+            e.target.src = defaultImage;
+            e.target.onerror = null;
+          }}
           className="max-h-full max-w-full object-contain transform hover:scale-105 transition-all duration-300"
         />
       </div>
