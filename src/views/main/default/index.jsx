@@ -78,7 +78,23 @@ const StartupCard = ({ startup, onClick }) => {
 };
 
 const Marketplace = () => {
-  const [startups, setStartups] = useState([]);
+  /*
+  // 임시 스타트업 정보
+  const [startups, setStartups] = useState([
+    {
+      startupId: 1,
+      name: 'Startup A',
+      category: 'Technology',
+      investmentStartDate: '2024-11-01',
+      investmentTargetDeadline: '2024-12-31',
+      fundingProgress: 75,
+      currentCoin: 50000,
+      goalCoin: 100000,
+    },
+  ]);
+  
+  const [isLoading, setIsLoading] = useState(false);
+  */
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
@@ -99,6 +115,7 @@ const Marketplace = () => {
   useEffect(() => {
     fetchStartups();
   }, []);
+  
 
   return (
     <div className="w-full min-h-screen bg-gray-50">
