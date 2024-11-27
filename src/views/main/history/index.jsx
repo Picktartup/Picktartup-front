@@ -1,6 +1,7 @@
 import React, { useState } from "react";
+
 import ActiveInvest from "./components/ActiveInvest";
-import CompletedInvest from "./components/CompletedInvest"; // 추가
+import CompletedInvest from "./components/CompletedInvest"; 
 import Menubar from "./components/Menubar";
 import activeTableData from "./variables/activeTableData.json";
 import completedTableData from "./variables/completedTableData.json";
