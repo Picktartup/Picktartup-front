@@ -14,7 +14,7 @@ const Marketplace = () => {
   const [error, setError] = useState(null); // 에러 상태 추가
   const [logoUrl, setLogUrl] = useState({}); // 로고 URL을 저장할 객체
   const navigate = useNavigate();
-
+  /*
   const fetchStartups = async () => {
     try {
       setIsLoading(true);
