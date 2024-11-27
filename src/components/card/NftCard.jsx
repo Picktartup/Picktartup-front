@@ -3,6 +3,7 @@ import Card from "components/card";
 import { useNavigate } from "react-router-dom";
 import { ArrowRight } from 'lucide-react';
 import InvestmentModal from "components/modal/InvestmentModal"; 
+import defaultImage from 'assets/img/nfts/default.png';
 
 const NftCard = ({
   startupId,
@@ -17,6 +18,7 @@ const NftCard = ({
 }) => {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [imageError, setImageError] = useState(false);  // 이미지 에러 상태 추가
 
   // 상세 페이지로 이동하는 핸들러
   const handleCardClick = (e) => {
@@ -49,16 +51,25 @@ const NftCard = ({
         className="relative flex flex-col bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden"
       >
         {/* 이미지 섹션 */}
-        <div className="relative h-60 bg-gradient-to-b from-gray-50 to-white p-8 flex items-center justify-center">
-          <img
-            src={image}
-            alt={name}
-            className="max-h-full max-w-full object-contain transform hover:scale-105 transition-all duration-300"
-          />
+        <div className="relative  bg-gradient-to-b from-gray-50 to-white p-8 flex items-center justify-center">
+          <div className="w-full h-full aspect-square flex items-center justify-center bg-gray-50/50 rounded-lg p-6">
+            <img
+              src={image}
+              alt={`${name} 로고`}
+              onError={(e) => {
+                console.log('Image load error for:', name, image);
+                setImageError(true);
+                e.target.src = defaultImage;
+                e.target.onerror = null;
+              }}
+              className="w-full h-full object-cover 
+                    transition-transform duration-300 hover:scale-110"
+            />
+          </div>
         </div>
 
         {/* 콘텐츠 섹션 */}
-        <div className="p-6 space-y-5">
+        <div className="p-4 space-y-4">
           {/* 헤더 */}
           <div className="flex items-start justify-between">
             <div>
@@ -112,15 +123,15 @@ const NftCard = ({
           <button
             onClick={handleInvestClick}
             className="invest-button w-full py-4 bg-gradient-to-r from-blue-600 to-blue-700 
-                   text-white rounded-xl font-semibold hover:from-blue-700 hover:to-blue-800 
-                   transform hover:-translate-y-0.5 transition-all duration-200 
-                   flex items-center justify-center gap-2 shadow-md"
+                     text-white rounded-xl font-semibold hover:from-blue-700 hover:to-blue-800 
+                     transform hover:-translate-y-0.5 transition-all duration-200 
+                     flex items-center justify-center gap-2 shadow-md"
           >
             투자하기
             <ArrowRight className="w-4 h-4" />
           </button>
         </div>
-      </Card>
+      </Card >
 
       {/* InvestmentModal 모달 */}
       <InvestmentModal

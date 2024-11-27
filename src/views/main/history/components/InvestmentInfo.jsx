@@ -1,6 +1,6 @@
 import React from "react";
 
-const InvestmentInfo = ({ investmentData, profileData }) => {
+const InvestmentInfo = ({ investmentData }) => {
   return (
     <div className="bg-white rounded-lg p-6">
       <h2 className="text-xl font-semibold text-gray-800 mb-6">투자 정보</h2>
@@ -28,7 +28,7 @@ const InvestmentInfo = ({ investmentData, profileData }) => {
           <div className="text-2xl font-bold text-violet-700">
              {investmentData.roi !== null
               ? `${investmentData.roi}%`
-              : `${profileData.expectedRoi}% 예상`}
+              : `${investmentData.expectedRoi}% 예상`}
           </div>
         </div>
       </div>

@@ -1,13 +1,12 @@
 // StartupProfile.js
 import React from "react";
 
-const StartupProfile = ({ investmentData, profileData }) => {
+const StartupProfile = ({ investmentData }) => {
   const profileInfo = [
-    { label: "기업 정보", value: profileData.desc },
-    { label: "업종", value: profileData.category },
-    { label: "SSI", value: profileData.ssi },
-    { label: "상장 여부", value: profileData.investStatus },
-    { label: "투자 라운드", value: profileData.investRound },
+    { label: "기업 정보", value: investmentData.startupDescription },
+    { label: "업종", value: investmentData.startupCategory },
+    { label: "상장 여부", value: investmentData.investStatus },
+    { label: "투자 라운드", value: investmentData.investRound },
   ];
 
   return (
@@ -17,12 +16,12 @@ const StartupProfile = ({ investmentData, profileData }) => {
         <div className="flex-shrink-0 flex flex-col items-center space-y-4 w-full md:w-64">
           <div className="w-16 h-16 rounded-full overflow-hidden">
             <img 
-              src={profileData.logo} 
+              src={investmentData.logoUrl} 
               alt={investmentData.startupName} 
               className="w-full h-full object-cover"
             />
           </div>
-          <div className="text-center md:text-left">
+          <div className="text-center">
             <h1 className="text-2xl font-semibold text-gray-800">{investmentData.startupName}</h1>
             <span
               className={`inline-block px-3 py-1 mt-2 text-sm font-semibold rounded-full ${

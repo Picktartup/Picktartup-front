@@ -1,13 +1,31 @@
-import React, { useState } from "react";
-
+import React, { useState, useEffect } from "react";
 import ActiveInvest from "./components/ActiveInvest";
-import CompletedInvest from "./components/CompletedInvest"; 
+import CompletedInvest from "./components/CompletedInvest";
 import Menubar from "./components/Menubar";
-import activeTableData from "./variables/activeTableData.json";
-import completedTableData from "./variables/completedTableData.json";
 
 const ProfileOverview = () => {
   const [selectedMenu, setSelectedMenu] = useState("contractActive");
+  const [tableData, setTableData] = useState([]);
+
+  useEffect(() => {
+    // 탭 메뉴에 따라 API 호출
+    const fetchData = async () => {
+      try {
+        const endpoint =
+          selectedMenu === "contractActive"
+            ? "/api/v1/contracts/status/active"
+            : "/api/v1/contracts/status/completed";
+        const response = await fetch(endpoint);
+        const result = await response.json();
+        setTableData(result.data);
+      } catch (error) {
+        console.error("데이터를 불러오는 중 오류가 발생했습니다.", error);
+        setTableData([]);
+      }
+    };
+
+    fetchData();
+  }, [selectedMenu]);
 
   return (
     <div className="flex w-full flex-col gap-5">
@@ -17,9 +35,9 @@ const ProfileOverview = () => {
             <Menubar onSelectMenu={(menu) => setSelectedMenu(menu)} />
           </div>
           {selectedMenu === "contractActive" ? (
-            <ActiveInvest tableData={activeTableData} />
+            <ActiveInvest tableData={tableData} />
           ) : (
-            <CompletedInvest tableData={completedTableData} />
+            <CompletedInvest tableData={tableData} />
           )}
         </div>
       </div>

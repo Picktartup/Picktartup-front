@@ -6,19 +6,6 @@ import Navbar from "components/navbar";
 import SSIIndicator from "components/ssi/SSIIndicator";
 import CompanyOverview from "components/CompanyOverview";
 
-const importAllImages = (requireContext) => {
-  const images = {};
-  requireContext.keys().forEach((key) => {
-    const imageName = key.replace("./", "").replace(".png", "");
-    images[imageName] = requireContext(key);
-  });
-  return images;
-};
-
-const nftImages = importAllImages(
-  require.context("assets/img/nfts", false, /\.png$/)
-);
-const getImageByName = (name) => nftImages[name] || defaultImage;
 
 const DetailPage = () => {
   const { startupId } = useParams();
@@ -30,6 +17,8 @@ const DetailPage = () => {
   const [activeSection, setActiveSection] = useState("dashboard");
   const [currentPage, setCurrentPage] = useState(1);
   const articlesPerPage = 3;
+  const [logoUrl, setLogoUrl] = useState(null);  // 로고 URL을 위한 state 추가
+
 
   // 총 페이지 수 계산
   const totalPages = Math.ceil(articles.length / articlesPerPage);
@@ -44,12 +33,19 @@ const DetailPage = () => {
   useEffect(() => {
     const fetchStartupDetails = async () => {
       try {
-        const response = await axios.get(
-          `/api/v1/startups/${startupId}?source=jpa`
-        );
-        setStartup(response.data.data);
+        const [startupResponse, logoResponse] = await Promise.all([
+          axios.get(`/api/v1/startups/${startupId}?source=jpa`),
+          axios.get('/api/v1/startups/logo-urls')
+        ]);
+        setStartup(startupResponse.data.data);
 
-        const latestSsi = response.data.data.ssiList
+        // 로고 URL 찾기
+        const startupLogo = logoResponse.data.find(
+          item => item.startupId === parseInt(startupId)
+        );
+        setLogoUrl(startupLogo?.logoUrl || defaultImage);
+
+        const latestSsi = startupResponse.data.data.ssiList
           .sort((a, b) => new Date(b.evalDate) - new Date(a.evalDate))[0];
 
         const formattedSsiData = {
@@ -115,7 +111,6 @@ const DetailPage = () => {
   if (loading) return <p>로딩 중...</p>;
   if (error) return <p>에러 발생: {error}</p>;
 
-  const logoSrc = getImageByName(startup.name);
 
   return (
     <div className="w-full min-h-screen bg-gray-50">
@@ -129,9 +124,13 @@ const DetailPage = () => {
             {/* 로고 및 기업명 */}
             <div className="flex items-center space-x-4">
               <img
-                src={logoSrc}
+                src={logoUrl}
                 alt={`${startup.name} 로고`}
                 className="w-8 h-8 rounded-full"
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = defaultImage;
+                }}
               />
               <span className="font-semibold text-navy-700">{startup.name}</span>
 
