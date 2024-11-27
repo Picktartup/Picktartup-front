@@ -1,4 +1,4 @@
-import React ,{ useState} from "react";
+import React, { useState } from "react";
 import Card from "components/card";
 import { useNavigate } from "react-router-dom";
 import { ArrowRight } from 'lucide-react';
@@ -43,22 +43,25 @@ const NftCard = ({
       className="relative flex flex-col bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden"
     >
       {/* 이미지 섹션 */}
-      <div className="relative h-60 bg-gradient-to-b from-gray-50 to-white p-8 flex items-center justify-center">
-        <img
-          src={image}
-          alt={`${name} 로고`}
-          onError={(e) => {
-            console.log('Image load error for:', name, image);
-            setImageError(true);
-            e.target.src = defaultImage;
-            e.target.onerror = null;
-          }}
-          className="max-h-full max-w-full object-contain transform hover:scale-105 transition-all duration-300"
-        />
+      <div className="relative  bg-gradient-to-b from-gray-50 to-white p-8 flex items-center justify-center">
+        <div className="w-full h-full aspect-square flex items-center justify-center bg-gray-50/50 rounded-lg p-6">
+          <img
+            src={image}
+            alt={`${name} 로고`}
+            onError={(e) => {
+              console.log('Image load error for:', name, image);
+              setImageError(true);
+              e.target.src = defaultImage;
+              e.target.onerror = null;
+            }}
+            className="w-full h-full object-cover 
+                  transition-transform duration-300 hover:scale-110"
+          />
+        </div>
       </div>
 
       {/* 콘텐츠 섹션 */}
-      <div className="p-6 space-y-5">
+      <div className="p-4 space-y-4">
         {/* 헤더 */}
         <div className="flex items-start justify-between">
           <div>
@@ -120,7 +123,7 @@ const NftCard = ({
           <ArrowRight className="w-4 h-4" />
         </button>
       </div>
-    </Card>
+    </Card >
   );
 };
 

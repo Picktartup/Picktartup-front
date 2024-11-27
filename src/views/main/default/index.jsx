@@ -8,80 +8,11 @@ import defaultImage from 'assets/img/nfts/default.png';
 import { useNavigate } from 'react-router-dom';
 import NftCard from 'components/card/NftCard';
 
-// const importAllImages = (requireContext) => {
-//   const images = {};
-//   requireContext.keys().forEach((key) => {
-//     const imageName = key.replace('./', '').replace('.png', '');
-//     images[imageName] = requireContext(key);
-//   });
-//   return images;
-// };
-
-// const nftImages = importAllImages(require.context("assets/img/nfts", false, /\.png$/));
-
-// const getImageByName = (name) => nftImages[name] || defaultImage;
-
-// const StartupCard = ({ startup, onClick }) => {
-//   const formatDate = (dateString) => {
-//     const date = new Date(dateString);
-//     return `${date.getFullYear()}.${String(date.getMonth() + 1).padStart(2, '0')}.${String(date.getDate()).padStart(2, '0')}`;
-//   };
-
-//   return (
-//     <motion.div
-//       whileHover={{ y: -5 }}
-//       className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all cursor-pointer"
-//       onClick={() => onClick(startup.startupId)}
-//     >
-//       <div className="relative aspect-[4/3] overflow-hidden">
-//         <img
-//           src={getImageByName(startup.name)}
-//           alt={startup.name}
-//           className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
-//         />
-//         <div className="absolute top-3 right-3">
-//           <span className="px-3 py-1 bg-white/90 backdrop-blur-sm rounded-full text-sm font-medium text-blue-600">
-//             {startup.category}
-//           </span>
-//         </div>
-//       </div>
-
-//       <div className="p-5 space-y-4">
-//         <div>
-//           <h3 className="text-lg font-bold text-gray-900">{startup.name}</h3>
-//           <div className="flex items-center gap-2 text-sm text-gray-500 mt-1">
-//             <span>{formatDate(startup.investmentStartDate)}</span>
-//             <span>~</span>
-//             <span>{formatDate(startup.investmentTargetDeadline)}</span>
-//           </div>
-//         </div>
-
-//         <div className="space-y-2">
-//           <div className="flex items-center justify-between text-sm">
-//             <span className="text-gray-600">투자 진행률</span>
-//             <span className="font-medium text-blue-600">{startup.fundingProgress}%</span>
-//           </div>
-//           <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
-//             <div 
-//               className="h-full bg-blue-600 rounded-full transition-all duration-500"
-//               style={{ width: `${startup.fundingProgress}%` }}
-//             />
-//           </div>
-//           <div className="flex items-center justify-between text-sm text-gray-500">
-//             <span>{startup.currentCoin.toLocaleString()} PCK</span>
-//             <span>{startup.goalCoin.toLocaleString()} PCK</span>
-//           </div>
-//         </div>
-//       </div>
-//     </motion.div>
-//   );
-// };
-
 const Marketplace = () => {
   const [startups, setStartups] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null); // 에러 상태 추가
-  const [logoUrls, setLogUrls] = useState({}); // 로고 URL을 저장할 객체
+  const [logoUrl, setLogUrl] = useState({}); // 로고 URL을 저장할 객체
   const navigate = useNavigate();
 
   const fetchStartups = async () => {
