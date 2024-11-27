@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   createColumnHelper,
@@ -15,17 +15,23 @@ import Card from "components/card";
 
 const columnHelper = createColumnHelper();
 
-function ActiveInvest(props) {
+function ActiveInvest({ tableData }) {
   const navigate = useNavigate();
 
-  const { tableTitle, tableData } = props;
-  const [sorting, setSorting] = useState([{ id: "contractAt", desc: true }]);
+  const isArray = Array.isArray(tableData);
+  const validData = isArray ? tableData : [];
+  const [data, setData] = useState(() => [...validData]);
+
+  const [sorting, setSorting] = useState([{ id: "contractDate", desc: true }]);
   const [pageSize, setPageSize] = useState(10);
-  const [data, setData] = useState(() => [...tableData]);
+  
+  useEffect(() => {
+    setData([...validData]);
+  }, [validData]);
 
   const columns = [
-    columnHelper.accessor("contractAt", {
-      id: "contractAt",
+    columnHelper.accessor("contractDate", {
+      id: "contractDate",
       header: ({ column }) => (
         <div className="flex items-center justify-center gap-2">
           <p className="text-sm font-bold text-gray-600 dark:text-white">투자 날짜</p>
@@ -119,8 +125,8 @@ function ActiveInvest(props) {
         );
       },
     }),
-    columnHelper.accessor("startupGoalProgress", {
-      id: "startupGoalProgress",
+    columnHelper.accessor("progress", {
+      id: "progress",
       header: ({ column }) => (
         <div className="flex items-center justify-center gap-2">
           <p className="text-sm font-bold text-gray-600 dark:text-white">목표 진행률</p>
@@ -161,50 +167,50 @@ function ActiveInvest(props) {
 
   return (
     <Card extra={"bg-white w-full h-full pt-2 pb-6"}>
-      <header className="relative flex items-center justify-between pb-4 px-6 border-b border-gray-200">
-        <div className="text-xl font-bold text-navy-700 dark:text-white">
-          {tableTitle}
-        </div>
-      </header>
+      <header className="relative flex items-center justify-between pb-4 px-6 border-b border-gray-200"></header>
 
       <div className="mx-8 overflow-x-scroll xl:overflow-x-hidden">
-        <table className="w-full">
-          <thead>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <tr key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <th
-                    key={header.id}
-                    colSpan={header.colSpan}
-                    onClick={header.column.getToggleSortingHandler()}
-                    className="cursor-pointer border-b-[1px] border-gray-200 pt-4 pb-4 pr-3 text-center 
-                      hover:bg-gray-50 dark:hover:bg-navy-700/50 transition-colors duration-200"
-                  >
-                    {flexRender(
-                      header.column.columnDef.header,
-                      header.getContext()
-                    )}
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </thead>
-          <tbody>
-            {table.getRowModel().rows.map((row) => (
-              <tr
-                key={row.id}
-                onClick={() => navigate(`/main/history/${Number(row.id) + 1}`)}
-                className="cursor-pointer hover:bg-gray-50 dark:hover:bg-navy-700/50 transition-colors duration-200"
-              >
-                {row.getVisibleCells().map((cell) => (
-                  <td key={cell.id} className="min-w-[150px] border-white/0 py-3 pr-4">
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        {isArray ? (
+          <table className="w-full">
+            <thead>
+              {table.getHeaderGroups().map((headerGroup) => (
+                <tr key={headerGroup.id}>
+                  {headerGroup.headers.map((header) => (
+                    <th
+                      key={header.id}
+                      colSpan={header.colSpan}
+                      onClick={header.column.getToggleSortingHandler()}
+                      className="cursor-pointer border-b-[1px] border-gray-200 pt-4 pb-4 pr-3 text-center 
+                        hover:bg-gray-50 dark:hover:bg-navy-700/50 transition-colors duration-200"
+                    >
+                      {flexRender(
+                        header.column.columnDef.header,
+                        header.getContext()
+                      )}
+                    </th>
+                  ))}
+                </tr>
+              ))}
+            </thead>
+            <tbody>
+              {table.getRowModel().rows.map((row) => (
+                <tr
+                  key={row.original.contractId}
+                  onClick={() => navigate(`/main/history/${Number(row.original.contractId)}`)}
+                  className="cursor-pointer hover:bg-gray-50 dark:hover:bg-navy-700/50 transition-colors duration-200"
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <td key={cell.id} className="min-w-[150px] border-white/0 py-3 pr-4">
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <p>유효한 데이터가 없습니다.</p>
+        )}
       </div>
 
       {/* Pagination */}
