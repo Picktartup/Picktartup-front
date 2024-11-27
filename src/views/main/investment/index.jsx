@@ -4,42 +4,41 @@ import NftCard from "components/card/NftCard";
 import defaultImage from "assets/img/nfts/default.png";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
-// 모든 이미지를 동적으로 가져오기
-const importAllImages = (requireContext) => {
-  const images = {};
-  requireContext.keys().forEach((key) => {
-    const imageName = key.replace("./", "").replace(".png", "");
-    images[imageName] = requireContext(key);
-  });
-  return images;
-};
-
-const nftImages = importAllImages(
-  require.context("assets/img/nfts", false, /\.png$/)
-);
-
-const getImageByName = (name) => nftImages[name] || defaultImage;
-
 const StartupInvestment = () => {
   const [startups, setStartups] = useState([]);
   const [keyword, setKeyword] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6; // 한 페이지에 표시할 스타트업 수
+  const [logoUrls, setLogoUrls] = useState({});
+
+  
+  const fetchStartups = async () => {
+    try {
+      const [startupResponse, logoResponse] = await Promise.all([
+        axios.get(`/api/v1/startups`, {
+          params: { keyword: keyword, source: "elk" },
+        }),
+        axios.get('/api/v1/startups/logo-urls')
+      ]);
+ 
+      setStartups(startupResponse.data.data);
+      
+      // 로고 URL 매핑
+      const urlMap = logoResponse.data.reduce((acc, startup) => {
+        acc[startup.startupId] = startup.logoUrl;
+        return acc;
+      }, {});
+      setLogoUrls(urlMap);
+ 
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
   useEffect(() => {
     fetchStartups();
   }, [keyword]);
 
-  const fetchStartups = async () => {
-    try {
-      const response = await axios.get(`/api/v1/startups`, {
-        params: { keyword: keyword, source: "elk" },
-      });
-      setStartups(response.data.data);
-    } catch (error) {
-      console.error("Error fetching startups:", error);
-    }
-  };
 
   // 페이지에 표시할 데이터 계산
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -93,8 +92,7 @@ const StartupInvestment = () => {
             currentCoin={startup.currentCoin}
             goalCoin={startup.goalCoin}
             fundingProgress={startup.fundingProgress}
-            image={getImageByName(startup.name)}
-          />
+            image={logoUrls[startup.startupId] || defaultImage}           />
         ))}
       </div>
 
