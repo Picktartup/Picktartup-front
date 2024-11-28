@@ -6,7 +6,9 @@ import NFTMarketplace from "views/main/investment";
 import Profile from "views/main/history";
 import ContractDetail from "views/main/history/ContractDetail";
 import DataTables from "views/main/token";
-import RTLDefault from "views/rtl/default";
+import DetailPage from "views/main/default/details";  // 이 줄 추가
+
+//import RTLDefault from "views/rtl/default";
 
 // Auth Imports
 import SignIn from "views/auth/SignIn";
@@ -36,6 +38,13 @@ const routes = [
     component: <NFTMarketplace />,
     secondary: true,
   },
+  {
+    name: "DetailPage",
+    layout: "/main",
+    path: "default/details/:startupId",
+    component: <DetailPage />,
+  },
+
   {
     name: "My 토큰",
     layout: "/main",

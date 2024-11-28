@@ -104,6 +104,7 @@ const Marketplace = () => {
                     startupId={startup.startupId}
                     name={startup.name}
                     category={startup.category}
+                    industry_type={startup.industry_type}
                     investmentStartDate={startup.investmentStartDate}
                     investmentTargetDeadline={startup.investmentTargetDeadline}
                     fundingProgress={startup.fundingProgress}

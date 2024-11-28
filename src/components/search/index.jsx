@@ -12,7 +12,7 @@ const SearchBar = ({ value, onChange, onSearch }) => (
     />
     <button
       onClick={onSearch}
-      className="px-4 py-2 ml-2 text-white bg-blue-500 rounded-md hover:bg-blue-600"
+      className="px-4 py-2 ml-2 text-white bg-violet-500 rounded-md hover:bg-blue-600"
     >
       검색
     </button>
