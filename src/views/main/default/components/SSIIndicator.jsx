@@ -155,7 +155,7 @@ const SSIIndicator = ({ ssiData = {} }) => {
     return (
       <div className="flex flex-col items-center space-y-4">
         <p className="text-gray-600">
-          기업 분석자료를 확인하기 위해서는 로그인이 필요합니다
+          기업 분석자료를 확인하기 위해서는 로그인이 필요합니다 
         </p>
         <button
           onClick={() => setShowContent(true)}

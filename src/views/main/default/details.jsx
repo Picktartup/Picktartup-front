@@ -1,7 +1,5 @@
-// src/views/main/default/details.jsx
-
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 import defaultImage from "assets/img/nfts/default.png";
 import Navbar from "components/navbar";
@@ -10,10 +8,10 @@ import CompanyOverview from "components/CompanyOverview";
 import AnnualFinancialMetrics from "./components/AnnualMetrics";
 import MonthlyMetrics from "./components/MonthlyMetrics";
 import InvestmentRound from "./components/InvestmentRound";
+import InvestmentModal from "components/modal/InvestmentModal"; // 모달 컴포넌트 추가
 
 const DetailPage = () => {
   const { startupId } = useParams();
-  const navigate = useNavigate();
   const [startup, setStartup] = useState(null);
   const [annualData, setAnnualData] = useState([]);
   const [monthlyData, setMonthlyData] = useState([]);
@@ -24,6 +22,7 @@ const DetailPage = () => {
   const [activeSection, setActiveSection] = useState("dashboard");
   const [currentPage, setCurrentPage] = useState(1);
   const articlesPerPage = 3;
+  const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태 관리 추가
 
   const totalPages = Math.ceil(articles.length / articlesPerPage);
   const displayedArticles = articles.slice(
@@ -31,10 +30,8 @@ const DetailPage = () => {
     currentPage * articlesPerPage
   );
 
-  const handleInvestClick = (e) => {
-    e.stopPropagation();
-    navigate(`/invest/${startupId}`);
-  };
+  const openModal = () => setIsModalOpen(true); // 모달 열기
+  const closeModal = () => setIsModalOpen(false); // 모달 닫기
 
   useEffect(() => {
     const fetchStartupDetails = async () => {
@@ -177,7 +174,9 @@ const DetailPage = () => {
                 {["dashboard", "ssi", "articles"].map((section) => (
                   <button
                     key={section}
-                    onClick={() => document.getElementById(section)?.scrollIntoView({ behavior: "smooth" })}
+                    onClick={() =>
+                      document.getElementById(section)?.scrollIntoView({ behavior: "smooth" })
+                    }
                     className={`text-sm font-medium ${
                       activeSection === section
                         ? "text-gray-900 font-bold"
@@ -194,7 +193,7 @@ const DetailPage = () => {
               </nav>
             </div>
             <button
-              onClick={handleInvestClick}
+              onClick={openModal} // 모달 열기 핸들러
               className="bg-violet-600 text-white px-4 py-2 text-sm rounded-lg shadow-sm hover:bg-blue-700 font-bold"
             >
               투자하기
@@ -213,8 +212,8 @@ const DetailPage = () => {
             page={startup.page}
             establishmentDate={startup.establishmentDate}
             annualData={annualData}
-            category={startup.category}  
-
+            category={startup.category}
+            industry_type={startup.industry_type}
           />
         </section>
 
@@ -268,6 +267,13 @@ const DetailPage = () => {
           )}
         </section>
       </div>
+
+      {/* 투자 모달 */}
+      <InvestmentModal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        campaignId={startupId} // 캠페인 ID 전달
+      />
     </div>
   );
 };
