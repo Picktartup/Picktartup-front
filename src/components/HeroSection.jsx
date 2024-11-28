@@ -1,27 +1,82 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { Coins, ChevronRight, TrendingUp, Shield } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Coins, TrendingUp, Shield } from 'lucide-react';
 import backgroundImage from 'assets/img/profile/img1.jpg';
-import { useNavigate } from 'react-router-dom';
 
-const FeatureCard = ({ icon: Icon, title, description }) => (
+const slides = [
+  {
+    id: 1,
+    tag: "토큰 분산 투자 플랫폼",
+    title: "스타트업의 미래를 함께 만드는",
+    subtitle: "블록체인 투자 플랫폼",
+    description: "PCK 토큰으로 투명하고 안전하게 스타트업에 투자하세요",
+    icon: <Coins className="w-6 h-6 text-blue-400" />
+  },
+  {
+    id: 2,
+    tag: "토큰 기반 투자",
+    title: "블록체인으로 시작하는",
+    subtitle: "스마트한 투자",
+    description: "블록체인 기술로 구현된 토큰으로 소액부터 투자가 가능합니다",
+    icon: <Coins className="w-6 h-6 text-green-400" />
+  },
+  {
+    id: 3,
+    tag: "투명한 거래",
+    title: "실시간으로 확인하는",
+    subtitle: "투명한 거래 내역",
+    description: "모든 거래 내역이 블록체인에 기록되어 투명하게 관리됩니다",
+    icon: <TrendingUp className="w-6 h-6 text-purple-400" />
+  },
+  {
+    id: 4,
+    tag: "안전한 보관",
+    title: "신뢰할 수 있는",
+    subtitle: "자산 보관 시스템",
+    description: "최고 수준의 보안 시스템으로 디지털 자산을 안전하게 보호합니다",
+    icon: <Shield className="w-6 h-6 text-orange-400" />
+  }
+];
+
+const ContentSlide = ({ content, isVisible }) => (
   <motion.div
-    whileHover={{ y: -5 }}
-    className="bg-white/90 backdrop-blur-md p-6 rounded-xl border border-white/20 shadow-lg"
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : 20 }}
+    exit={{ opacity: 0, y: -20 }}
+    transition={{ duration: 0.5 }}
+    className="absolute inset-0"
   >
-    <div className="w-12 h-12 rounded-full bg-blue-600/10 flex items-center justify-center mb-4">
-      <Icon className="w-6 h-6 text-blue-600" />
-    </div>
-    <h3 className="text-lg font-semibold mb-2 text-gray-900">{title}</h3>
-    <p className="text-gray-600">{description}</p>
+    <motion.div
+      className="inline-flex items-center px-4 py-2 bg-white/10 backdrop-blur-md rounded-full border border-white/20 mb-6"
+    >
+      {content.icon}
+      <span className="text-sm font-medium text-white ml-2">{content.tag}</span>
+    </motion.div>
+
+    <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
+      <span className="text-white">{content.title}</span>
+      <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400 mt-2">
+        {content.subtitle}
+      </span>
+    </h1>
+
+    <p className="text-xl text-white/90 mb-8">{content.description}</p>
   </motion.div>
 );
 
 const HeroSection = () => {
-  const navigate = useNavigate();
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, 4000);
+    return () => clearInterval(timer);
+  }, []);
+
   return (
     <div className="relative min-h-[90vh] overflow-hidden">
-      {/* Background */}
+      {/* Background Image */}
       <div
         className="absolute inset-0 z-0"
         style={{
@@ -35,96 +90,32 @@ const HeroSection = () => {
       </div>
 
       {/* Content */}
-      <div className="relative z-10">
-        {/* Tag */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="absolute top-8 left-8 md:left-[10%]"
-        >
+      <div className="relative z-10 container mx-auto px-4 pt-32 pb-20">
+        <div className="max-w-4xl mx-auto text-center mb-16 relative min-h-[300px]">
+          <AnimatePresence mode="wait">
+            <ContentSlide 
+              key={currentSlide}
+              content={slides[currentSlide]} 
+              isVisible={true}
+            />
+          </AnimatePresence>
 
-        </motion.div>
-
-        {/* Main content container */}
-        <div className="container mx-auto px-4 pt-32 pb-20">
-          <div className="max-w-4xl mx-auto text-center mb-16">
-            <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="absolute top-8 left-4 md:left-[5%] z-20" // 위치 수정
-            >
-              <div className="inline-flex items-center px-4 py-2 bg-white/10 backdrop-blur-md rounded-full border border-white/20">
-                <Coins className="w-5 h-5 text-white mr-2" />
-                <span className="text-sm font-medium text-white">토큰 분산 투자 플랫폼</span>
-              </div>
-            </motion.div>
-
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              className="text-4xl md:text-6xl font-bold mb-6 leading-tight text-white"
-            >
-              스타트업의 미래를 함께 만드는
-              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400 mt-2">
-                블록체인 투자 플랫폼
-              </span>
-            </motion.h1>
-
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="text-xl text-gray-300 mb-8"
-            >
-              PCK 토큰으로 투명하고 안전하게 스타트업에 투자하세요
-            </motion.p>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className="flex flex-wrap justify-center gap-4"
-            >
+          {/* Progress Indicators */}
+          <div className="flex justify-center gap-2 mt-8">
+            {slides.map((_, index) => (
               <button
-                onClick={() => navigate('/main/investment')}
-                className="group px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold transition-all flex items-center backdrop-blur-sm">
-                지금 시작하기
-                <ChevronRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-              </button>
-              <button className="px-8 py-4 bg-white/10 hover:bg-white/20 text-white rounded-xl font-semibold transition-all border border-white/20 backdrop-blur-sm">
-                자세히 알아보기
-              </button>
-            </motion.div>
+                key={index}
+                onClick={() => setCurrentSlide(index)}
+                className={`h-1 rounded-full transition-all duration-300 ${
+                  currentSlide === index ? 'w-8 bg-blue-400' : 'w-4 bg-white/30'
+                }`}
+              />
+            ))}
           </div>
-
-          {/* Features */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
-            className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto"
-          >
-            <FeatureCard
-              icon={Coins}
-              title="토큰 기반 투자"
-              description="블록체인 기술로 구현된 토큰으로 소액부터 투자가 가능합니다."
-            />
-            <FeatureCard
-              icon={TrendingUp}
-              title="투명한 거래"
-              description="모든 거래 내역이 블록체인에 기록되어 투명하게 관리됩니다."
-            />
-            <FeatureCard
-              icon={Shield}
-              title="안전한 보관"
-              description="디지털 자산을 안전하게 보관하고 관리할 수 있습니다."
-            />
-          </motion.div>
         </div>
       </div>
 
-      {/* Wave Effect with adjusted opacity */}
+      {/* Wave Effect */}
       <div className="absolute bottom-0 left-0 right-0 z-10">
         <svg
           viewBox="0 0 1440 120"
