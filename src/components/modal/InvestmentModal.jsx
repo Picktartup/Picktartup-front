@@ -77,9 +77,9 @@ const InvestmentModal = ({ isOpen, onClose, campaignId }) => {
     goToNextStep();
   };
 
-  const updateBalance = async (address) => {
+  const updateBalance = async (userId) => {
     try {
-      const response = await axios.post(`http://localhost:8989/${address}/update-balance`);
+      const response = await axios.post(`/api/v1/wallets/${userId}/update-balance`);
       console.log(response.data); // 성공 응답 출력
     } catch (error) {
       console.error('잔고 업데이트 중 오류 발생:', error);
@@ -103,15 +103,17 @@ const InvestmentModal = ({ isOpen, onClose, campaignId }) => {
     });
 
     try {
+      const userId = process.env.REACT_APP_MOCK_USER_ID;
+
       const response = await axios.post(`/api/v1/contracts/transaction`, {
-        userId: process.env.REACT_APP_MOCK_USER_ID,
+        userId: userId,
         startupId: 5,
         walletPassword: walletPassword,
         amount: parseFloat(tokenAmount),
         investorSignature: signatureUrl
       });
 
-      if (response.status === 200 && response.data.success) {
+      if (response.status === 200 && response.data.status === "OK") {
         //const { amount, totalRaised, transactionHash } = response.data.data;
         //console.log("투자 금액:", amount);
         //console.log("모금 총액:", totalRaised);
@@ -129,7 +131,7 @@ const InvestmentModal = ({ isOpen, onClose, campaignId }) => {
           toast.success("투자가 완료되었습니다!", { autoClose: 5000 });
         }
       
-        // updateBalance(user-wallet-address);
+        // updateBalance(userId);
       } else {
         // 실패 시 처리
         if (toast.isActive(toastId)) {
