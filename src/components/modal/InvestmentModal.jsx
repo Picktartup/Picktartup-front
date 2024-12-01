@@ -17,6 +17,7 @@ const InvestmentModal = ({ isOpen, onClose, campaignId }) => {
   const [isAgreed, setIsAgreed] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [signatureUrl, setSignatureUrl] = useState("");
+  const [walletPassword, setWalletPassword] = useState("");
 
   const signatureRef = useRef(null);
 
@@ -61,44 +62,60 @@ const InvestmentModal = ({ isOpen, onClose, campaignId }) => {
       return;
     }
 
-    setStep(4);
+    goToNextStep();
   };
 
-  const handleFinalSubmit = async () => {
+  const handleSignatureSubmit = async () => {
     if (signatureRef.current && signatureRef.current.isEmpty()) {
       alert("서명을 완료해야 합니다.");
       return;
     }
 
-    const signatureData = signatureRef.current.toDataURL(); // 서명 데이터를 URL로 변환
+    const signatureData = signatureRef.current.toDataURL();
     setSignatureUrl(signatureData);
+
+    goToNextStep();
+  };
+
+  const updateBalance = async (address) => {
+    try {
+      const response = await axios.post(`http://localhost:8989/${address}/update-balance`);
+      console.log(response.data); // 성공 응답 출력
+    } catch (error) {
+      console.error('잔고 업데이트 중 오류 발생:', error);
+    }
+  };
+
+  const handleFinalSubmit = async () => {
+    if (!walletPassword) {
+      alert("지갑 비밀번호를 입력해주세요.");
+      return;
+    }
 
     setIsLoading(true);
 
     // 모달 닫기
     onClose();
 
-    // 처리 중 토스트 생성
     const toastId = toast.loading("토큰을 전송 중입니다...", {
-      autoClose: false, // 자동 닫힘 없음
-      closeOnClick: false, // 클릭으로 닫기 비활성화
-      onClose: () => {
-        console.log("토큰 전송 중 토스트가 닫혔습니다.");
-      },
+      autoClose: false,
+      closeOnClick: false,
     });
 
     try {
-      const response = await axios.post(`/api/v1/startup-funding/campaigns/${campaignId}/invest`, {
+      const response = await axios.post(`/api/v1/contracts/transaction`, {
         userId: process.env.REACT_APP_MOCK_USER_ID,
+        startupId: 5,
+        walletPassword: walletPassword,
         amount: parseFloat(tokenAmount),
-        walletPassword: process.env.REACT_APP_MOCK_WALLET_PW,
+        investorSignature: signatureUrl
       });
 
       if (response.status === 200 && response.data.success) {
-        const { amount, totalRaised, transactionHash } = response.data.data;
-        console.log("투자 금액:", amount);
-        console.log("모금 총액:", totalRaised);
-        console.log("트랜잭션 해시:", transactionHash);
+        //const { amount, totalRaised, transactionHash } = response.data.data;
+        //console.log("투자 금액:", amount);
+        //console.log("모금 총액:", totalRaised);
+        //console.log("트랜잭션 해시:", transactionHash);
 
         // 토스트가 닫혔는지 확인한 후 성공 메시지 출력
         if (toast.isActive(toastId)) {
@@ -111,6 +128,8 @@ const InvestmentModal = ({ isOpen, onClose, campaignId }) => {
         } else {
           toast.success("투자가 완료되었습니다!", { autoClose: 5000 });
         }
+      
+        // updateBalance(user-wallet-address);
       } else {
         // 실패 시 처리
         if (toast.isActive(toastId)) {
@@ -190,7 +209,7 @@ const InvestmentModal = ({ isOpen, onClose, campaignId }) => {
             className="w-full py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
             disabled={isLoading}
           >
-            {isLoading ? "로딩 중..." : "투자하기"}
+            {isLoading ? "로딩 중..." : "다음"}
           </button>
         </div>
       )}
@@ -254,13 +273,39 @@ const InvestmentModal = ({ isOpen, onClose, campaignId }) => {
               서명 초기화
             </button>
             <button
-              onClick={handleFinalSubmit}
+              onClick={handleSignatureSubmit}
               className="py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
               disabled={isLoading}
             >
-              {isLoading ? "로딩 중..." : "투자하기"}
+              {isLoading ? "로딩 중..." : "다음"}
             </button>
           </div>
+        </div>
+      )}
+
+      {step === 5 && (
+        <div>
+          <h2 className="text-lg font-bold text-gray-900 mb-4">지갑 비밀번호 입력</h2>
+          <div className="mb-4">
+            <label htmlFor="walletPassword" className="block text-sm font-medium text-gray-700">
+              지갑 비밀번호
+            </label>
+            <input
+              type="password"
+              id="walletPassword"
+              value={walletPassword}
+              onChange={(e) => setWalletPassword(e.target.value)}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+              placeholder="비밀번호 입력"
+            />
+          </div>
+          <button
+            onClick={handleFinalSubmit}
+            className="w-full py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+            disabled={isLoading}
+          >
+            {isLoading ? "로딩 중..." : "투자하기"}
+          </button>
         </div>
       )}
     </Modal>
