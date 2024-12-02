@@ -12,6 +12,8 @@ import DetailPage from "views/main/default/details";  // 이 줄 추가
 
 // Auth Imports
 import SignIn from "views/auth/SignIn";
+import SignUpStep1 from "views/auth/SignUpStep1";
+import SignUpStep2 from "views/auth/SignUpStep2";
 
 // Icon Imports
 import {
@@ -20,6 +22,7 @@ import {
   MdBarChart,
   MdPerson,
   MdLock,
+  MdPersonAdd,
 } from "react-icons/md";
 
 const routes = [
@@ -71,6 +74,20 @@ const routes = [
     path: "sign-in",
     icon: <MdLock className="h-6 w-6" />,
     component: <SignIn />,
+  },
+  {
+    name: "Sign Up Step 1",
+    layout: "/auth",
+    path: "signup/step1",
+    icon: <MdPersonAdd className="h-6 w-6" />,
+    component: <SignUpStep1 />,
+  },
+  {
+    name: "Sign Up Step 2",
+    layout: "/auth",
+    path: "signup/step2",
+    icon: <MdPersonAdd className="h-6 w-6" />,
+    component: <SignUpStep2 />,
   },
 ];
 export default routes;
