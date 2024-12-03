@@ -18,6 +18,8 @@ const products = [
 ];
 
 const PurchaseTable = () => {
+  const userId = 3;
+
   const navigate = useNavigate();
 
   async function requestPayment(coin, price) {
@@ -49,7 +51,9 @@ const PurchaseTable = () => {
 
     // 결제 성공 알림 표시
     alert("결제가 성공적으로 완료되었습니다!");
-
+ 
+    console.log("결제 coin:", coin);
+    console.log("paymentId:", paymentId);
 
     // 서버에 결제 검증 요청
     const notified = await fetch("/api/v1/coins/purchase", {
@@ -57,7 +61,7 @@ const PurchaseTable = () => {
       headers: { "Content-Type": "application/json" },
       // paymentId와 주문 정보를 서버에 전달합니다
       body: JSON.stringify({
-        walletId: 1,          // TODO: 로그인한 유저 정보로 수정
+        userId: userId,          // TODO: 로그인한 유저 정보로 수정
         amount: price,
         coin: Number(coin),
         paymentId: paymentId,

@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import axios from "axios";
 
 const ExchangeTable = ({ balance }) => {
+  const userId = 3;
+
   const [exchangeAmount, setExchangeAmount] = useState("");
   const [selectedBank, setSelectedBank] = useState("");
   const [accountNumber, setAccountNumber] = useState("");
@@ -36,7 +38,7 @@ const ExchangeTable = ({ balance }) => {
 
     try {
       const response = await axios.post("/api/v1/coins/exchange", {
-        walletId: 1,
+        userId: userId,
         exchangeAmount: Number(exchangeAmount),
         exchangeBank: selectedBank,
         exchangeAccount: accountNumber,
