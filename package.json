@@ -41,6 +41,10 @@
     "pretty": "prettier --write \"./**/*.{js,jsx,json}\""
   },
   "eslintConfig": {
+    "rules": {
+        "no-unused-vars": "warn",
+        "react-hooks/exhaustive-deps": "warn"
+    },
     "extends": [
       "react-app",
       "react-app/jest"
