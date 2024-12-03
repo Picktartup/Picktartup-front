@@ -41,6 +41,10 @@
     "pretty": "prettier --write \"./**/*.{js,jsx,json}\""
   },
   "eslintConfig": {
+    "rules": {
+      "no-unused-vars": "warn",
+      "react-hooks/exhaustive-deps": "warn"
+    },
     "extends": [
       "react-app",
       "react-app/jest"
@@ -59,6 +63,7 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "autoprefixer": "^10.4.8",
     "postcss": "^8.4.16",
     "prettier": "^2.8.3",
