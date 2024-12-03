@@ -8,6 +8,8 @@ import HistoryTable from "./components/HistoryTable";
 import ExchangeTable from "./components/ExchangeTable";
 
 const Tables = () => {
+  const userId = 3;
+
   const historyTableTitle = "토큰 구매/현금화 내역";
   const [apiData, setApiData] = useState(null);
   const [error, setError] = useState(null);
@@ -20,7 +22,7 @@ const Tables = () => {
 
     const fetchBalance = async () => {
       try {
-        const response = await fetch('/api/v1/coins/balance?walletId=1'); // TODO: 수정
+        const response = await fetch(`/api/v1/coins/balance?userId=${userId}`);
         const data = await response.json();
         setBalance(data.data);
       } catch (error) {
@@ -33,7 +35,7 @@ const Tables = () => {
   const fetchMenuData = async (menu) => {
     if (menu === "history" && tableData.length > 0) return;
 
-    const endpoint = "/api/v1/coins/purchases?userId=1";
+    const endpoint = `/api/v1/coins/purchases?userId=${userId}`;
 
     try {
       const response = await axios.get(endpoint);
