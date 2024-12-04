@@ -24,8 +24,8 @@ const Navbar = (props) => {
   };
 
   const menuItems = [
-    { path: "/main/investment", text: "스타트업 투자" },
-    { path: "/main/token", text: "My 토큰" },
+    { path: "/main/manage", text: "스타트업 관리" },
+    { path: "/main/monitoring", text: "모니터링" },
     { path: "/main/history", text: "투자 내역" },
   ];
 

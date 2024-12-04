@@ -2,9 +2,9 @@ import React from "react";
 
 // Main Imports
 import MainDashboard from "views/main/default";
-import NFTMarketplace from "views/main/investment";
+import NFTMarketplace from "views/main/manage";
 import Profile from "views/main/history";
-import DataTables from "views/main/token";
+import DataTables from "views/main/monitoring";
 import RTLDefault from "views/rtl/default";
 
 // Auth Imports
@@ -18,6 +18,7 @@ import {
   MdPerson,
   MdLock,
 } from "react-icons/md";
+import StartupInvestment from "views/main/manage";
 
 const routes = [
   {
@@ -28,18 +29,18 @@ const routes = [
     component: <MainDashboard />,
   },
   {
-    name: "스타트업 투자",
+    name: "스타트업 관리",
     layout: "/main",
-    path: "investment",
+    path: "manage",
     icon: <MdOutlineShoppingCart className="h-6 w-6" />,
-    component: <NFTMarketplace />,
+    component: <StartupInvestment />,
     secondary: true,
   },
   {
-    name: "My 토큰",
+    name: "모니터링",
     layout: "/main",
     icon: <MdBarChart className="h-6 w-6" />,
-    path: "token",
+    path: "monitoring",
     component: <DataTables />,
   },
   {
