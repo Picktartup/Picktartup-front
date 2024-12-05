@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import ActiveInvest from "./components/ActiveInvest";
 import CompletedInvest from "./components/CompletedInvest";
 import Menubar from "./components/Menubar";
@@ -9,6 +10,8 @@ const ProfileOverview = () => {
   const [tableData, setTableData] = useState([]);
   const [userId, setUserId] = useState(null);
   const [error, setError] = useState(null);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     // JWT 토큰에서 userId 추출 및 유효성 검증
@@ -29,7 +32,7 @@ const ProfileOverview = () => {
 
     const extractedUserId = extractUserIdFromToken(token);
     setUserId(extractedUserId);
-  }, []);
+  }, [navigate]);
 
   useEffect(() => {
     // userId가 설정된 후 API 호출
