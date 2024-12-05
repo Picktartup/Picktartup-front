@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { extractUserIdFromToken, isTokenExpired } from "../utils/jwtUtils";
+import { extractUserIdFromToken, isTokenExpired } from "utils/jwtUtils";
 
 const ExchangeTable = ({ balance }) => {
   const [userId, setUserId] = useState(null);

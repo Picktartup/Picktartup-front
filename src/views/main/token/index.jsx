@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { extractUserIdFromToken, isTokenExpired } from '../utils/jwtUtils';
+import { extractUserIdFromToken, isTokenExpired } from "utils/jwtUtils";
 
 import Menubar from "components/menubar";
 import VideoWithTransparency from "components/VideoWithTransparency";
