@@ -28,7 +28,7 @@ const PurchaseTable = () => {
     if (token) {
       if (isTokenExpired(token)) {
         console.warn("Token has expired. Redirecting to login...");
-        navigate("/login"); // 로그인 페이지로 리다이렉트
+        navigate("/auth/sign-in"); // 로그인 페이지로 리다이렉트
         return;
       }
 
@@ -40,7 +40,7 @@ const PurchaseTable = () => {
       // fetch.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     } else {
       console.warn("No token found. Redirecting to login...");
-      navigate("/login"); // 로그인 페이지로 리다이렉트
+      navigate("/auth/sign-in"); // 로그인 페이지로 리다이렉트
     }
   }, [navigate]);
 
@@ -74,7 +74,7 @@ const PurchaseTable = () => {
     alert("결제가 성공적으로 완료되었습니다!");
 
     // 서버에 결제 검증 요청
-    const notified = await fetch("https://picktartup.com/coins/api/v1/coins/purchase", {
+    const notified = await fetch("https://picktartup.com/api/v1/coins/purchase", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
