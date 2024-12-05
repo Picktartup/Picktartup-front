@@ -45,7 +45,7 @@ const InvestmentModal = ({ isOpen, onClose, campaignId }) => {
         transactionHash: null,
       };
 
-      const response = await axios.post("/api/v1/contracts/pdf", requestData);
+      const response = await axios.post("https://picktartup.local:31158/contract/api/v1/contracts/pdf", requestData);
       setPdfUrl(response.data.data);
       goToNextStep();
     } catch (error) {
@@ -79,7 +79,7 @@ const InvestmentModal = ({ isOpen, onClose, campaignId }) => {
 
   const updateBalance = async (userId) => {
     try {
-      const response = await axios.post(`/api/v1/wallets/${userId}/update-balance`);
+      const response = await axios.post(`https://picktartup.local:31158/wallet/api/v1/wallets/${userId}/update-balance`);
       console.log(response.data); // 성공 응답 출력
     } catch (error) {
       console.error('잔고 업데이트 중 오류 발생:', error);
@@ -105,7 +105,7 @@ const InvestmentModal = ({ isOpen, onClose, campaignId }) => {
     try {
       const userId = process.env.REACT_APP_MOCK_USER_ID;
 
-      const response = await axios.post(`/api/v1/contracts/transaction`, {
+      const response = await axios.post(`https://picktartup.local:31158/contract/api/v1/contracts/transaction`, {
         userId: userId,
         startupId: 5,
         walletPassword: walletPassword,

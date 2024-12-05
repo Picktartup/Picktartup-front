@@ -2,7 +2,7 @@
   "name": "horizon-ui-tailwind-react",
   "version": "1.1.0",
   "private": true,
-  "proxy": "http://localhost:8080",
+  "proxy": "https://picktartup.local:31158",
   "dependencies": {
     "@chakra-ui/hooks": "^2.1.4",
     "@chakra-ui/modal": "^2.2.9",

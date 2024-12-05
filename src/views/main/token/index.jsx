@@ -29,6 +29,7 @@ const Tables = () => {
 
       const extractedUserId = extractUserIdFromToken(token);
       setUserId(extractedUserId);
+      console.log("userId: ", userId);
     } else {
       console.warn("No token found. Redirecting to login...");
       // 로그인 페이지로 리다이렉트 (필요한 경우)
@@ -44,7 +45,7 @@ const Tables = () => {
     if (!userId) return;
 
     try {
-      const response = await fetch(`/api/v1/coins/balance?userId=${userId}`);
+      const response = await fetch(`https://picktartup.com/coin/api/v1/coins/balance?userId=${userId}`);
       const data = await response.json();
       setBalance(data.data);
     } catch (error) {
@@ -57,7 +58,7 @@ const Tables = () => {
 
     if (menu === "history" && tableData.length > 0) return;
 
-    const endpoint = `/api/v1/coins/purchases?userId=${userId}`;
+    const endpoint = `https://picktartup.com/api/v1/coins/purchases?userId=${userId}`;
 
     try {
       const response = await axios.get(endpoint);

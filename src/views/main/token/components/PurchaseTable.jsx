@@ -34,9 +34,10 @@ const PurchaseTable = () => {
 
       const decodedUserId = extractUserIdFromToken(token);
       setUserId(decodedUserId);
+      console.log("userId: ", userId);
 
       // 전역 Axios 요청에 Authorization 헤더 추가
-      fetch.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+      // fetch.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     } else {
       console.warn("No token found. Redirecting to login...");
       navigate("/login"); // 로그인 페이지로 리다이렉트
@@ -73,11 +74,11 @@ const PurchaseTable = () => {
     alert("결제가 성공적으로 완료되었습니다!");
 
     // 서버에 결제 검증 요청
-    const notified = await fetch("/api/v1/coins/purchase", {
+    const notified = await fetch("https://picktartup.com/coins/api/v1/coins/purchase", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("accessToken")}`, // 헤더에 JWT 추가
+        //Authorization: `Bearer ${localStorage.getItem("accessToken")}`, // 헤더에 JWT 추가
       },
       body: JSON.stringify({
         userId: userId, // JWT에서 추출한 userId 사용

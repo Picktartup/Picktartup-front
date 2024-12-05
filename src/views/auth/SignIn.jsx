@@ -13,7 +13,7 @@ const SignIn = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('/api/v1/users/public/login', {
+      const response = await axios.post('https://picktartup.com/api/v1/users/public/login', {
         email,
         password
       });

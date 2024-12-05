@@ -13,8 +13,8 @@ const ProfileOverview = () => {
       try {
         const endpoint =
           selectedMenu === "contractActive"
-            ? "/api/v1/contracts/status/active"
-            : "/api/v1/contracts/status/completed";
+            ? "https://picktartup.local:31158/contract/api/v1/contracts/status/active"
+            : "https://picktartup.local:31158/contract/api/v1/contracts/status/completed";
         const response = await fetch(endpoint);
         const result = await response.json();
         setTableData(result.data);
