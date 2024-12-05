@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Card from "components/card";
 import { FaBitcoin } from "react-icons/fa";
 import * as PortOne from "@portone/browser-sdk/v2";
-import { extractUserIdFromToken, isTokenExpired } from "../utils/jwtUtils";
+import { extractUserIdFromToken, isTokenExpired } from "utils/jwtUtils";
 
 const products = [
   { id: 1, name: "1", price: 100 },
