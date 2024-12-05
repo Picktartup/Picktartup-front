@@ -1,4 +1,4 @@
-import jwtDecode from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 
 /**
  * JWT 토큰에서 userId를 추출하는 유틸리티 함수
