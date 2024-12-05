@@ -18,7 +18,7 @@ const ContractDetail = () => {
         setLoading(true); // 로딩 상태 시작
 
         // 계약 상세 내역 API 호출
-        const contractResponse = await fetch(`/api/v1/contracts/details/${id}`);
+        const contractResponse = await fetch(`https://picktartup.local:31158/contract/api/v1/contracts/details/${id}`);
         const response = await contractResponse.json();
 
         // 상태 업데이트

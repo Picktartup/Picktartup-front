@@ -40,8 +40,8 @@ const DetailPage = () => {
         setError(null);
 
         const [startupResponse, logoResponse] = await Promise.all([
-          axios.get(`/api/v1/startups/${startupId}?source=jpa`),
-          axios.get("/api/v1/startups/logo-urls"),
+          axios.get(`https://picktartup.com/api/v1/startups/${startupId}?source=jpa`),
+          axios.get("https://picktartup.com/api/v1/startups/logo-urls"),
         ]);
 
         const startupData = startupResponse.data.data;
@@ -82,7 +82,7 @@ const DetailPage = () => {
     const fetchAnnualMetrics = async () => {
       try {
         const response = await axios.get(
-          `/api/v1/startups/${startupId}/metrics/annual`
+          `https://picktartup.com/api/v1/startups/${startupId}/metrics/annual`
         );
         if (response.data) {
           const formattedData = response.data.map((item) => ({
@@ -108,7 +108,7 @@ const DetailPage = () => {
     const fetchMonthlyData = async () => {
       try {
         const response = await axios.get(
-          `/api/v1/startups/${startupId}/metrics/monthly`
+          `https://picktartup.com/api/v1/startups/${startupId}/metrics/monthly`
         );
         setMonthlyData(response.data);
       } catch (error) {
@@ -125,7 +125,7 @@ const DetailPage = () => {
       if (!startup?.name) return;
       try {
         const response = await axios.get(
-          `/api/v1/articles/startup/${startup.startupId}`
+          `https://picktartup.com/api/v1/articles/startup/${startup.startupId}`
         );
         setArticles(response.data);
       } catch (err) {
