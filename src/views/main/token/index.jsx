@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { extractUserIdFromToken, isTokenExpired } from '../utils/jwtUtils';
 
 import Menubar from "components/menubar";
 import VideoWithTransparency from "components/VideoWithTransparency";
@@ -8,8 +9,7 @@ import HistoryTable from "./components/HistoryTable";
 import ExchangeTable from "./components/ExchangeTable";
 
 const Tables = () => {
-  const userId = 3;
-
+  const [userId, setUserId] = useState(null);
   const historyTableTitle = "토큰 구매/현금화 내역";
   const [apiData, setApiData] = useState(null);
   const [error, setError] = useState(null);
@@ -18,21 +18,43 @@ const Tables = () => {
   const [balance, setBalance] = useState(null);
 
   useEffect(() => {
-    fetchMenuData("history");
-
-    const fetchBalance = async () => {
-      try {
-        const response = await fetch(`/api/v1/coins/balance?userId=${userId}`);
-        const data = await response.json();
-        setBalance(data.data);
-      } catch (error) {
-        console.error('잔액 데이터를 가져오는 중 오류 발생:', error);
+    // JWT 토큰에서 userId를 추출하고 유효성 검증
+    const token = localStorage.getItem('accessToken');
+    if (token) {
+      if (isTokenExpired(token)) {
+        console.warn("Token has expired. Redirecting to login...");
+        // 로그인 페이지로 리다이렉트 (필요한 경우)
+        return;
       }
-    };
+
+      const extractedUserId = extractUserIdFromToken(token);
+      setUserId(extractedUserId);
+    } else {
+      console.warn("No token found. Redirecting to login...");
+      // 로그인 페이지로 리다이렉트 (필요한 경우)
+      return;
+    }
+
+    // 메뉴 데이터 및 잔액 정보 불러오기
+    fetchMenuData("history");
     fetchBalance();
   }, []);
 
+  const fetchBalance = async () => {
+    if (!userId) return;
+
+    try {
+      const response = await fetch(`/api/v1/coins/balance?userId=${userId}`);
+      const data = await response.json();
+      setBalance(data.data);
+    } catch (error) {
+      console.error('잔액 데이터를 가져오는 중 오류 발생:', error);
+    }
+  };
+
   const fetchMenuData = async (menu) => {
+    if (!userId) return;
+
     if (menu === "history" && tableData.length > 0) return;
 
     const endpoint = `/api/v1/coins/purchases?userId=${userId}`;
