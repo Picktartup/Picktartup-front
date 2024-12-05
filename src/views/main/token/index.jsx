@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { extractUserIdFromToken, isTokenExpired } from "utils/jwtUtils";
 
@@ -15,6 +16,8 @@ const Tables = () => {
   const [error, setError] = useState(null);
   const [selectedMenu, setSelectedMenu] = useState("purchase");
   const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
 
   const historyTableTitle = "토큰 구매/현금화 내역";
 
@@ -35,7 +38,7 @@ const Tables = () => {
 
     const extractedUserId = extractUserIdFromToken(token);
     setUserId(extractedUserId);
-  }, []);
+  }, [navigate]);
 
   useEffect(() => {
     if (!userId) return;
