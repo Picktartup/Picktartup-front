@@ -1,10 +1,11 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Modal from "components/modal";
 import SignatureCanvas from "react-signature-canvas";
 import { pdfjs, Document, Page } from "react-pdf";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { extractUserIdFromToken, isTokenExpired } from "utils/jwtUtils";  // import the utility functions
+import { extractUserIdFromToken, isTokenExpired } from "utils/jwtUtils";
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   "pdfjs-dist/build/pdf.worker.min.mjs",
@@ -12,6 +13,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 ).toString();
 
 const InvestmentModal = ({ isOpen, onClose, campaignId }) => {
+  const [userId, setUserId] = useState(null);
   const [step, setStep] = useState(1);
   const [tokenAmount, setTokenAmount] = useState("");
   const [pdfUrl, setPdfUrl] = useState("");
@@ -19,21 +21,23 @@ const InvestmentModal = ({ isOpen, onClose, campaignId }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [signatureUrl, setSignatureUrl] = useState("");
   const [walletPassword, setWalletPassword] = useState("");
+  const [authToken, setAuthToken] = useState(null); // 새 상태 추가
 
+  const navigate = useNavigate();
   const signatureRef = useRef(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");  // 토큰 가져오기
+    if (token && !isTokenExpired(token)) {
+      setAuthToken(token);  // 유효한 토큰이 있으면 상태에 저장
+    } else {
+      toast.error("세션이 만료되었습니다. 다시 로그인 해주세요.");
+      onClose();  // 세션 만료 시 모달 닫기
+    }
+  }, [onClose]);  // onClose가 변경될 때마다 실행되도록 의존성 추가
 
   const goToNextStep = () => {
     setStep((prevStep) => prevStep + 1);
-  };
-
-  const getAuthToken = () => {
-    const token = localStorage.getItem("authToken");
-    if (!token || isTokenExpired(token)) {
-      toast.error("세션이 만료되었습니다. 다시 로그인 해주세요.");
-      onClose();
-      return null;
-    }
-    return token;
   };
 
   const handleInvestmentSubmit = async () => {
@@ -43,8 +47,6 @@ const InvestmentModal = ({ isOpen, onClose, campaignId }) => {
     }
 
     setIsLoading(true);
-
-    const authToken = getAuthToken(); // Get token from localStorage
 
     if (!authToken) return; // If token is invalid or expired, return
 
@@ -101,8 +103,6 @@ const InvestmentModal = ({ isOpen, onClose, campaignId }) => {
   };
 
   const updateBalance = async (userId) => {
-    const authToken = getAuthToken(); // Get token from localStorage
-
     if (!authToken) return; // If token is invalid or expired, return
 
     try {
@@ -128,7 +128,6 @@ const InvestmentModal = ({ isOpen, onClose, campaignId }) => {
     }
 
     setIsLoading(true);
-    const authToken = getAuthToken(); // Get token from localStorage
 
     if (!authToken) return; // If token is invalid or expired, return
 
