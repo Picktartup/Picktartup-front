@@ -4,6 +4,7 @@ import SignatureCanvas from "react-signature-canvas";
 import { pdfjs, Document, Page } from "react-pdf";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { extractUserIdFromToken, isTokenExpired } from "utils/jwtUtils";  // import the utility functions
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   "pdfjs-dist/build/pdf.worker.min.mjs",
@@ -25,6 +26,16 @@ const InvestmentModal = ({ isOpen, onClose, campaignId }) => {
     setStep((prevStep) => prevStep + 1);
   };
 
+  const getAuthToken = () => {
+    const token = localStorage.getItem("authToken");
+    if (!token || isTokenExpired(token)) {
+      toast.error("세션이 만료되었습니다. 다시 로그인 해주세요.");
+      onClose();
+      return null;
+    }
+    return token;
+  };
+
   const handleInvestmentSubmit = async () => {
     if (!tokenAmount || parseFloat(tokenAmount) <= 0) {
       alert("유효한 토큰 수량을 입력해주세요.");
@@ -33,9 +44,13 @@ const InvestmentModal = ({ isOpen, onClose, campaignId }) => {
 
     setIsLoading(true);
 
+    const authToken = getAuthToken(); // Get token from localStorage
+
+    if (!authToken) return; // If token is invalid or expired, return
+
     try {
       const requestData = {
-        userId: 1,
+        userId: extractUserIdFromToken(authToken),
         startupId: campaignId,
         contractAt: new Date().toISOString(),
         contractAddress: null,
@@ -45,7 +60,15 @@ const InvestmentModal = ({ isOpen, onClose, campaignId }) => {
         transactionHash: null,
       };
 
-      const response = await axios.post("https://192.168.0.142:31158/contract/api/v1/contracts/pdf", requestData);
+      const response = await axios.post(
+        "https://picktartup.local/contract/api/v1/contracts/pdf",
+        requestData,
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`, // Add the Authorization header
+          },
+        }
+      )
       setPdfUrl(response.data.data);
       goToNextStep();
     } catch (error) {
@@ -78,8 +101,20 @@ const InvestmentModal = ({ isOpen, onClose, campaignId }) => {
   };
 
   const updateBalance = async (userId) => {
+    const authToken = getAuthToken(); // Get token from localStorage
+
+    if (!authToken) return; // If token is invalid or expired, return
+
     try {
-      const response = await axios.post(`https://192.168.0.142:31158/wallet/api/v1/wallets/${userId}/update-balance`);
+      const response = await axios.post(
+        `https://picktartup.local/wallet/api/v1/wallets/${userId}/update-balance`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`, // Add the Authorization header
+          },
+        }
+      );
       console.log(response.data); // 성공 응답 출력
     } catch (error) {
       console.error('잔고 업데이트 중 오류 발생:', error);
@@ -93,6 +128,9 @@ const InvestmentModal = ({ isOpen, onClose, campaignId }) => {
     }
 
     setIsLoading(true);
+    const authToken = getAuthToken(); // Get token from localStorage
+
+    if (!authToken) return; // If token is invalid or expired, return
 
     // 모달 닫기
     onClose();
@@ -103,15 +141,23 @@ const InvestmentModal = ({ isOpen, onClose, campaignId }) => {
     });
 
     try {
-      const userId = process.env.REACT_APP_MOCK_USER_ID;
+      const userId = extractUserIdFromToken(authToken);
 
-      const response = await axios.post(`https://192.168.0.142:31158/contract/api/v1/contracts/transaction`, {
-        userId: userId,
-        startupId: 5,
-        walletPassword: walletPassword,
-        amount: parseFloat(tokenAmount),
-        investorSignature: signatureUrl
-      });
+      const response = await axios.post(
+        "https://picktartup.local/contract/api/v1/contracts/transaction",
+        {
+          userId: userId,
+          startupId: 1,
+          walletPassword: walletPassword,
+          amount: parseFloat(tokenAmount),
+          investorSignature: signatureUrl,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`, // Add the Authorization header
+          },
+        }
+      );
 
       if (response.status === 200 && response.data.status === "OK") {
         //const { amount, totalRaised, transactionHash } = response.data.data;
