@@ -24,27 +24,35 @@ const PurchaseTable = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
-
+  
     if (token) {
       if (isTokenExpired(token)) {
         console.warn("Token has expired. Redirecting to login...");
         navigate("/auth/sign-in"); // 로그인 페이지로 리다이렉트
         return;
       }
-
+  
       const decodedUserId = extractUserIdFromToken(token);
-      setUserId(decodedUserId);
-      console.log("userId: ", userId);
-
-      // 전역 Axios 요청에 Authorization 헤더 추가
-      // fetch.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+      if (decodedUserId) {
+        setUserId(decodedUserId.toString()); // userId를 문자열로 변환
+        console.log("userId: ", decodedUserId.toString());
+      } else {
+        console.warn("Invalid userId in token. Redirecting to login...");
+        navigate("/auth/sign-in");
+      }
     } else {
       console.warn("No token found. Redirecting to login...");
-      navigate("/auth/sign-in"); // 로그인 페이지로 리다이렉트
+      navigate("/auth/sign-in");
     }
   }, [navigate]);
 
   async function requestPayment(coin, price) {
+    if (!userId || typeof userId !== "string") {
+      alert("유효한 사용자 ID를 찾을 수 없습니다.");
+      navigate("/auth/sign-in");
+      return;
+    }
+
     const paymentId = `payment-${crypto.randomUUID().slice(0, 30)}`;
     const payMethod = "CARD";
 
@@ -78,7 +86,6 @@ const PurchaseTable = () => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        //Authorization: `Bearer ${localStorage.getItem("accessToken")}`, // 헤더에 JWT 추가
       },
       body: JSON.stringify({
         userId: userId, // JWT에서 추출한 userId 사용
