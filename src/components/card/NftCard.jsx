@@ -96,7 +96,7 @@ const NftCard = ({
 
             <div className="relative h-2 bg-gray-200 rounded-full overflow-hidden mb-2">
               <div
-                className="absolute h-full bg-blue-600 rounded-full transition-all duration-500"
+                className="absolute h-full bg-violet-600 rounded-full transition-all duration-500"
                 style={{ width: `${fundingProgress}%` }}
               />
             </div>

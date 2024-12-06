@@ -4,7 +4,7 @@ import { Building2, Users, Coins } from 'lucide-react';
 
 const AnimatedNumber = ({ value, shouldStart }) => {
   const [current, setCurrent] = useState(0);
-  
+
   useEffect(() => {
     if (!shouldStart) return;
 
@@ -19,7 +19,7 @@ const AnimatedNumber = ({ value, shouldStart }) => {
         setCurrent(value);
         clearInterval(timer);
       } else {
-        setCurrent(prev => Math.min(prev + increment, value));
+        setCurrent((prev) => Math.min(prev + increment, value));
       }
     }, stepDuration);
 
@@ -36,16 +36,16 @@ const StatCard = ({ icon: Icon, label, value, unit, delay, shouldAnimate }) => (
     transition={{ delay }}
     className="relative bg-white rounded-2xl p-6 border border-gray-100 hover:border-blue-200 transition-all"
   >
-    <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center mb-4">
-      <Icon className="w-6 h-6 text-blue-600" />
+    <div className="w-14 h-14 rounded-xl bg-blue-50 flex items-center justify-center mb-4">
+      <Icon className="w-7 h-7 text-blue-600" />
     </div>
-    
+
     <div className="space-y-2">
-      <div className="text-4xl font-bold text-gray-900">
+      <div className="text-5xl font-bold text-gray-900">
         <AnimatedNumber value={value} shouldStart={shouldAnimate} />
-        <span className="ml-1 text-gray-500 text-2xl">{unit}</span>
+        <span className="ml-1 text-gray-500 text-3xl">{unit}</span>
       </div>
-      <div className="text-gray-600">{label}</div>
+      <div className="text-gray-600 text-xl">{label}</div>
     </div>
 
     <div className="absolute -bottom-px left-0 right-0 h-1 bg-gradient-to-r from-blue-500 to-purple-500 rounded-b-2xl opacity-50" />
@@ -53,12 +53,15 @@ const StatCard = ({ icon: Icon, label, value, unit, delay, shouldAnimate }) => (
 );
 
 const SimpleStats = () => {
-  const [stats] = useState({
+  const [stats, setStats] = useState({
     activeStartups: 100,
     totalInvestors: 2500,
-    totalTokens: 100000
+    totalTokens: 100000,
   });
-
+  const [currentDateTime, setCurrentDateTime] = useState(() => ({
+    date: new Date().toLocaleDateString(),
+    time: new Date().toLocaleTimeString(),
+  }));
   const [isVisible, setIsVisible] = useState(false);
   const containerRef = useRef(null);
 
@@ -70,10 +73,7 @@ const SimpleStats = () => {
           observer.disconnect();
         }
       },
-      {
-        root: null,
-        threshold: 0.1, // 10% 정도만 보여도 애니메이션 시작
-      }
+      { root: null, threshold: 0.1 }
     );
 
     if (containerRef.current) {
@@ -81,6 +81,28 @@ const SimpleStats = () => {
     }
 
     return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const baseDate = new Date('2024-01-01');
+    const today = new Date();
+    const daysDifference = Math.floor((today - baseDate) / (1000 * 60 * 60 * 24));
+
+    setStats({
+      activeStartups: 100 + daysDifference,
+      totalInvestors: 2500 + daysDifference * 10,
+      totalTokens: 100000 + daysDifference * 100,
+    });
+
+    const timer = setInterval(() => {
+      const now = new Date();
+      setCurrentDateTime({
+        date: now.toLocaleDateString(),
+        time: now.toLocaleTimeString(),
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
   }, []);
 
   return (
@@ -101,7 +123,7 @@ const SimpleStats = () => {
               delay={0}
               shouldAnimate={isVisible}
             />
-            
+
             <StatCard
               icon={Users}
               label="현재 참여 투자자"
@@ -110,7 +132,7 @@ const SimpleStats = () => {
               delay={0.1}
               shouldAnimate={isVisible}
             />
-            
+
             <StatCard
               icon={Coins}
               label="발행된 PCK 토큰"
@@ -127,8 +149,8 @@ const SimpleStats = () => {
             transition={{ delay: 0.3 }}
             className="mt-8 text-center"
           >
-            <div className="inline-flex items-center text-sm text-gray-500">
-              2024.11 기준
+            <div className="inline-flex items-center text-lg text-gray-500">
+              {currentDateTime.date} {currentDateTime.time} 기준
             </div>
           </motion.div>
         </div>
