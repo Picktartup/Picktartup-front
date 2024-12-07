@@ -31,7 +31,7 @@ const InvestmentModal = ({ isOpen, onClose, campaignId }) => {
     if (token && !isTokenExpired(token)) {
       setAuthToken(token);  // 유효한 토큰이 있으면 상태에 저장
     } else {
-      toast.error("세션이 만료되었습니다. 다시 로그인 해주세요.");
+      //toast.error("세션이 만료되었습니다. 다시 로그인 해주세요.");
       onClose();  // 세션 만료 시 모달 닫기
     }
   }, [onClose]);  // onClose가 변경될 때마다 실행되도록 의존성 추가
