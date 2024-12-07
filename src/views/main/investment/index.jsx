@@ -15,10 +15,10 @@ const StartupInvestment = () => {
   const fetchStartups = async () => {
     try {
       const [startupResponse, logoResponse] = await Promise.all([
-        axios.get(`/api/v1/startups`, {
+        axios.get(`https://picktartup.com/api/v1/startups`, {
           params: { keyword: keyword, source: "elk" },
         }),
-        axios.get('/api/v1/startups/logo-urls')
+        axios.get('https://picktartup.com/api/v1/startups/logo-urls')
       ]);
 
       setStartups(startupResponse.data.data);

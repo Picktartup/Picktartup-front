@@ -62,8 +62,8 @@ const InvestmentRoundTimeline = ({ startupId }) => {
     const fetchData = async () => {
       try {
         const [startupResponse, metricsResponse] = await Promise.all([
-          axios.get(`/api/v1/startups/${startupId}`),
-          axios.get(`/api/v1/startups/${startupId}/metrics/annual`),
+          axios.get(`https://picktartup.com/api/v1/startups/${startupId}`),
+          axios.get(`https://picktartup.com/api/v1/startups/${startupId}/metrics/annual`),
         ]);
 
         const sortedData = metricsResponse.data.sort((a, b) => a.year - b.year);

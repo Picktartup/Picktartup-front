@@ -17,7 +17,7 @@ const SignUpStep2 = () => {
     setIsCreatingWallet(true);
     
     try {
-      const response = await axios.post('/api/v1/wallets', {
+      const response = await axios.post('https://picktartup.local/wallet/api/v1/wallets', {
         userId: userId
       });
 

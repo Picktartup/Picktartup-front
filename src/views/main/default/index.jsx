@@ -20,10 +20,10 @@ const Marketplace = () => {
       setError(null); // 이전 에러 초기화 
       // 두 API를 동시에 호출
       const [topResponse, logosResponse] = await Promise.all([
-        axios.get('/api/v1/startups/top', {
+        axios.get('https://picktartup.com/api/v1/startups/top', {
           params: { source: 'jpa' }
         }),
-        axios.get('/api/v1/startups/logo-urls')
+        axios.get('https://picktartup.com/api/v1/startups/logo-urls')
       ]);
 
     console.log('로고 URL 응답:', logosResponse.data);
