@@ -44,7 +44,10 @@ const ProfileOverview = () => {
           selectedMenu === "contractActive"
             ? `https://picktartup.local/contract/api/v1/contracts/status/active?userId=${userId}`
             : `https://picktartup.local/contract/api/v1/contracts/status/completed?userId=${userId}`;
-        const response = await fetch(endpoint);
+        const response = await fetch(endpoint, {
+            method: 'GET',
+            credentials: 'include', // 인증 정보 포함
+          });
         const result = await response.json();
         setTableData(result.data);
       } catch (error) {
