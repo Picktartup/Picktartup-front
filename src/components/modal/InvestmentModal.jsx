@@ -12,7 +12,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   import.meta.url
 ).toString();
 
-const InvestmentModal = ({ isOpen, onClose, campaignId }) => {
+const InvestmentModal = ({ isOpen, onClose, startupId }) => {
   const [userId, setUserId] = useState(null);
   const [step, setStep] = useState(1);
   const [tokenAmount, setTokenAmount] = useState("");
@@ -51,9 +51,11 @@ const InvestmentModal = ({ isOpen, onClose, campaignId }) => {
     if (!authToken) return; // If token is invalid or expired, return
 
     try {
+      const userId = extractUserIdFromToken(authToken);
+
       const requestData = {
-        userId: extractUserIdFromToken(authToken),
-        startupId: campaignId,
+        userId: userId,
+        startupId: startupId,
         contractAt: new Date().toISOString(),
         contractAddress: null,
         amount: parseFloat(tokenAmount),
@@ -103,23 +105,34 @@ const InvestmentModal = ({ isOpen, onClose, campaignId }) => {
   };
 
   const updateBalance = async (userId) => {
-    if (!authToken) return; // If token is invalid or expired, return
-
+    if (!authToken) return;
+  
     try {
-      const response = await axios.post(
-        `https://picktartup.local/wallet/api/v1/wallets/${userId}/update-balance`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${authToken}`, // Add the Authorization header
-          },
+      // Step 1: Fetch wallet details to get the address
+      const walletResponse = await axios.get(`https://picktartup.local/wallet/api/v1/wallets/user/${userId}`);
+  
+      if (walletResponse.data?.success) {
+        const address = walletResponse.data.data?.address;
+  
+        if (!address) {
+          console.error("지갑 주소를 찾을 수 없습니다.");
+          return;
         }
-      );
-      console.log(response.data); // 성공 응답 출력
+  
+        // Step 2: Use the fetched address to update the balance
+        const updateResponse = await axios.post(
+          `https://picktartup.local/wallet/api/v1/wallets/${address}/update-balance`,
+          null
+        );
+  
+        console.log("잔고 업데이트 성공"); // 성공 응답 출력
+      } else {
+        console.error("지갑 정보를 가져오는 데 실패했습니다.");
+      }
     } catch (error) {
-      console.error('잔고 업데이트 중 오류 발생:', error);
+      console.error("잔고 업데이트 중 오류 발생:", error);
     }
-  };
+  };  
 
   const handleFinalSubmit = async () => {
     if (!walletPassword) {
@@ -146,7 +159,7 @@ const InvestmentModal = ({ isOpen, onClose, campaignId }) => {
         "https://picktartup.local/contract/api/v1/contracts/transaction",
         {
           userId: userId,
-          startupId: 1,
+          startupId: startupId,
           walletPassword: walletPassword,
           amount: parseFloat(tokenAmount),
           investorSignature: signatureUrl,
@@ -176,7 +189,7 @@ const InvestmentModal = ({ isOpen, onClose, campaignId }) => {
           toast.success("투자가 완료되었습니다!", { autoClose: 5000 });
         }
       
-        // updateBalance(userId);
+        updateBalance(userId);
       } else {
         // 실패 시 처리
         if (toast.isActive(toastId)) {

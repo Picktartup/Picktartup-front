@@ -3,19 +3,20 @@ import { useNavigate } from "react-router-dom";
 import Card from "components/card";
 import { FaBitcoin } from "react-icons/fa";
 import * as PortOne from "@portone/browser-sdk/v2";
+import { toast } from "react-toastify";
 import { extractUserIdFromToken, isTokenExpired } from "utils/jwtUtils";
 
 const products = [
-  { id: 1, name: "1", price: 100 },
-  { id: 2, name: "10", price: 1000 },
-  { id: 3, name: "30", price: 3000 },
-  { id: 4, name: "50", price: 5000 },
-  { id: 5, name: "100", price: 10000 },
-  { id: 6, name: "200", price: 20000 },
-  { id: 7, name: "300", price: 30000 },
-  { id: 8, name: "500", price: 50000 },
-  { id: 9, name: "700", price: 70000 },
-  { id: 10, name: "1000", price: 100000 },
+  { id: 1, name: "10", price: 1000 },
+  { id: 2, name: "30", price: 3000 },
+  { id: 3, name: "50", price: 5000 },
+  { id: 4, name: "100", price: 10000 },
+  { id: 5, name: "200", price: 20000 },
+  { id: 6, name: "300", price: 30000 },
+  { id: 7, name: "500", price: 50000 },
+  { id: 8, name: "700", price: 70000 },
+  { id: 9, name: "1000", price: 100000 },
+  { id: 10, name: "1500", price: 150000 },
 ];
 
 const PurchaseTable = () => {
@@ -56,53 +57,100 @@ const PurchaseTable = () => {
     const paymentId = `payment-${crypto.randomUUID().slice(0, 30)}`;
     const payMethod = "CARD";
 
-    // PortOne에 결제 요청
-    const response = await PortOne.requestPayment({
-      storeId: process.env.REACT_APP_STORE_ID,
-      channelKey: process.env.REACT_APP_CHANNEL_KEY,
-      paymentId: paymentId,
-      orderName: "PCK",
-      totalAmount: price, // 선택한 결제 금액
-      currency: "CURRENCY_KRW",
-      payMethod: payMethod,
-      customer: {
-        customerId: userId, // JWT에서 추출한 userId 사용
-        fullName: "테스트유저",
-        phoneNumber: "010-1234-5678",
-        email: "yummytomato7@gmail.com",
-      },
-    });
-
-    // 결제가 실패한 경우, 오류 메시지를 표시하고 종료
-    if (response.code !== undefined) {
-      return alert(response.message);
-    }
-
-    // 결제 성공 알림 표시
-    alert("결제가 성공적으로 완료되었습니다!");
-
-    // 서버에 결제 검증 요청
-    const notified = await fetch("https://picktartup.com/api/v1/coins/purchase", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        userId: userId, // JWT에서 추출한 userId 사용
-        amount: price,
-        coin: Number(coin),
+    try {
+      // Fetch user data from the API
+      const userResponse = await fetch(`https://picktartup.com/api/v1/users/public/${userId}/validation`);
+      if (!userResponse.ok) {
+        alert("사용자 정보를 가져오는 데 실패했습니다. 다시 시도해 주세요.");
+        return;
+      }
+  
+      const userData = await userResponse.json();
+      const { username, email } = userData.data;
+  
+      // PortOne에 결제 요청
+      const response = await PortOne.requestPayment({
+        storeId: process.env.REACT_APP_STORE_ID,
+        channelKey: process.env.REACT_APP_CHANNEL_KEY,
         paymentId: paymentId,
-        paymentMethod: payMethod,
-      }),
-    });
+        orderName: "PCK",
+        totalAmount: price, // 선택한 결제 금액
+        currency: "CURRENCY_KRW",
+        payMethod: payMethod,
+        customer: {
+          customerId: userId, // JWT에서 추출한 userId 사용
+          fullName: username || "테스트유저",
+          phoneNumber: "010-8762-6285", // Replace or retrieve dynamically if necessary
+          email: email || "example@example.com",
+        },
+      });
+  
+      // 결제가 실패한 경우, 오류 메시지를 표시하고 종료
+      if (response.code !== undefined) {
+        return alert(response.message);
+      }
+  
+      const toastId = toast.loading("토큰을 발급 중입니다...", {
+        autoClose: false,
+        closeOnClick: false,
+      });
+  
+      // 서버에 결제 검증 요청
+      const notified = await fetch("https://picktartup.com/api/v1/coins/purchase", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: userId, // JWT에서 추출한 userId 사용
+          amount: price,
+          coin: Number(coin),
+          paymentId: paymentId,
+          paymentMethod: payMethod,
+        }),
+      });
+  
+      console.log(notified);
+  
+      // 서버 검증 성공 시 새로 고침
+      if (notified.ok) {
+        if (toast.isActive(toastId)) {
+          toast.update(toastId, {
+            render: "토큰이 발급되었습니다!",
+            type: "success",
+            isLoading: false, // 로딩 상태 해제
+            autoClose: 5000,
+          });
+        } else {
+          toast.success("토큰이 발급되었습니다!", { autoClose: 5000 });
+        }
 
-    console.log(notified);
+        navigate(0);
+      } else {
+        if (toast.isActive(toastId)) {
+          toast.update(toastId, {
+            render: "결제 검증에 실패했습니다. 관리자에게 문의해주세요.",
+            type: "error",
+            isLoading: false, // 로딩 상태 해제
+            autoClose: 5000,
+          });
+        } else {
+          toast.error("결제 검증에 실패했습니다. 관리자에게 문의해주세요.", { autoClose: 5000 });
+        }
+      }
+    } catch (error) {
+      console.error("결제 처리 중 오류 발생: ", error);
 
-    // 서버 검증 성공 시 새로 고침
-    if (notified.ok) {
-      navigate(0);
-    } else {
-      alert("결제 검증에 실패했습니다. 다시 시도해 주세요.");
+      if (toast.isActive(toastId)) {
+        toast.update(toastId, {
+          render: "결제 요청 중 오류가 발생했습니다.",
+          type: "error",
+          isLoading: false, // 로딩 상태 해제
+          autoClose: 5000,
+        });
+      } else {
+        toast.error("결제 요청 중 오류가 발생했습니다.", { autoClose: 5000 });
+      }
     }
   }
 
