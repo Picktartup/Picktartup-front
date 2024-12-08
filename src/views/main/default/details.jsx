@@ -272,7 +272,7 @@ const DetailPage = () => {
       <InvestmentModal
         isOpen={isModalOpen}
         onClose={closeModal}
-        campaignId={startupId} // 캠페인 ID 전달
+        startupId={startupId} // 캠페인 ID 전달
       />
     </div>
   );

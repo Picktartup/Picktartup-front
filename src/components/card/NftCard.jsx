@@ -132,7 +132,7 @@ const NftCard = ({
       <InvestmentModal
         isOpen={isModalOpen}
         onClose={handleModalClose}
-        campaignId={process.env.REACT_APP_MOCK_STARTUP_ID} // 캠페인 ID 전달
+        startupId={startupId} // 캠페인 ID 전달
       />
     </>
   );
