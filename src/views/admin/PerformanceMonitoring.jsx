@@ -43,25 +43,29 @@ const useServiceMetrics = (serviceName, environment) => {
             axios.get(`${prometheusEndpoint}/api/v1/query`, {
               params: {
                 query: `sum(rate(container_cpu_usage_seconds_total{namespace="${serviceName}"}[5m])) * 100`
-              }
+              },
+              withCredentials: true
             }),
             // 메모리 사용률
             axios.get(`${prometheusEndpoint}/api/v1/query`, {
               params: {
                 query: `sum(container_memory_working_set_bytes{container!="POD",container!="",namespace="${serviceName}"}) / sum(kube_pod_container_resource_limits{resource="memory",namespace="${serviceName}"}) * 100`
-              }
+              },
+              withCredentials: true
             }),
             // 디스크 사용률
             axios.get(`${prometheusEndpoint}/api/v1/query`, {
               params: {
                 query: `max(kubelet_volume_stats_used_bytes{namespace="${serviceName}"} / kubelet_volume_stats_capacity_bytes{namespace="${serviceName}"}) * 100`
-              }
+              },
+              withCredentials: true
             }),
             // 재시작 횟수로 변경
             axios.get(`${prometheusEndpoint}/api/v1/query`, {
                 params: {
                   query: `sum(kube_pod_container_status_restarts_total{namespace="${serviceName}"})`
-                }
+                },
+                withCredentials: true
               })
           ]);
   
