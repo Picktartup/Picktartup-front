@@ -6,8 +6,12 @@ import "react-toastify/dist/ReactToastify.css"; // react-toastify CSS import
 import RtlLayout from "layouts/rtl";
 import AdminLayout from "layouts/main";
 import AuthLayout from "layouts/auth";
+import AdminPageLayout from "layouts/admin";
 import DetailPage from "./views/main/default/details"; // DetailPage import
-
+import Dashboard from "./views/admin/Dashboard"; // Dashboard import
+import SystemMonitoring from "./views/admin/SystemMonitoring"; 
+import PerformanceMonitoring from "./views/admin/PerformanceMonitoring"; 
+import NetworkMonitoring from "./views/admin/NetworkMonitoring"; 
 
 const App = () => {
   return (
@@ -26,8 +30,13 @@ const App = () => {
       <Routes>
         <Route path="auth/*" element={<AuthLayout />} />
         <Route path="main/*" element={<AdminLayout />} />
+        <Route path="admin" element={<AdminPageLayout />}>
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="system" element={<SystemMonitoring />} />
+          <Route path="performance" element={<PerformanceMonitoring />} />
+          <Route path="network" element={<NetworkMonitoring />} />
+        </Route>
         <Route path="rtl/*" element={<RtlLayout />} />
-        {/* 기업 이름을 기반으로 하는 상세 페이지 경로 추가 */}
         <Route path="/main/default/details/:startupId" element={<DetailPage />} />
         <Route path="/" element={<Navigate to="/main" replace />} />
       </Routes>

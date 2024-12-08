@@ -15,6 +15,13 @@ import SignIn from "views/auth/SignIn";
 import SignUpStep1 from "views/auth/SignUpStep1";
 import SignUpStep2 from "views/auth/SignUpStep2";
 
+//Admin Imports
+import { MdDashboard } from "react-icons/md";  // 아이콘 import 추가
+import Dashboard from 'views/admin/Dashboard';
+import SystemMonitoring from 'views/admin/SystemMonitoring';
+import PerformanceMonitoring from 'views/admin/PerformanceMonitoring';
+import NetworkMonitoring from 'views/admin/NetworkMonitoring';
+
 // Icon Imports
 import {
   MdHome,
@@ -89,5 +96,33 @@ const routes = [
     icon: <MdPersonAdd className="h-6 w-6" />,
     component: <SignUpStep2 />,
   },
+  {
+    name: "관리자 대시보드",
+    layout: "/admin",
+    path: "dashboard",
+    icon: <MdDashboard className="h-6 w-6" />,  // Material 아이콘 사용
+    component: <Dashboard />
+  },
+  {
+    name: "시스템 모니터링",
+    layout: "/admin",
+    path: "system",
+    icon: <MdDashboard className="h-6 w-6" />, // 원하는 아이콘으로 교체 가능
+    component: <SystemMonitoring />,
+  },
+  {
+    name: "성능 모니터링",
+    layout: "/admin",
+    path: "performance",
+    icon: <MdDashboard className="h-6 w-6" />,
+    component: <PerformanceMonitoring />,
+  },
+  {
+    name: "네트워크 모니터링",
+    layout: "/admin",
+    path: "network",
+    icon: <MdDashboard className="h-6 w-6" />,
+    component: <NetworkMonitoring />,
+  }
 ];
 export default routes;

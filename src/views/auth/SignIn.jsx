@@ -19,9 +19,10 @@ const SignIn = () => {
       });
 
       if (response.data.success && response.data.code === 200) {
-        const { tokenType, accessToken, refreshToken, accessTokenExpireDate } = response.data.data;
+        const { role, tokenType, accessToken, refreshToken, accessTokenExpireDate } = response.data.data;
         
         // 토큰 정보 저장
+        localStorage.setItem('role', role);
         localStorage.setItem('tokenType', tokenType);
         localStorage.setItem('accessToken', accessToken);
         localStorage.setItem('refreshToken', refreshToken);
@@ -29,9 +30,13 @@ const SignIn = () => {
         
         // axios 기본 헤더 설정
         axios.defaults.headers.common['Authorization'] = `${tokenType} ${accessToken}`;
-        
-        // 로그인 성공 후 리다이렉트
-        navigate('/main/default');
+      
+        // 권한에 따른 리다이렉트
+        if (role === 'ADMIN') {
+          navigate('/admin/dashboard'); // 관리자 페이지로 리다이렉트
+        } else {
+          navigate('/main/default'); // 일반 사용자는 홈으로 리다이렉트
+        }
       }
     } catch (error) {
       console.error('Login failed:', error);
