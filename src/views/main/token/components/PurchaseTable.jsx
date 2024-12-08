@@ -57,6 +57,8 @@ const PurchaseTable = () => {
     const paymentId = `payment-${crypto.randomUUID().slice(0, 30)}`;
     const payMethod = "CARD";
 
+    let toastId = null;
+
     try {
       // Fetch user data from the API
       const userResponse = await fetch(`https://picktartup.com/api/v1/users/public/${userId}/validation`);
@@ -90,7 +92,7 @@ const PurchaseTable = () => {
         return alert(response.message);
       }
   
-      const toastId = toast.loading("토큰을 발급 중입니다...", {
+      toastId = toast.loading("토큰을 발급 중입니다...", {
         autoClose: false,
         closeOnClick: false,
       });
