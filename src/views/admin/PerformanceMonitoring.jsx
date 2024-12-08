@@ -36,7 +36,7 @@ const useServiceMetrics = (serviceName, environment) => {
     useEffect(() => {
       const fetchMetrics = async () => {
         try {
-          const prometheusEndpoint = 'https://picktartup.local:31158';
+          const prometheusEndpoint = 'https://192.168.0.142:31158';
   
           const responses = await Promise.all([
             // CPU 사용률
@@ -44,28 +44,24 @@ const useServiceMetrics = (serviceName, environment) => {
               params: {
                 query: `sum(rate(container_cpu_usage_seconds_total{namespace="${serviceName}"}[5m])) * 100`
               },
-              withCredentials: true
             }),
             // 메모리 사용률
             axios.get(`${prometheusEndpoint}/api/v1/query`, {
               params: {
                 query: `sum(container_memory_working_set_bytes{container!="POD",container!="",namespace="${serviceName}"}) / sum(kube_pod_container_resource_limits{resource="memory",namespace="${serviceName}"}) * 100`
               },
-              withCredentials: true
             }),
             // 디스크 사용률
             axios.get(`${prometheusEndpoint}/api/v1/query`, {
               params: {
                 query: `max(kubelet_volume_stats_used_bytes{namespace="${serviceName}"} / kubelet_volume_stats_capacity_bytes{namespace="${serviceName}"}) * 100`
               },
-              withCredentials: true
             }),
             // 재시작 횟수로 변경
             axios.get(`${prometheusEndpoint}/api/v1/query`, {
                 params: {
                   query: `sum(kube_pod_container_status_restarts_total{namespace="${serviceName}"})`
                 },
-                withCredentials: true
               })
           ]);
   
@@ -156,25 +152,25 @@ const useOverallMetrics = () => {
       try {
         const responses = await Promise.all([
           // CPU 사용률 (예시)
-          axios.get('https://picktartup.local:31158/api/v1/query', {
+          axios.get('https://192.168.0.142:31158/api/v1/query', {
             params: {
               query: `100 - (avg(irate(node_cpu_seconds_total{mode="idle"}[5m])) by (instance) * 100)`
             }
           }),
           // 메모리 사용률
-          axios.get('https://picktartup.local:31158/api/v1/query', {
+          axios.get('https://192.168.0.142:31158/api/v1/query', {
             params: {
               query: `100 * (node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / node_memory_MemTotal_bytes`
             }
           }),
           // 디스크 사용률
-          axios.get('https://picktartup.local:31158/api/v1/query', {
+          axios.get('https://192.168.0.142:31158/api/v1/query', {
             params: {
               query: `100 - ((node_filesystem_avail_bytes{mountpoint="/"} * 100) / node_filesystem_size_bytes{mountpoint="/"})`
             }
           }),
           // 시스템 로드
-          axios.get('https://picktartup.local:31158/api/v1/query', {
+          axios.get('https://192.168.0.142:31158/api/v1/query', {
             params: {
               query: `node_load1`  
             }
@@ -277,7 +273,7 @@ const ServiceCard = ({ service, environment }) => {
     const metrics = useServiceMetrics(service.name, environment);
   
     const getGrafanaUrl = (service) => {
-        const baseUrl = 'https://picktartup.local:31158';
+        const baseUrl = 'https://192.168.0.142:31158';
         const now = Date.now();
         const from = now - 60 * 60 * 1000; // 1시간 전
       
@@ -522,7 +518,7 @@ const PerformanceMonitoring = () => {
           <OverallMetricsSection />
           <div className="h-[600px]">
             <iframe
-              src="https://picktartup.local:31158/d/ff635a025bcfea7bc3dd4f508990a3e9/kubernetes-networking-cluster?orgId=1&from=2024-12-06T09:16:21.506Z&to=2024-12-06T10:16:21.507Z&timezone=utc&var-datasource=default&var-cluster=&refresh=10s&kiosk"
+              src="https://192.168.0.142:31158/d/ff635a025bcfea7bc3dd4f508990a3e9/kubernetes-networking-cluster?orgId=1&from=2024-12-06T09:16:21.506Z&to=2024-12-06T10:16:21.507Z&timezone=utc&var-datasource=default&var-cluster=&refresh=10s&kiosk"
               className="w-full h-full border-0"
               title="Overall Performance"
             />

@@ -37,7 +37,7 @@ const useNetworkMetrics = (serviceName, environment) => {
   useEffect(() => {
     const fetchMetrics = async () => {
       try {
-        const prometheusEndpoint = 'https://picktartup.local';
+        const prometheusEndpoint = 'https://192.168.0.142:31158';
 
         const responses = await Promise.all([
           // 네트워크 트래픽 (수신 + 송신)
@@ -212,7 +212,7 @@ const ServiceCard = ({ service, environment }) => {
   const metrics = useNetworkMetrics(service.name, environment);
 
   const getGrafanaUrl = (service) => {
-    const baseUrl = 'https://picktartup.local';
+    const baseUrl = 'https://192.168.0.142:31158';
     const now = Date.now();
     const from = now - 60 * 60 * 1000; // 1시간 전
 
@@ -273,7 +273,7 @@ const NetworkMonitoring = () => {
   const [timeRange, setTimeRange] = useState('30m');
 
   const getOverallGrafanaUrl = () => {
-    const baseUrl = 'http://picktartup.local';
+    const baseUrl = 'http://192.168.0.142:31158';
     const now = Date.now();
     const from = now - 60 * 60 * 1000; // 1시간 전
 
