@@ -49,7 +49,7 @@ const Dashboard = () => {
                 title="Response Time Chart"
               /> */}
               <iframe 
-                src="/kibana/app/dashboards#/view/a6f695e3-9fa8-4173-bf17-1dee79887759?embed=true&_g=(refreshInterval:(pause:!t,value:60000),time:(from:'2024-12-05T06:00:00.000Z',to:now))&_a=()&hide-filter-bar=true"
+                src="https://picktartup.local:31158/kibana/app/dashboards#/view/a6f695e3-9fa8-4173-bf17-1dee79887759?embed=true&_g=(refreshInterval:(pause:!t,value:60000),time:(from:'2024-12-05T06:00:00.000Z',to:now))&_a=()&hide-filter-bar=true"
                 height="600" width="800"
                 className="w-full h-full border-0"
                 title="Response Time Chart"></iframe>
@@ -66,7 +66,7 @@ const Dashboard = () => {
           <CardContent>
             <div className="h-[300px] bg-gray-50 rounded">
               <iframe
-                src="/kibana/app/dashboards#/view/9ce63212-8ba1-4811-9085-c4cdedc428d5?embed=true&_g=(refreshInterval:(pause:!t,value:60000),time:(from:'2024-12-05T06:30:00.000Z',to:'2024-12-05T07:00:00.000Z'))&_a=()&hide-filter-bar=true"
+                src="https://picktartup.local:31158/kibana/app/dashboards#/view/9ce63212-8ba1-4811-9085-c4cdedc428d5?embed=true&_g=(refreshInterval:(pause:!t,value:60000),time:(from:'2024-12-05T06:30:00.000Z',to:'2024-12-05T07:00:00.000Z'))&_a=()&hide-filter-bar=true"
                 className="w-full h-full border-0"
                 title="DNS Response Time Chart"
               />
