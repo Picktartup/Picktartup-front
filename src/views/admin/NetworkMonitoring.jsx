@@ -259,6 +259,8 @@ const ServiceCard = ({ service, environment }) => {
             <iframe 
                 src={getGrafanaUrl(service)}
                 className="w-full h-full"
+                sandbox="allow-scripts allow-same-origin"
+                referrerPolicy="no-referrer"
                 frameBorder="0"
                 title={`${service.displayName} Network Metrics`}
             />
@@ -345,6 +347,8 @@ const NetworkMonitoring = () => {
          <div className="h-[600px] mt-6">
            <iframe
              src={getOverallGrafanaUrl()}
+             sandbox="allow-scripts allow-same-origin"
+              referrerPolicy="no-referrer"
              className="w-full h-full border-0"
              title="Overall Network Performance"
            />
