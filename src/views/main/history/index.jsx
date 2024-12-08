@@ -44,10 +44,7 @@ const ProfileOverview = () => {
           selectedMenu === "contractActive"
             ? `https://192.168.0.142:31158/contract/api/v1/contracts/status/active?userId=${userId}`
             : `https://192.168.0.142:31158/contract/api/v1/contracts/status/completed?userId=${userId}`;
-        const response = await fetch(endpoint, {
-            method: 'GET',
-            credentials: 'include', // 인증 정보 포함
-          });
+        const response = await fetch(endpoint);
         const result = await response.json();
         setTableData(result.data);
       } catch (error) {
