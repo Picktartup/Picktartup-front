@@ -65,7 +65,7 @@ const InvestmentModal = ({ isOpen, onClose, startupId }) => {
       };
 
       const response = await axios.post(
-        "https://picktartup.local/contract/api/v1/contracts/pdf",
+        "https://192.168.0.142:31158/contract/api/v1/contracts/pdf",
         requestData,
         {
           headers: {
@@ -109,7 +109,7 @@ const InvestmentModal = ({ isOpen, onClose, startupId }) => {
   
     try {
       // Step 1: Fetch wallet details to get the address
-      const walletResponse = await axios.get(`https://picktartup.local/wallet/api/v1/wallets/user/${userId}`);
+      const walletResponse = await axios.get(`https://192.168.0.142:31158/wallet/api/v1/wallets/user/${userId}`);
   
       if (walletResponse.data?.success) {
         const address = walletResponse.data.data?.address;
@@ -121,7 +121,7 @@ const InvestmentModal = ({ isOpen, onClose, startupId }) => {
   
         // Step 2: Use the fetched address to update the balance
         const updateResponse = await axios.post(
-          `https://picktartup.local/wallet/api/v1/wallets/${address}/update-balance`,
+          `https://192.168.0.142:31158/wallet/api/v1/wallets/${address}/update-balance`,
           null
         );
   
@@ -156,7 +156,7 @@ const InvestmentModal = ({ isOpen, onClose, startupId }) => {
       const userId = extractUserIdFromToken(authToken);
 
       const response = await axios.post(
-        "https://picktartup.local/contract/api/v1/contracts/transaction",
+        "https://192.168.0.142:31158/contract/api/v1/contracts/transaction",
         {
           userId: userId,
           startupId: startupId,

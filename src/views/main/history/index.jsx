@@ -42,8 +42,8 @@ const ProfileOverview = () => {
       try {
         const endpoint =
           selectedMenu === "contractActive"
-            ? `https://picktartup.local/contract/api/v1/contracts/status/active?userId=${userId}`
-            : `https://picktartup.local/contract/api/v1/contracts/status/completed?userId=${userId}`;
+            ? `https://192.168.0.142:31158/contract/api/v1/contracts/status/active?userId=${userId}`
+            : `https://192.168.0.142:31158/contract/api/v1/contracts/status/completed?userId=${userId}`;
         const response = await fetch(endpoint, {
             method: 'GET',
             credentials: 'include', // 인증 정보 포함
