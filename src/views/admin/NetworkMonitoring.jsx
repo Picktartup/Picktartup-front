@@ -216,7 +216,7 @@ const ServiceCard = ({ service, environment }) => {
     const now = Date.now();
     const from = now - 60 * 60 * 1000;
   
-    return `${baseUrl}/d-solo/${service.dashboardId}/kubernetes-networking-namespace-pods?orgId=1&from=${from}&to=${now}&timezone=utc&var-datasource=default&var-cluster=&var-namespace=${service.namespace}&refresh=10s&panelId=1&__feature.dashboardSceneSolo`;
+    return `${baseUrl}/d-solo/${service.dashboardId}/kubernetes-networking-namespace-pods?orgId=1&api_key=sa-1-test-43641fdc-7fea-45ea-8f6f-975c7e4746fb&from=${from}&to=${now}&timezone=utc&var-datasource=default&var-cluster=&var-namespace=${service.namespace}&refresh=10s&panelId=1&__feature.dashboardSceneSolo`;
   };
 
   return (
@@ -280,7 +280,7 @@ const NetworkMonitoring = () => {
   const now = Date.now();
   const from = now - 60 * 60 * 1000;
 
-  return `${baseUrl}/d/ff635a025bcfea7bc3dd4f508990a3e9/kubernetes-networking-cluster?orgId=1&from=${from}&to=${now}&timezone=utc&var-datasource=default&var-cluster=&refresh=10s&kiosk`;
+  return `${baseUrl}/d/ff635a025bcfea7bc3dd4f508990a3e9/kubernetes-networking-cluster?orgId=1&api_key=sa-1-test-43641fdc-7fea-45ea-8f6f-975c7e4746fb&from=${from}&to=${now}&timezone=utc&var-datasource=default&var-cluster=&refresh=10s&kiosk`;
 };
 
   return (
