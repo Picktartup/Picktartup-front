@@ -259,7 +259,7 @@ const ServiceCard = ({ service, environment }) => {
             <iframe 
                 src={getGrafanaUrl(service)}
                 className="w-full h-full"
-                sandbox="allow-scripts allow-same-origin allow-forms"
+                sandbox="allow-scripts allow-same-origin"
                 referrerPolicy="no-referrer"
                 frameBorder="0"
                 title={`${service.displayName} Network Metrics`}
@@ -275,9 +275,9 @@ const NetworkMonitoring = () => {
   const [timeRange, setTimeRange] = useState('30m');
 
   const getOverallGrafanaUrl = () => {
-    const baseUrl = window.location.protocol + '//192.168.0.142:32647';
-    const now = Date.now();
-    const from = now - 60 * 60 * 1000;
+  const baseUrl = window.location.protocol + '//192.168.0.142:32647';
+  const now = Date.now();
+  const from = now - 60 * 60 * 1000;
 
   return `${baseUrl}/d/ff635a025bcfea7bc3dd4f508990a3e9/kubernetes-networking-cluster?orgId=1&from=${from}&to=${now}&timezone=utc&var-datasource=default&var-cluster=&refresh=10s&kiosk`;
 };
@@ -347,7 +347,7 @@ const NetworkMonitoring = () => {
          <div className="h-[600px] mt-6">
            <iframe
              src={getOverallGrafanaUrl()}
-             sandbox="allow-scripts allow-same-origin allow-forms"
+             sandbox="allow-scripts allow-same-origin"
               referrerPolicy="no-referrer"
              className="w-full h-full border-0"
              title="Overall Network Performance"
