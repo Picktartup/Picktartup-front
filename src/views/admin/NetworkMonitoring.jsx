@@ -256,10 +256,11 @@ const ServiceCard = ({ service, environment }) => {
             {/* 나머지 메트릭 카드들도 같은 스타일 적용 */}
             </div>
             <div className="h-[300px] mt-6 rounded-xl overflow-hidden shadow-inner">
+            
             <iframe 
                 src={getGrafanaUrl(service)}
                 className="w-full h-full"
-                sandbox="allow-scripts allow-same-origin allow-forms"
+                sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals allow-top-navigation"
                 referrerPolicy="no-referrer"
                 frameBorder="0"
                 title={`${service.displayName} Network Metrics`}
@@ -347,7 +348,7 @@ const NetworkMonitoring = () => {
          <div className="h-[600px] mt-6">
            <iframe
              src={getOverallGrafanaUrl()}
-             sandbox="allow-scripts allow-same-origin allow-forms"
+             sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals allow-top-navigation"
               referrerPolicy="no-referrer"
              className="w-full h-full border-0"
              title="Overall Network Performance"

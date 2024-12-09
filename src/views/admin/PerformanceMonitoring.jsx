@@ -362,7 +362,7 @@ const ServiceCard = ({ service, environment }) => {
         <div className="h-[300px] mt-6"> {/* mt-4에서 mt-6으로 변경하여 상단 여백 증가 */}
             <iframe 
             src={getGrafanaUrl(service)}
-            sandbox="allow-scripts allow-same-origin allow-forms"
+            sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals allow-top-navigation"
             referrerPolicy="no-referrer"
             className="w-full h-full rounded-md" // rounded-lg 제거
             frameBorder="0"
@@ -522,7 +522,7 @@ const PerformanceMonitoring = () => {
             <iframe
               src="http://192.168.0.142:32647/d/ff635a025bcfea7bc3dd4f508990a3e9/kubernetes-networking-cluster?orgId=1&from=2024-12-06T09:16:21.506Z&to=2024-12-06T10:16:21.507Z&timezone=utc&var-datasource=default&var-cluster=&refresh=10s&kiosk"
               className="w-full h-full border-0"
-              sandbox="allow-scripts allow-same-origin allow-forms"
+              sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals allow-top-navigation"
               referrerPolicy="no-referrer"
               title="Overall Performance"
             />
