@@ -1,10 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
-import unicornVideo from '../assets/img/main/startup.mp4';
-import coinVideo from '../assets/img/main/토큰2.mp4';
-import contractVideo from '../assets/img/main/contract3.mp4';
-import angelVideo from '../assets/img/main/angel.mp4';
 
 import video from "../assets/img/main/검정.mp4"
 import video2 from "../assets/img/main/검정2.mp4"
