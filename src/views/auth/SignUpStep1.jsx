@@ -290,7 +290,7 @@ const SignUpStep1 = () => {
       setIsSubmitting(true); // 제출 시작
 
       // 회원가입 API 호출
-      const response = await axios.post('/api/v1/users/public/register', requestData);
+      const response = await axios.post('https://picktartup.com/api/v1/users/public/register', requestData);
 
       if (response.data.success) {
         // 회원가입 성공 시 다음 단계로 이동

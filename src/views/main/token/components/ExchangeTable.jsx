@@ -1,15 +1,37 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { extractUserIdFromToken, isTokenExpired } from "utils/jwtUtils";
 
 const ExchangeTable = ({ balance }) => {
-  const userId = 3;
-
+  const [userId, setUserId] = useState(null);
   const [exchangeAmount, setExchangeAmount] = useState("");
   const [selectedBank, setSelectedBank] = useState("");
   const [accountNumber, setAccountNumber] = useState("");
   const [exchangeError, setExchangeError] = useState(null);
   const [exchangeBankError, setExchangeBankError] = useState(null);
   const [accountNumberError, setAccountNumberError] = useState(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+
+    if (token) {
+      if (isTokenExpired(token)) {
+        console.warn("Token has expired. Redirecting to login...");
+        // 로그인이 필요한 경우 로그인 페이지로 리다이렉트 추가
+        return;
+      }
+
+      const decodedUserId = extractUserIdFromToken(token);
+      setUserId(decodedUserId);
+      console.log("userId: ", userId);
+
+      // Axios 기본 헤더에 Authorization 추가
+      //axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    } else {
+      console.warn("No token found. Redirecting to login...");
+      // 로그인이 필요한 경우 로그인 페이지로 리다이렉트 추가
+    }
+  }, []);
 
   const handleExchangeRequest = async () => {
     let valid = true;
@@ -37,12 +59,13 @@ const ExchangeTable = ({ balance }) => {
     if (!valid) return; // 유효성 검사 실패 시 요청 진행 안 함
 
     try {
-      const response = await axios.post("/api/v1/coins/exchange", {
-        userId: userId,
+      const response = await axios.post("https://picktartup.com/api/v1/coins/exchange", {
+        userId: userId, // JWT에서 디코딩한 userId 사용
         exchangeAmount: Number(exchangeAmount),
         exchangeBank: selectedBank,
         exchangeAccount: accountNumber,
       });
+
       alert("환전 요청이 완료되었습니다.");
       setExchangeAmount("");
       setSelectedBank("");
