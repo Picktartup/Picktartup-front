@@ -67,7 +67,7 @@ const AdminLayout = () => {
   };
 
   return (
-    <div className="flex h-screen w-full overflow-hidden bg-gray-50">
+    <div className="flex h-screen w-full overflow-hidden bg-gray-50 font-pretendard">
       {/* Fixed Sidebar */}
       <div className="fixed left-0 w-72 h-full bg-[#1a2234] flex flex-col py-6 transition-all duration-300 ease-in-out">
         {/* Logo Area */}
