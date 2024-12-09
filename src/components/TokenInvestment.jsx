@@ -16,7 +16,7 @@ const TokenInvestment = () => {
     {
       number: 1,
       title: '회원가입',
-      subtitle: '회원가입과 함께 자동으로 블록체인 지갑이 생성됩니다!',
+      subtitle: '회원가입과 함께 자동으로 블록체인 지갑이 생성됩니다',
       points: [
         '간편한 회원가입으로 즉시 시작하세요',
         '안전한 블록체인 지갑이 자동으로 생성됩니다',
@@ -48,7 +48,7 @@ const TokenInvestment = () => {
     {
       number: 4,
       title: '계약 체결',
-      subtitle: '목표 달성 시 자동 계약 체결',
+      subtitle: '목표 달성 시 자동 계약 체결됩니다.',
       points: [
         '실시간 투자 진행률 모니터링',
         '목표 금액 달성 시 자동 계약 체결',

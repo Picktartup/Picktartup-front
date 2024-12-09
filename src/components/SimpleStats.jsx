@@ -34,9 +34,9 @@ const StatCard = ({ icon: Icon, label, value, unit, delay, shouldAnimate }) => (
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ delay }}
-    className="relative bg-white rounded-2xl p-6 border border-gray-100 hover:border-blue-200 transition-all"
+    className="relative bg-white rounded-2xl p-5 border border-gray-100 hover:border-blue-200 transition-all"
   >
-    <div className="w-14 h-14 rounded-xl bg-blue-50 flex items-center justify-center mb-4">
+    <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center mb-4">
       <Icon className="w-7 h-7 text-blue-600" />
     </div>
 
@@ -48,21 +48,22 @@ const StatCard = ({ icon: Icon, label, value, unit, delay, shouldAnimate }) => (
       <div className="text-gray-600 text-xl">{label}</div>
     </div>
 
-    <div className="absolute -bottom-px left-0 right-0 h-1 bg-gradient-to-r from-blue-500 to-purple-500 rounded-b-2xl opacity-50" />
+    <div className="absolute -bottom-px left-0 right-0 h-1 bg-gradient-to-r from-blue-500 to-purple-500 rounded-b-xl opacity-50" />
   </motion.div>
 );
 
 const SimpleStats = () => {
   const [stats, setStats] = useState({
-    activeStartups: 100,
-    totalInvestors: 2500,
-    totalTokens: 100000,
+    activeStartups: 30,
+    totalInvestors: 706,
+    totalTokens: 16860,
   });
   const [currentDateTime, setCurrentDateTime] = useState(() => ({
     date: new Date().toLocaleDateString(),
     time: new Date().toLocaleTimeString(),
   }));
   const [isVisible, setIsVisible] = useState(false);
+  const [lastStartupUpdate, setLastStartupUpdate] = useState(new Date());
   const containerRef = useRef(null);
 
   useEffect(() => {
@@ -84,17 +85,33 @@ const SimpleStats = () => {
   }, []);
 
   useEffect(() => {
-    const baseDate = new Date('2024-01-01');
-    const today = new Date();
-    const daysDifference = Math.floor((today - baseDate) / (1000 * 60 * 60 * 24));
+    // 실시간 업데이트 로직
+    const updateStats = () => {
+      const now = new Date();
+      const hoursSinceLastUpdate = (now - lastStartupUpdate) / (1000 * 60 * 60);
+      
+      setStats(prevStats => {
+        // 24시간마다 스타트업 1개씩 증가
+        const newStartupCount = 
+          hoursSinceLastUpdate >= 24 
+            ? prevStats.activeStartups + 1 
+            : prevStats.activeStartups;
+        
+        // 24시간이 지났다면 마지막 업데이트 시간 갱신
+        if (hoursSinceLastUpdate >= 24) {
+          setLastStartupUpdate(now);
+        }
 
-    setStats({
-      activeStartups: 100 + daysDifference,
-      totalInvestors: 2500 + daysDifference * 10,
-      totalTokens: 100000 + daysDifference * 100,
-    });
+        return {
+          activeStartups: newStartupCount,
+          totalInvestors: prevStats.totalInvestors + Math.floor(Math.random() * 2),
+          totalTokens: prevStats.totalTokens + Math.floor(Math.random() * 5),
+        };
+      });
+    };
 
-    const timer = setInterval(() => {
+    const statsTimer = setInterval(updateStats, 60000); // 1분마다 업데이트
+    const clockTimer = setInterval(() => {
       const now = new Date();
       setCurrentDateTime({
         date: now.toLocaleDateString(),
@@ -102,8 +119,11 @@ const SimpleStats = () => {
       });
     }, 1000);
 
-    return () => clearInterval(timer);
-  }, []);
+    return () => {
+      clearInterval(statsTimer);
+      clearInterval(clockTimer);
+    };
+  }, [lastStartupUpdate]);
 
   return (
     <div className="relative w-full bg-gray-50 py-16" ref={containerRef}>
@@ -113,7 +133,7 @@ const SimpleStats = () => {
       </div>
 
       <div className="relative container mx-auto px-4">
-        <div className="max-w-5xl mx-auto">
+        <div className="max-w-4xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <StatCard
               icon={Building2}

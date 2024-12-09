@@ -1,17 +1,19 @@
 import React from 'react';
 import { Globe, MapPin, Calendar, User, Info, TrendingUp, DollarSign, Tag } from 'lucide-react';
 
-// 마침표(`.`) 기준으로 줄바꿈 처리 함수
+// 마침표(`.`) 기준으로 줄바꿈 처리 함수 (처음 3줄 뒤에만 추가 줄바꿈)
 const formatDescription = (description) => {
-  return description.split('.').map((sentence, index) => (
-    sentence.trim() ? (
-      <span key={index}>
-        {sentence.trim() + '.'}
-        <br />
-      </span>
-    ) : null
+  const sentences = description.split('.').filter((sentence) => sentence.trim());
+  
+  return sentences.map((sentence, index) => (
+    <span key={index}>
+      {sentence.trim() + '.'}
+      <br />
+      {(index === 2) && <br />} {/* 처음 3줄 뒤에만 추가 줄바꿈 */}
+    </span>
   ));
 };
+
 
 // Tooltip 컴포넌트 (투자 상태 설명용)
 const CustomTooltip = ({ content, children }) => {
@@ -73,18 +75,7 @@ const CompanyOverview = ({
           </div>
         </div>
 
-        {/* 카테고리 */}
-        <div className="bg-gray-50 p-4 rounded-lg hover:bg-gray-100 transition-colors">
-          <div className="flex items-center gap-4">
-            <div className="bg-white p-3 rounded-full shadow-sm">
-              <Tag className="w-6 h-6 text-blue-600" />
-            </div>
-            <div>
-              <p className="text-sm font-medium text-gray-500">카테고리</p>
-              <p className="text-lg font-bold text-gray-900">{category}</p>
-            </div>
-          </div>
-        </div>
+        
 
         {/* 홈페이지 */}
         <div className="bg-gray-50 p-4 rounded-lg hover:bg-gray-100 transition-colors">

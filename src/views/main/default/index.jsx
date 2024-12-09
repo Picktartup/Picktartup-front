@@ -73,11 +73,12 @@ const Marketplace = () => {
       return (
         <div className="w-full min-h-screen bg-gray-50">
           <MainVideo />
+          <div className="mt-10"></div>
           {/* <MainCarousel />/ */}
           {/* <HeroSection /> */}
-          <SimpleStats />
           {/* <TokenInvestment/> */}
           <TokenInvestmentProcess />
+          <SimpleStats />
 
           <div className="container mx-auto px-4 py-16">
             {/* Section Header */}
