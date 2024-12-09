@@ -212,10 +212,10 @@ const ServiceCard = ({ service, environment }) => {
   const metrics = useNetworkMetrics(service.name, environment);
 
   const getGrafanaUrl = (service) => {
-    const baseUrl = 'http://192.168.0.142:32647';
+    const baseUrl = window.location.protocol + '//192.168.0.142:32647';
     const now = Date.now();
-    const from = now - 60 * 60 * 1000; // 1시간 전
-
+    const from = now - 60 * 60 * 1000;
+  
     return `${baseUrl}/d-solo/${service.dashboardId}/kubernetes-networking-namespace-pods?orgId=1&from=${from}&to=${now}&timezone=utc&var-datasource=default&var-cluster=&var-namespace=${service.namespace}&refresh=10s&panelId=1&__feature.dashboardSceneSolo`;
   };
 
@@ -275,12 +275,12 @@ const NetworkMonitoring = () => {
   const [timeRange, setTimeRange] = useState('30m');
 
   const getOverallGrafanaUrl = () => {
-    const baseUrl = 'http://192.168.0.142:32647';
+    const baseUrl = window.location.protocol + '//192.168.0.142:32647';
     const now = Date.now();
-    const from = now - 60 * 60 * 1000; // 1시간 전
+    const from = now - 60 * 60 * 1000;
 
-    return `${baseUrl}/d/ff635a025bcfea7bc3dd4f508990a3e9/kubernetes-networking-cluster?orgId=1&from=${from}&to=${now}&timezone=utc&var-datasource=default&var-cluster=&refresh=10s&kiosk`;
-  };
+  return `${baseUrl}/d/ff635a025bcfea7bc3dd4f508990a3e9/kubernetes-networking-cluster?orgId=1&from=${from}&to=${now}&timezone=utc&var-datasource=default&var-cluster=&refresh=10s&kiosk`;
+};
 
   return (
     <div className="space-y-6">
