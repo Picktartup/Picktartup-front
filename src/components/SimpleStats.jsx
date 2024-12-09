@@ -4,7 +4,7 @@ import { Building2, Users, Coins } from 'lucide-react';
 
 const AnimatedNumber = ({ value, shouldStart }) => {
   const [current, setCurrent] = useState(0);
-  
+
   useEffect(() => {
     if (!shouldStart) return;
 
@@ -19,7 +19,7 @@ const AnimatedNumber = ({ value, shouldStart }) => {
         setCurrent(value);
         clearInterval(timer);
       } else {
-        setCurrent(prev => Math.min(prev + increment, value));
+        setCurrent((prev) => Math.min(prev + increment, value));
       }
     }, stepDuration);
 
@@ -34,32 +34,36 @@ const StatCard = ({ icon: Icon, label, value, unit, delay, shouldAnimate }) => (
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ delay }}
-    className="relative bg-white rounded-2xl p-6 border border-gray-100 hover:border-blue-200 transition-all"
+    className="relative bg-white rounded-2xl p-5 border border-gray-100 hover:border-blue-200 transition-all"
   >
-    <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center mb-4">
-      <Icon className="w-6 h-6 text-blue-600" />
-    </div>
-    
-    <div className="space-y-2">
-      <div className="text-4xl font-bold text-gray-900">
-        <AnimatedNumber value={value} shouldStart={shouldAnimate} />
-        <span className="ml-1 text-gray-500 text-2xl">{unit}</span>
-      </div>
-      <div className="text-gray-600">{label}</div>
+    <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center mb-4">
+      <Icon className="w-7 h-7 text-blue-600" />
     </div>
 
-    <div className="absolute -bottom-px left-0 right-0 h-1 bg-gradient-to-r from-blue-500 to-purple-500 rounded-b-2xl opacity-50" />
+    <div className="space-y-2">
+      <div className="text-5xl font-bold text-gray-900">
+        <AnimatedNumber value={value} shouldStart={shouldAnimate} />
+        <span className="ml-1 text-gray-500 text-3xl">{unit}</span>
+      </div>
+      <div className="text-gray-600 text-xl">{label}</div>
+    </div>
+
+    <div className="absolute -bottom-px left-0 right-0 h-1 bg-gradient-to-r from-blue-500 to-purple-500 rounded-b-xl opacity-50" />
   </motion.div>
 );
 
 const SimpleStats = () => {
-  const [stats] = useState({
-    activeStartups: 100,
-    totalInvestors: 2500,
-    totalTokens: 100000
+  const [stats, setStats] = useState({
+    activeStartups: 30,
+    totalInvestors: 706,
+    totalTokens: 16860,
   });
-
+  const [currentDateTime, setCurrentDateTime] = useState(() => ({
+    date: new Date().toLocaleDateString(),
+    time: new Date().toLocaleTimeString(),
+  }));
   const [isVisible, setIsVisible] = useState(false);
+  const [lastStartupUpdate, setLastStartupUpdate] = useState(new Date());
   const containerRef = useRef(null);
 
   useEffect(() => {
@@ -70,10 +74,7 @@ const SimpleStats = () => {
           observer.disconnect();
         }
       },
-      {
-        root: null,
-        threshold: 0.1, // 10% 정도만 보여도 애니메이션 시작
-      }
+      { root: null, threshold: 0.1 }
     );
 
     if (containerRef.current) {
@@ -83,6 +84,47 @@ const SimpleStats = () => {
     return () => observer.disconnect();
   }, []);
 
+  useEffect(() => {
+    // 실시간 업데이트 로직
+    const updateStats = () => {
+      const now = new Date();
+      const hoursSinceLastUpdate = (now - lastStartupUpdate) / (1000 * 60 * 60);
+      
+      setStats(prevStats => {
+        // 24시간마다 스타트업 1개씩 증가
+        const newStartupCount = 
+          hoursSinceLastUpdate >= 24 
+            ? prevStats.activeStartups + 1 
+            : prevStats.activeStartups;
+        
+        // 24시간이 지났다면 마지막 업데이트 시간 갱신
+        if (hoursSinceLastUpdate >= 24) {
+          setLastStartupUpdate(now);
+        }
+
+        return {
+          activeStartups: newStartupCount,
+          totalInvestors: prevStats.totalInvestors + Math.floor(Math.random() * 2),
+          totalTokens: prevStats.totalTokens + Math.floor(Math.random() * 5),
+        };
+      });
+    };
+
+    const statsTimer = setInterval(updateStats, 60000); // 1분마다 업데이트
+    const clockTimer = setInterval(() => {
+      const now = new Date();
+      setCurrentDateTime({
+        date: now.toLocaleDateString(),
+        time: now.toLocaleTimeString(),
+      });
+    }, 1000);
+
+    return () => {
+      clearInterval(statsTimer);
+      clearInterval(clockTimer);
+    };
+  }, [lastStartupUpdate]);
+
   return (
     <div className="relative w-full bg-gray-50 py-16" ref={containerRef}>
       <div className="absolute inset-0 overflow-hidden">
@@ -91,7 +133,7 @@ const SimpleStats = () => {
       </div>
 
       <div className="relative container mx-auto px-4">
-        <div className="max-w-5xl mx-auto">
+        <div className="max-w-4xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <StatCard
               icon={Building2}
@@ -101,7 +143,7 @@ const SimpleStats = () => {
               delay={0}
               shouldAnimate={isVisible}
             />
-            
+
             <StatCard
               icon={Users}
               label="현재 참여 투자자"
@@ -110,7 +152,7 @@ const SimpleStats = () => {
               delay={0.1}
               shouldAnimate={isVisible}
             />
-            
+
             <StatCard
               icon={Coins}
               label="발행된 PCK 토큰"
@@ -127,8 +169,8 @@ const SimpleStats = () => {
             transition={{ delay: 0.3 }}
             className="mt-8 text-center"
           >
-            <div className="inline-flex items-center text-sm text-gray-500">
-              2024.11 기준
+            <div className="inline-flex items-center text-lg text-gray-500">
+              {currentDateTime.date} {currentDateTime.time} 기준
             </div>
           </motion.div>
         </div>

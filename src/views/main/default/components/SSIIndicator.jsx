@@ -1,244 +1,552 @@
-import React, { useState } from 'react';
-import { TrendingUp, Users, Box, Lightbulb, ChevronDown, ChevronUp } from 'lucide-react';
+import React, { useState, useMemo } from 'react';
+import { Users, Box, Lightbulb, TrendingUp, AlertTriangle, ChevronDown, ChevronUp, Info, Book, HelpCircle } from 'lucide-react';
+import { RadarChart, Radar, PolarGrid, PolarAngleAxis, ResponsiveContainer, Tooltip } from 'recharts';
 
-const SSIIndicator = ({ ssiData = {} }) => {
-  const [showContent, setShowContent] = useState(false);
-  const [expandedCategories, setExpandedCategories] = useState(new Set());
-
-
-  const toggleCategory = (category) => {
-    setExpandedCategories((prev) => {
-      const newSet = new Set(prev);
-      if (newSet.has(category)) {
-        newSet.delete(category);
-      } else {
-        newSet.add(category);
-      }
-      return newSet;
-    });
-  };
-
-
-  const {
-    people_grade = '진행 중',
-    product_grade = '진행 중',
-    performance_grade = '진행 중',
-    potential_grade = '진행 중',
-  } = ssiData;
-
-  const evaluationItems = [
+const ssiFramework = {
+  overview: {
+    title: "스마트 스타트업 평가 지표 (SSI)",
+    description: `
+      SSI는 스타트업의 성장 단계별 특성을 고려한 종합 평가 지표입니다.
+      글로벌/국내 투자 데이터를 기반으로 개발되었으며,
+      4P(People/Product/Potential/Performance) 프레임워크를 통해 
+      객관적인 평가가 가능하도록 설계되었습니다.
+    `,
+    source: "글로벌/국내 투자사 데이터 기반"
+  },
+  evaluationItems: [
     {
       category: 'People',
       icon: Users,
-      status: people_grade,
-      description: '창업자와 핵심 팀원의 경력, 팀워크, 리더십을 평가',
-      keyMetrics: [
-        { label: '팀 경력', value: '5년 이상' },
-        { label: '협업 능력', value: '95%' },
-        { label: '리더십', value: '우수' },
-      ],
-      criteria: {
-        우수: '창업자와 핵심 팀원이 해당 산업에서 5년 이상 활동했으며, 관련 분야에서 성공적인 이력이나 신뢰도가 높음',
-        양호: '팀 경력이 2~5년 정도이고, 특정 부분에서 경험이 부족하지만 나머지 부분은 우수함',
-        보통: '창업자와 팀원이 산업 내 경력이 1~2년 정도이거나, 팀 내 결속력이 부족함',
-        '진행 중': '창업자와 팀의 경력이 부족하고, 협업에 문제가 있어 회사 성장에 위험 요소가 있음',
-      },
+      description: '창업팀의 전문성과 실행력',
+      stageMetrics: {
+        Seed: {
+          핵심지표: [
+            "• 팀 구성의 다양성",
+            "• 관련 전공/경험 보유",
+            "• 창업팀 간 상호 보완성"
+          ],
+          평가기준: "핵심 2-3인 창업팀 구성 완료"
+        },
+        SeriesA: {
+          핵심지표: [
+            "• 핵심인력 유지율 90%↑",
+            "• 주요 포지션 채용 완료",
+            "• 조직 문화 정립"
+          ],
+          평가기준: "10-30인 조직 운영 체계 구축"
+        },
+        SeriesB: {
+          핵심지표: [
+            "• 조직 확장 실행력",
+            "• 인재 영입 경쟁력",
+            "• 부서별 성과 관리"
+          ],
+          평가기준: "50인 이상 조직 운영 체계"
+        }
+      }
     },
     {
       category: 'Product',
       icon: Box,
-      status: product_grade,
-      description: '제품/서비스의 개발 단계, 시장 적합성, 사용자 반응을 평가',
-      keyMetrics: [
-        { label: '제품 개발 단계', value: '베타 버전' },
-        { label: 'MAU 증가율', value: '20%' },
-        { label: '사용자 피드백', value: '긍정적' },
-      ],
-      criteria: {
-        우수: '제품이 베타 버전 이상으로 출시되어 있고, MAU가 20% 이상 증가하는 추세를 보임',
-        양호: '제품이 프로토타입 또는 초기 출시 단계이며, MAU가 10% 이상 증가 중',
-        보통: '제품이 초기 개발 단계이며, MAU와 사용자 피드백이 부족함',
-        '진행 중': '제품이 아이디어 단계이거나, 구체적인 피드백을 받지 못하고 있음',
-      },
-    },
-    {
-      category: 'Performance',
-      icon: TrendingUp,
-      status: performance_grade,
-      description: '매출, 수익성, 거래량 등 실질적인 성과를 평가',
-      keyMetrics: [
-        { label: '매출 성장률', value: '10%' },
-        { label: '수익성', value: '15%' },
-        { label: '거래량', value: '500만 건' },
-      ],
-      criteria: {
-        우수: '매출 성장률이 월 10% 이상으로 유지되고 있으며, 거래량이 상장 목표의 80% 이상 달성',
-        양호: '매출이 발생하고 있지만, 예측보다 낮거나 일정 부분만 달성됨',
-        보통: '매출은 발생하지 않거나, 예측 대비 50% 이하의 실적을 기록',
-        '진행 중': '매출이 발생하지 않았으며, 손익 구조가 불확실함',
-      },
+      description: '제품/서비스의 경쟁력',
+      stageMetrics: {
+        Seed: {
+          핵심지표: [
+            "• MVP 개발 완성도",
+            "• 초기 사용자 피드백",
+            "• 제품 차별성"
+          ],
+          평가기준: "베타 서비스 또는 프로토타입"
+        },
+        SeriesA: {
+          핵심지표: [
+            "• MAU 성장률",
+            "• 재사용률/리텐션",
+            "• NPS/사용자 만족도"
+          ],
+          평가기준: "PMF 검증 및 초기 트랙션"
+        },
+        SeriesB: {
+          핵심지표: [
+            "• 핵심 지표 안정성",
+            "• 플랫폼 확장성",
+            "• 기술 경쟁력"
+          ],
+          평가기준: "제품 확장 및 수익화"
+        }
+      }
     },
     {
       category: 'Potential',
       icon: Lightbulb,
-      status: potential_grade,
-      description: '시장 성장성, 산업 경쟁력, 장기 비전을 평가',
-      keyMetrics: [
-        { label: '시장 성장률', value: '15%' },
-        { label: '경쟁력', value: '상위 20%' },
-        { label: '장기 비전', value: '명확' },
-      ],
-      criteria: {
-        우수: '시장 성장률이 15% 이상으로 예상되며, 회사가 경쟁 우위에 있음',
-        양호: '시장 성장률이 10~15% 정도이고, 경쟁에서 일정 정도 우위를 가짐',
-        보통: '시장 성장률이 5~10% 사이이며, 경쟁에서 뒤처지고 있음',
-        '진행 중': '시장 성장률이 낮거나, 경쟁에서 불리하며 장기 비전이 불확실',
-      },
+      description: '시장 확장성과 성장성',
+      stageMetrics: {
+        Seed: {
+          핵심지표: [
+            "• 시장 규모(TAM)",
+            "• 문제 해결의 강도",
+            "• 경쟁사 분석"
+          ],
+          평가기준: "검증 가능한 시장 기회"
+        },
+        SeriesA: {
+          핵심지표: [
+            "• 시장 침투율",
+            "• 확장 가능성",
+            "• 경쟁 우위요소"
+          ],
+          평가기준: "시장 점유율 성장세"
+        },
+        SeriesB: {
+          핵심지표: [
+            "• 신규 시장 개척",
+            "• 진입장벽 구축",
+            "• 파트너십 확보"
+          ],
+          평가기준: "시장 지배력 강화"
+        }
+      }
     },
+    {
+      category: 'Performance',
+      icon: TrendingUp,
+      description: '실질적 성과와 성장성',
+      stageMetrics: {
+        Seed: {
+          핵심지표: [
+            "• 초기 매출 발생",
+            "• 고객 획득 비용",
+            "• Burn Rate"
+          ],
+          평가기준: "수익 모델 검증 단계"
+        },
+        SeriesA: {
+          핵심지표: [
+            "• MoM 성장률",
+            "• Unit Economics",
+            "• Runway"
+          ],
+          평가기준: "매출 안정성 확보"
+        },
+        SeriesB: {
+          핵심지표: [
+            "• 매출 성장률",
+            "• 영업이익률",
+            "• 현금흐름"
+          ],
+          평가기준: "수익성 개선 단계"
+        }
+      }
+    }
+  ],
+  gradingCriteria: {
+    선구적: {
+      정의: "해당 단계에서 요구되는 모든 지표에서 탁월한 성과 달성",
+      특징: "업계 평균 대비 상위 25% 이상의 성과"
+    },
+    도약적: {
+      정의: "대부분의 핵심 지표에서 목표치 달성",
+      특징: "업계 평균 이상의 성과"
+    },
+    성장하는: {
+      정의: "일부 핵심 지표에서 의미있는 성과 달성",
+      특징: "성장 가능성 확인 단계"
+    },
+    기대되는: {
+      정의: "기본적인 성장 지표 확인",
+      특징: "잠재력 보유 단계"
+    }
+  },
+  keyConsiderations: {
+    Seed: [
+      "문제 해결의 명확성",
+      "팀의 실행력",
+      "시장 기회의 크기"
+    ],
+    SeriesA: [
+      "Product-Market Fit",
+      "초기 성장세",
+      "확장 가능성"
+    ],
+    SeriesB: [
+      "수익성 개선",
+      "시장 지배력",
+      "지속가능한 성장"
+    ]
+  }
+};
+
+const SSIIndicator = ({ ssiData = {} }) => {
+  const [showContent, setShowContent] = useState(false);
+  const [currentStage, setCurrentStage] = useState('seed');
+
+  const getGradeColor = (grade) => {
+    const colors = {
+      "선구적": "bg-blue-100 text-blue-800",
+      "도약적": "bg-green-100 text-green-800",
+      "성장하는": "bg-yellow-100 text-yellow-800",
+      "기대되는": "bg-purple-100 text-purple-800"
+    };
+    return colors[grade] || "bg-gray-100 text-gray-800";
+  };
+
+  const categories = [
+    {
+      title: "People (팀)",
+      icon: Users,
+      grade: "선구적",
+      metrics: [
+        { label: "산업 경험", value: 90, benchmark: 70 },
+        { label: "팀 안정성", value: 85, benchmark: 60 },
+        { label: "실행력", value: 95, benchmark: 75 },
+        { label: "전문성", value: 88, benchmark: 65 }
+      ],
+      keyPoints: {
+        seed: [
+          "핵심 인력 구성 완료",
+          "관련 분야 경험 보유",
+          "명확한 역할 분담"
+        ],
+        seriesA: [
+          "산업 경험 3년↑",
+          "핵심인력 유지율 90%↑",
+          "주요 포지션 채용 완료"
+        ],
+        seriesB: [
+          "산업 경험 5년↑",
+          "핵심인력 유지율 85%↑",
+          "조직 확장 실행력"
+        ]
+      },
+      summary: {
+        strength: "풍부한 산업 경험과 높은 팀 안정성",
+        focus: "지속적인 전문성 강화",
+        stageSpecific: {
+          seed: "초기 팀 구성과 역량 검증",
+          seriesA: "조직 확장과 시스템 구축",
+          seriesB: "조직 안정화와 성과 관리"
+        }
+      }
+    },
+    {
+      title: "Product (제품)",
+      icon: Box,
+      grade: "도약적",
+      metrics: [
+        { label: "기술력", value: 82, benchmark: 65 },
+        { label: "시장성", value: 78, benchmark: 60 },
+        { label: "확장성", value: 85, benchmark: 70 },
+        { label: "완성도", value: 75, benchmark: 60 }
+      ],
+      keyPoints: {
+        seed: [
+          "MVP 개발 완료",
+          "초기 사용자 확보",
+          "핵심 기능 검증"
+        ],
+        seriesA: [
+          "월 사용자 증가율 20%↑",
+          "재사용률 40%↑",
+          "사용자 만족도 4.0↑"
+        ],
+        seriesB: [
+          "안정적 서비스 운영",
+          "핵심 지표 달성",
+          "플랫폼 확장성"
+        ]
+      },
+      summary: {
+        strength: "독자적 기술력과 높은 확장성",
+        focus: "제품 완성도 향상",
+        stageSpecific: {
+          seed: "시장 검증과 제품 개선",
+          seriesA: "서비스 안정화와 확장",
+          seriesB: "플랫폼화와 신규 기능"
+        }
+      }
+    },
+    {
+      title: "Potential (성장성)",
+      icon: Lightbulb,
+      grade: "성장하는",
+      metrics: [
+        { label: "시장규모", value: 75, benchmark: 60 },
+        { label: "성장률", value: 85, benchmark: 70 },
+        { label: "진입장벽", value: 70, benchmark: 55 },
+        { label: "경쟁력", value: 80, benchmark: 65 }
+      ],
+      keyPoints: {
+        seed: [
+          "시장 기회 검증",
+          "성장 가능성 확인",
+          "차별화 요소 보유"
+        ],
+        seriesA: [
+          "시장 규모 1000억↑",
+          "연간 성장률 15%↑",
+          "진입장벽 구축"
+        ],
+        seriesB: [
+          "시장 규모 5000억↑",
+          "연간 성장률 20%↑",
+          "시장 지배력 확보"
+        ]
+      },
+      summary: {
+        strength: "높은 시장 성장성과 진입장벽",
+        focus: "시장 지배력 강화",
+        stageSpecific: {
+          seed: "시장 기회 검증",
+          seriesA: "시장 점유율 확대",
+          seriesB: "시장 지배력 강화"
+        }
+      }
+    },
+    {
+      title: "Performance (성과)",
+      icon: TrendingUp,
+      grade: "기대되는",
+      metrics: [
+        { label: "매출", value: 65, benchmark: 55 },
+        { label: "수익성", value: 70, benchmark: 60 },
+        { label: "성장성", value: 85, benchmark: 70 },
+        { label: "안정성", value: 75, benchmark: 65 }
+      ],
+      keyPoints: {
+        seed: [
+          "매출 발생 시작",
+          "비즈니스 모델 검증",
+          "초기 고객 확보"
+        ],
+        seriesA: [
+          "매출 성장률 100%↑",
+          "수익성 개선 중",
+          "Unit Economics 검증"
+        ],
+        seriesB: [
+          "매출 성장률 50%↑",
+          "영업이익률 10%↑",
+          "안정적 현금흐름"
+        ]
+      },
+      summary: {
+        strength: "높은 성장률과 수익성",
+        focus: "매출 확대",
+        stageSpecific: {
+          seed: "수익모델 검증",
+          seriesA: "매출 확대",
+          seriesB: "수익성 강화"
+        }
+      }
+    }
   ];
 
-  const getCompanyType = () => {
-    const grades = {
-      우수: 3,
-      양호: 2,
-      보통: 1,
-      '진행 중': 0,
-    };
+  const WarningMessage = () => (
+    <div className="bg-amber-50 border-l-4 border-amber-500 p-6 mb-8 rounded-lg shadow-lg">
+      <div className="flex items-start">
+        <AlertTriangle className="w-6 h-6 text-amber-500 mt-1 mr-3" />
+        <div>
+          <h3 className="font-bold text-amber-800 text-lg mb-2">투자자 유의사항</h3>
+          <ul className="text-base text-amber-700 space-y-2">
+            <li>
+              본 SSI(Smart Startup Index) 지표는 픽타트업의 연구에 기반하여 개발된 참고 지표입니다.
+            </li>
+            <li>
+              투자 판단에 참고용으로 활용하되, 최종적인 투자 결정은 <strong>본인의 판단과 책임하에 이루어져야 합니다.</strong>
+            </li>
+            <li>
+              픽타트업은 <strong>투자 결과에 대한 책임을 지지 않습니다.</strong>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  );
 
-    let maxGrade = -1;
-    let topCategory = null;
+  const CategoryCard = ({ category, currentStage }) => {
+    const [showCriteria, setShowCriteria] = useState(false);
 
-    Object.entries({
-      People: people_grade,
-      Product: product_grade,
-      Performance: performance_grade,
-      Potential: potential_grade,
-    }).forEach(([category, grade]) => {
-      const gradeValue = grades[grade] || 0;
-      if (gradeValue > maxGrade) {
-        maxGrade = gradeValue;
-        topCategory = category;
-      }
-    });
+    return (
+      <div className="bg-white rounded-xl shadow-lg p-6">
+        {/* 카드 헤더 */}
+        <div className="flex justify-between items-center mb-6">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-gray-100 rounded-lg">
+              <category.icon className="w-6 h-6" />
+            </div>
+            <h2 className="text-xl font-bold">{category.title}</h2>
+          </div>
+          <span className={`px-3 py-1 rounded-full text-sm font-semibold ${getGradeColor(category.grade)}`}>
+            {category.grade}
+          </span>
+        </div>
 
-    const types = {
-      People: { name: '든든기업', description: '탄탄한 팀워크와 경험이 돋보이는 기업' },
-      Product: { name: '활발기업', description: '혁신적인 제품과 높은 성장성을 보유한 기업' },
-      Performance: { name: '실속기업', description: '안정적인 매출과 수익을 창출하는 기업' },
-      Potential: { name: '펄럭기업', description: '미래 성장 가능성이 매우 높은 기업' },
-    };
+        {/* 레이더 차트 */}
+        <div className="h-64 mb-6">
+          <ResponsiveContainer width="100%" height="100%">
+            <RadarChart data={category.metrics}>
+              <PolarGrid />
+              <PolarAngleAxis dataKey="label" />
+              <Radar
+                name="현재 수준"
+                dataKey="value"
+                stroke="#2563eb"
+                fill="#3b82f6"
+                fillOpacity={0.3}
+              />
+              <Radar
+                name="업계 기준"
+                dataKey="benchmark"
+                stroke="#9ca3af"
+                fill="#d1d5db"
+                fillOpacity={0.3}
+              />
+              <Tooltip />
+            </RadarChart>
+          </ResponsiveContainer>
+        </div>
 
-    return {
-      ...types[topCategory || 'People'],
-      category: topCategory || 'People',
-    };
+        {/* 핵심 지표 */}
+        <div className="space-y-4">
+          <div className="bg-gray-50 rounded-lg p-4">
+            <h3 className="font-semibold mb-2">핵심 지표</h3>
+            <div className="grid grid-cols-1 gap-2">
+              {category.keyPoints[currentStage].map((point, i) => (
+                <div key={i} className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                  <span className="text-sm">{point}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* 요약 정보 */}
+          <div className="grid grid-cols-2 gap-4">
+            <div className="bg-green-50 rounded-lg p-3">
+              <h4 className="text-sm font-semibold text-green-800 mb-1">강점</h4>
+              <p className="text-sm text-green-600">{category.summary.strength}</p>
+            </div>
+            <div className="bg-blue-50 rounded-lg p-3">
+              <h4 className="text-sm font-semibold text-blue-800 mb-1">중점 사항</h4>
+              <p className="text-sm text-blue-600">
+                {category.summary.stageSpecific[currentStage]}
+              </p>
+            </div>
+          </div>
+
+          {/* 평가 기준 토글 버튼 */}
+          <button
+            onClick={() => setShowCriteria(!showCriteria)}
+            className="w-full mt-4 flex items-center justify-between px-4 py-2 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors"
+          >
+            <span className="text-sm font-medium text-gray-700">
+              {showCriteria ? '평가 기준 접기' : '평가 기준 보기'}
+            </span>
+            {showCriteria ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+          </button>
+
+          {/* 평가 기준 상세 내용 */}
+          {showCriteria && (
+            <div className="mt-4 space-y-4 bg-gray-50 rounded-lg p-4">
+              <div className="space-y-4">
+                {['Seed', 'SeriesA', 'SeriesB'].map((stage) => (
+                  <div
+                    key={stage}
+                    className={`p-4 rounded-lg ${currentStage === stage.toLowerCase() ? 'bg-blue-50' : 'bg-white'}`}
+                  >
+                    <h4 className="font-semibold text-gray-800 mb-2">
+                      {stage} 단계 평가 기준
+                    </h4>
+                    <div className="space-y-2">
+                      <div>
+                        <h5 className="text-sm font-medium text-gray-700 mb-1">핵심 지표</h5>
+                        {ssiFramework.evaluationItems
+                          .find(item => item.category === category.title.split(' ')[0])
+                          ?.stageMetrics[stage].핵심지표.map((item, idx) => (
+                            <p key={idx} className="text-sm text-gray-600">{item}</p>
+                          ))
+                        }
+                      </div>
+                      <div>
+                        <h5 className="text-sm font-medium text-gray-700 mb-1">평가 기준</h5>
+                        <p className="text-sm text-gray-600">
+                          {ssiFramework.evaluationItems
+                            .find(item => item.category === category.title.split(' ')[0])
+                            ?.stageMetrics[stage].평가기준
+                          }
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+
+                {/* 등급 체계 설명 */}
+                <div className="mt-6 bg-gray-100 rounded-lg p-4">
+                  <h4 className="font-semibold text-gray-800 mb-3">등급 체계 설명</h4>
+                  {Object.entries(ssiFramework.gradingCriteria).map(([grade, info]) => (
+                    <div key={grade} className="mb-3">
+                      <span className={`${getGradeColor(grade)} px-2 py-1 rounded text-sm inline-block mb-1`}>
+                        {grade}
+                      </span>
+                      <p className="text-sm text-gray-600 mt-1">{info.정의}</p>
+                      <p className="text-sm text-gray-500">{info.특징}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    );
   };
-
-  const getStatusStyle = (status) => {
-    const baseStyle = 'text-xs font-semibold px-3 py-1 rounded-full';
-    switch (status) {
-      case '우수':
-        return `${baseStyle} bg-blue-100 text-blue-800`;
-      case '양호':
-        return `${baseStyle} bg-emerald-100 text-emerald-800`;
-      case '보통':
-        return `${baseStyle} bg-amber-100 text-amber-800`;
-      case '진행 중':
-        return `${baseStyle} bg-purple-100 text-purple-800`;
-      default:
-        return `${baseStyle} bg-gray-100 text-gray-800`;
-    }
-  };
-
 
   if (!showContent) {
     return (
-      <div className="flex flex-col items-center space-y-4">
-        <p className="text-gray-600">
-          기업 분석자료를 확인하기 위해서는 로그인이 필요합니다 
-        </p>
-        <button
-          onClick={() => setShowContent(true)}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"
-        >
-          로그인하기
-        </button>
+      <div className="p-6">
+        <WarningMessage />
+        <div className="flex flex-col items-center justify-center bg-gray-50 rounded-xl p-8">
+          <p className="text-gray-600 text-center mb-4">
+            기업 분석자료를 확인하기 위해서는 로그인이 필요합니다.
+          </p>
+          <button
+            onClick={() => setShowContent(true)}
+            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold"
+          >
+            로그인하기
+          </button>
+        </div>
       </div>
     );
   }
 
-  const companyType = getCompanyType();
-
   return (
-    <div className="max-w-6xl mx-auto">
-      <div className="mb-8">
-        <div className="bg-white rounded-xl shadow-sm p-6 mt-4">
-          <div className="flex items-center space-x-3">
-            <span className="text-lg font-bold text-blue-600">{companyType.name}</span>
-            <span className="text-gray-600">- {companyType.description}</span>
-          </div>
-          <p className="text-sm text-gray-600 mt-2">
-            {companyType.category} 분야에서 가장 높은 등급을 기록했습니다.
-          </p>
+    <div className="p-6">
+      <WarningMessage />
+
+      <div className="mb-6 bg-gray-50 p-4 rounded-lg">
+        <div className="flex items-center justify-between">
+          <span className="font-semibold">성장 단계 선택</span>
+          <select
+            value={currentStage}
+            onChange={(e) => setCurrentStage(e.target.value)}
+            className="p-2 border rounded-lg"
+          >
+            <option value="seed">Seed</option>
+            <option value="seriesA">Series A</option>
+            <option value="seriesB">Series B</option>
+          </select>
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-        {evaluationItems.map((item) => {
-          const IconComponent = item.icon;
-          const isExpanded = expandedCategories.has(item.category);
-
-          return (
-            <div key={item.category} className="bg-white rounded-xl shadow-sm p-6">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center space-x-3">
-                  <IconComponent className="w-6 h-6 text-gray-600" />
-                  <h3 className="text-lg font-semibold text-gray-800">{item.category}</h3>
-                </div>
-                <span className={getStatusStyle(item.status)}>{item.status}</span>
-              </div>
-              <p className="text-gray-600 text-sm mb-4">{item.description}</p>
-              <div className="bg-gray-50 rounded-lg p-4">
-                <h4 className="font-medium text-gray-700 mb-2">주요 지표</h4>
-                <ul className="space-y-2">
-                  {item.keyMetrics.map((metric, index) => (
-                    <li key={index} className="text-sm text-gray-600 flex justify-between">
-                      <span>• {metric.label}</span>
-                      <span className="font-medium text-gray-800">{metric.value}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <button
-                onClick={() => toggleCategory(item.category)}
-                className="mt-4 flex items-center text-sm text-blue-600 hover:text-blue-800"
-              >
-                {isExpanded ? (
-                  <>
-                    평가 기준 접기
-                    <ChevronUp className="w-4 h-4 ml-1" />
-                  </>
-                ) : (
-                  <>
-                    평가 기준 보기
-                    <ChevronDown className="w-4 h-4 ml-1" />
-                  </>
-                )}
-              </button>
-              {isExpanded && (
-                <div className="mt-4 bg-gray-50 rounded-lg p-4">
-                  <h4 className="font-medium text-gray-700 mb-2">평가 기준</h4>
-                  {Object.entries(item.criteria).map(([status, description]) => (
-                    <div key={status} className="mb-3">
-                      <span className={`${getStatusStyle(status)} inline-block mb-1`}>{status}</span>
-                      <p className="text-sm text-gray-600 ml-1">{description}</p>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          );
-        })}
+        {categories.map((category, idx) => (
+          <CategoryCard
+            key={idx}
+            category={category}
+            currentStage={currentStage}
+          />
+        ))}
       </div>
     </div>
   );

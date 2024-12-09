@@ -8,7 +8,8 @@ import CompanyOverview from "components/CompanyOverview";
 import AnnualFinancialMetrics from "./components/AnnualMetrics";
 import MonthlyMetrics from "./components/MonthlyMetrics";
 import InvestmentRound from "./components/InvestmentRound";
-import InvestmentModal from "components/modal/InvestmentModal"; // 모달 컴포넌트 추가
+import InvestmentModal from "components/modal/InvestmentModal";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 const DetailPage = () => {
   const { startupId } = useParams();
@@ -21,17 +22,37 @@ const DetailPage = () => {
   const [error, setError] = useState(null);
   const [activeSection, setActiveSection] = useState("dashboard");
   const [currentPage, setCurrentPage] = useState(1);
-  const articlesPerPage = 3;
-  const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태 관리 추가
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const articlesPerPage = 3;
   const totalPages = Math.ceil(articles.length / articlesPerPage);
   const displayedArticles = articles.slice(
     (currentPage - 1) * articlesPerPage,
     currentPage * articlesPerPage
   );
 
-  const openModal = () => setIsModalOpen(true); // 모달 열기
-  const closeModal = () => setIsModalOpen(false); // 모달 닫기
+  const sections = [
+    { id: "dashboard", label: "대시보드" },
+    { id: "investment-round", label: "투자 라운드" },
+    { id: "annual-metrics", label: "연간 재무 지표" },
+    { id: "monthly-metrics", label: "월간 재무 지표" },
+    { id: "ssi", label: "SSI" },
+    { id: "articles", label: "최근 기사" },
+  ];
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+
+  const scrollToSection = (sectionId) => {
+    const element = document.getElementById(sectionId);
+    const navbarHeight = 80;
+
+    if (element) {
+      const offsetTop = element.offsetTop - navbarHeight;
+      window.scrollTo({ top: offsetTop, behavior: "smooth" });
+      setActiveSection(sectionId);
+    }
+  };
 
   useEffect(() => {
     const fetchStartupDetails = async () => {
@@ -171,29 +192,23 @@ const DetailPage = () => {
               />
               <span className="font-bold text-gray-900">{startup.name}</span>
               <nav className="flex items-center space-x-6 ml-8">
-                {["dashboard", "ssi", "articles"].map((section) => (
+                {sections.map((section) => (
                   <button
-                    key={section}
-                    onClick={() =>
-                      document.getElementById(section)?.scrollIntoView({ behavior: "smooth" })
-                    }
-                    className={`text-sm font-medium ${
-                      activeSection === section
-                        ? "text-gray-900 font-bold"
+                    key={section.id}
+                    onClick={() => scrollToSection(section.id)}
+                    className={`text-sm font-medium transition-colors ${
+                      activeSection === section.id
+                        ? "text-gray-900 font-bold border-b-2 border-blue-500"
                         : "text-gray-500 hover:text-gray-900"
                     }`}
                   >
-                    {section === "dashboard"
-                      ? "대시보드"
-                      : section === "ssi"
-                      ? "SSI"
-                      : "최근 기사"}
+                    {section.label}
                   </button>
                 ))}
               </nav>
             </div>
             <button
-              onClick={openModal} // 모달 열기 핸들러
+              onClick={openModal}
               className="bg-violet-600 text-white px-4 py-2 text-sm rounded-lg shadow-sm hover:bg-blue-700 font-bold"
             >
               투자하기
@@ -213,11 +228,10 @@ const DetailPage = () => {
             establishmentDate={startup.establishmentDate}
             annualData={annualData}
             category={startup.category}
-            industry_type={startup.industry_type}
           />
         </section>
 
-        <section className="mt-8 mb-8">
+        <section id="investment-round" className="bg-white p-6 rounded-lg shadow-md">
           <InvestmentRound startupId={startupId} />
         </section>
 
@@ -241,37 +255,58 @@ const DetailPage = () => {
           {articles.length === 0 ? (
             <p className="text-gray-600">관련 기사가 없습니다.</p>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {displayedArticles.map((article) => (
-                <div
-                  key={article.id}
-                  className="border rounded-lg shadow-sm p-4 bg-gray-50"
-                >
-                  <a
-                    href={article.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
+            <>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {displayedArticles.map((article) => (
+                  <div
+                    key={article.id}
+                    className="border rounded-lg shadow-sm p-4 bg-gray-50"
                   >
-                    <img
-                      src={article.imageUrl || defaultImage}
-                      alt={article.title}
-                      className="w-full h-40 object-cover rounded-md mb-4"
-                    />
-                    <h3 className="text-lg font-bold text-gray-900">
-                      {article.title}
-                    </h3>
-                  </a>
-                </div>
-              ))}
-            </div>
+                    <a
+                      href={article.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <img
+                        src={article.imageUrl || defaultImage}
+                        alt={article.title}
+                        className="w-full h-40 object-cover rounded-md mb-4"
+                      />
+                      <h3 className="text-lg font-bold text-gray-900">
+                        {article.title}
+                      </h3>
+                    </a>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-4 flex justify-center items-center gap-4">
+                <button
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 1}
+                  className="px-4 py-2 bg-violet-600 text-white rounded-lg hover:bg-violet-700 transition disabled:opacity-50"
+                >
+                  <FaChevronLeft />
+                </button>
+                <span className="text-sm font-medium">
+                  {currentPage} / {totalPages}
+                </span>
+                <button
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                  className="px-4 py-2 bg-violet-600 text-white rounded-lg hover:bg-violet-700 transition disabled:opacity-50"
+                >
+                  <FaChevronRight />
+                </button>
+              </div>
+            </>
           )}
         </section>
       </div>
 
-      {/* 투자 모달 */}
       <InvestmentModal
         isOpen={isModalOpen}
         onClose={closeModal}
+
         startupId={startupId} // 캠페인 ID 전달
       />
     </div>

@@ -7,6 +7,11 @@ import SimpleStats from 'components/SimpleStats';
 import defaultImage from 'assets/img/nfts/default.png';
 import { useNavigate } from 'react-router-dom';
 import NftCard from 'components/card/NftCard';
+import TokenInvestmentProcess from 'components/TokenInvestmentProcess';
+import MainCarousel from 'components/MainCarousel';
+import MainVideo from 'components/MainVideo';
+import TokenInvestment from 'components/TokenInvestment';
+
 
 const Marketplace = () => {
   const [startups, setStartups] = useState([]);
@@ -67,7 +72,12 @@ const Marketplace = () => {
 
       return (
         <div className="w-full min-h-screen bg-gray-50">
-          <HeroSection />
+          <MainVideo />
+          <div className="mt-10"></div>
+          {/* <MainCarousel />/ */}
+          {/* <HeroSection /> */}
+          {/* <TokenInvestment/> */}
+          <TokenInvestmentProcess />
           <SimpleStats />
 
           <div className="container mx-auto px-4 py-16">
