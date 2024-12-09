@@ -273,7 +273,7 @@ const ServiceCard = ({ service, environment }) => {
 
 const NetworkMonitoring = () => {
   const [selectedEnvironment, setSelectedEnvironment] = useState('all');
-  const [timeRange, setTimeRange] = useState('30m');
+  const [timeRange, setTimeRange] = useState('1w');
 
   const getOverallGrafanaUrl = () => {
   const baseUrl = window.location.protocol + '//192.168.0.142:32647';
@@ -302,6 +302,10 @@ const NetworkMonitoring = () => {
             <option value="1h">최근 1시간</option>
            <option value="3h">최근 3시간</option>
            <option value="6h">최근 6시간</option>
+           <option value="1d">최근 1일</option>
+            <option value="1w">최근 1주일</option>
+            <option value="2w">최근 2주일</option>
+            <option value="1m">최근 1개월</option>
          </select>
          <div className="flex items-center px-3 py-2 bg-white rounded-lg shadow-sm">
            <RefreshCw className="h-4 w-4 mr-2" />
