@@ -112,6 +112,7 @@ module.exports = {
         dm: ["DM Sans", "sans-serif"],
         pretendard: ["Pretendard", "sans-serif"],
         tenada: ["Tenada", "sans-serif"],
+        sbaggrob: ["SBAggroB", "sans-serif"]
       },
       boxShadow: {
         "3xl": "14px 17px 40px 4px",

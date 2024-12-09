@@ -20,7 +20,7 @@ export default function AuthLayout(props) {
   }, [location.pathname]);
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white font-pretendard">
       <Navbar
         logoText={"PicktartUp"}
         brandText={currentRoute}

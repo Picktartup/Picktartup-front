@@ -158,7 +158,7 @@ const DetailPage = () => {
   }
 
   return (
-    <div className="w-full min-h-screen bg-gray-50">
+    <div className="w-full min-h-screen bg-gray-50 font-pretendard">
       <Navbar />
       <div className="sticky top-16 z-40 bg-white/10 backdrop-blur-xl shadow-sm">
         <div className="container mx-auto px-4">
