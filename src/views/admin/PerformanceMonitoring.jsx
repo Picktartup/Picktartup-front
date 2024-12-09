@@ -277,7 +277,7 @@ const ServiceCard = ({ service, environment }) => {
         const now = Date.now();
         const from = now - 60 * 60 * 1000; // 1시간 전
       
-        return `${baseUrl}/d-solo/${service.dashboardId}/kubernetes-compute-resources-namespace-pods?orgId=1&from=${from}&to=${now}&timezone=utc&var-datasource=prometheus&var-cluster=&var-namespace=${service.namespace}&refresh=10s&panelId=5&__feature.dashboardSceneSolo`;
+        return `${baseUrl}/d-solo/${service.dashboardId}/kubernetes-compute-resources-namespace-pods?orgId=1&api_key=sa-1-test-43641fdc-7fea-45ea-8f6f-975c7e4746fb&from=${from}&to=${now}&timezone=utc&var-datasource=prometheus&var-cluster=&var-namespace=${service.namespace}&refresh=10s&panelId=5&__feature.dashboardSceneSolo`;
       };
 
   return (
