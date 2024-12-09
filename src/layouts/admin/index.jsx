@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+
 import {
   Bell,
   SearchIcon,
@@ -24,6 +27,7 @@ import {
 const AdminLayout = () => {
   const location = useLocation();
   const [isHovered, setIsHovered] = useState('');
+  const navigate = useNavigate();
 
   const menuItems = [
     {
@@ -52,6 +56,15 @@ const AdminLayout = () => {
       ],
     },
   ];
+
+  const handleLogout = async () => {
+    try {
+      await axios.delete('https://picktartup.com/api/v1/users/auth/logout');
+      navigate('/main/default');
+    } catch (error) {
+      console.error('로그아웃 실패:', error);
+    }
+  };
 
   return (
     <div className="flex h-screen w-full overflow-hidden bg-gray-50">
@@ -101,6 +114,7 @@ const AdminLayout = () => {
         {/* Logout Button */}
         <div className="px-3">
           <button
+            onClick={handleLogout}
             className="w-full flex items-center px-3 py-3 text-gray-300 hover:bg-red-500/10 hover:text-red-500 rounded-lg transition-colors duration-200"
           >
             <LogOut size={20} />

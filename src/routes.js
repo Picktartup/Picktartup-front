@@ -1,29 +1,23 @@
 import React from "react";
-
-// Main Imports
 import MainDashboard from "views/main/default";
 import NFTMarketplace from "views/main/investment";
 import Profile from "views/main/history";
 import ContractDetail from "views/main/history/ContractDetail";
 import DataTables from "views/main/token";
-import DetailPage from "views/main/default/details";  // 이 줄 추가
-
-//import RTLDefault from "views/rtl/default";
-
-// Auth Imports
+import DetailPage from "views/main/default/details";
 import SignIn from "views/auth/SignIn";
 import SignUpStep1 from "views/auth/SignUpStep1";
 import SignUpStep2 from "views/auth/SignUpStep2";
 
-//Admin Imports
-import { MdDashboard } from "react-icons/md";  // 아이콘 import 추가
+// Admin Imports
 import Dashboard from 'views/admin/Dashboard';
 import SystemMonitoring from 'views/admin/SystemMonitoring';
 import PerformanceMonitoring from 'views/admin/PerformanceMonitoring';
 import NetworkMonitoring from 'views/admin/NetworkMonitoring';
+import UserMonitoring from 'views/admin/UserMonitoring';
 
 // Icon Imports
-import {
+import { 
   MdHome,
   MdOutlineShoppingCart,
   MdBarChart,
@@ -31,6 +25,19 @@ import {
   MdLock,
   MdPersonAdd,
 } from "react-icons/md";
+
+import {
+  LayoutDashboard,
+  Server,
+  Activity,
+  Network,
+  Users,
+  Shield,
+  AlertTriangle,
+  Database,
+  Cpu,
+  LineChart
+} from 'lucide-react';
 
 const routes = [
   {
@@ -54,7 +61,6 @@ const routes = [
     path: "default/details/:startupId",
     component: <DetailPage />,
   },
-
   {
     name: "My 토큰",
     layout: "/main",
@@ -96,33 +102,42 @@ const routes = [
     icon: <MdPersonAdd className="h-6 w-6" />,
     component: <SignUpStep2 />,
   },
+  // Admin Routes
   {
     name: "관리자 대시보드",
     layout: "/admin",
     path: "dashboard",
-    icon: <MdDashboard className="h-6 w-6" />,  // Material 아이콘 사용
+    icon: <LayoutDashboard size={20} />,
     component: <Dashboard />
   },
   {
     name: "시스템 모니터링",
     layout: "/admin",
     path: "system",
-    icon: <MdDashboard className="h-6 w-6" />, // 원하는 아이콘으로 교체 가능
+    icon: <Server size={20} />,
     component: <SystemMonitoring />,
   },
   {
     name: "성능 모니터링",
     layout: "/admin",
     path: "performance",
-    icon: <MdDashboard className="h-6 w-6" />,
+    icon: <Activity size={20} />,
     component: <PerformanceMonitoring />,
   },
   {
     name: "네트워크 모니터링",
     layout: "/admin",
     path: "network",
-    icon: <MdDashboard className="h-6 w-6" />,
+    icon: <Network size={20} />,
     component: <NetworkMonitoring />,
+  },
+  {
+    name: "사용자 모니터링",
+    layout: "/admin",
+    path: "users",
+    icon: <Users size={20} />,
+    component: <UserMonitoring />,
   }
 ];
+
 export default routes;
