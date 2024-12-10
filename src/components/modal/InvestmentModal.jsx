@@ -108,27 +108,12 @@ const InvestmentModal = ({ isOpen, onClose, startupId }) => {
     if (!authToken) return;
   
     try {
-      // Step 1: Fetch wallet details to get the address
-      const walletResponse = await axios.get(`https://192.168.0.142:31158/wallet/api/v1/wallets/user/${userId}`);
-  
-      if (walletResponse.data?.success) {
-        const address = walletResponse.data.data?.address;
-  
-        if (!address) {
-          console.error("지갑 주소를 찾을 수 없습니다.");
-          return;
-        }
-  
-        // Step 2: Use the fetched address to update the balance
-        const updateResponse = await axios.post(
-          `https://192.168.0.142:31158/wallet/api/v1/wallets/${address}/update-balance`,
-          null
-        );
-  
-        console.log("잔고 업데이트 성공"); // 성공 응답 출력
-      } else {
-        console.error("지갑 정보를 가져오는 데 실패했습니다.");
-      }
+      const updateResponse = await axios.post(
+        `https://192.168.0.142:31158/wallet/api/v1/wallets/${userId}/update-balance`,
+        null
+      );
+
+      console.log(updateResponse.data.data);
     } catch (error) {
       console.error("잔고 업데이트 중 오류 발생:", error);
     }

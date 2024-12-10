@@ -212,7 +212,7 @@ const ServiceCard = ({ service, environment }) => {
   const metrics = useNetworkMetrics(service.name, environment);
 
   const getGrafanaUrl = (service) => {
-    const baseUrl = window.location.protocol + '//192.168.0.142:32647';
+    const baseUrl = 'http://192.168.0.142:32647';
     const now = Date.now();
     const from = now - 60 * 60 * 1000;
   
@@ -276,7 +276,7 @@ const NetworkMonitoring = () => {
   const [timeRange, setTimeRange] = useState('1w');
 
   const getOverallGrafanaUrl = () => {
-  const baseUrl = window.location.protocol + '//192.168.0.142:32647';
+  const baseUrl ='http://192.168.0.142:32647';
   const now = Date.now();
   const from = now - 60 * 60 * 1000;
 
