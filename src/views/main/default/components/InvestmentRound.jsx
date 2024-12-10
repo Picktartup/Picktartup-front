@@ -90,7 +90,7 @@ const InvestmentRoundTimeline = ({ startupId }) => {
       {/* Current Round Display */}
       <div className="mb-8">
         <div className="flex items-center gap-2 mb-2">
-          <TrendingUp className="w-5 h-5 text-blue-600" />
+          <TrendingUp className="w-5 h-5 text-purple-600" />
           <h2 className="text-lg font-bold text-gray-900">현재 투자 라운드</h2>
           <CustomTooltip
             content={
@@ -105,7 +105,7 @@ const InvestmentRoundTimeline = ({ startupId }) => {
         </div>
         <div className="flex items-center gap-2">
           <div className="text-gray-500">투자</div>
-          <div className="text-2xl font-bold text-blue-600">{currentRound}</div>
+          <div className="text-2xl font-bold text-purple-600">{currentRound}</div>
         </div>
       </div>
 

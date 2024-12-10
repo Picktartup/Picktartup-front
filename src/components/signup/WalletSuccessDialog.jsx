@@ -67,7 +67,7 @@ const WalletSuccessDialog = ({ walletData }) => {
 
           <button
             onClick={handleContinue}
-            className="w-full py-3 px-4 bg-indigo-600 text-white rounded font-medium hover:bg-indigo-700 text-sm mt-2"
+            className="w-full py-3 px-4 bg-purple-600 text-white rounded font-medium hover:bg-purple-700 text-sm mt-2"
           >
             로그인하기
           </button>
