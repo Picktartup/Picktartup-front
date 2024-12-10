@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 
-import video from "../assets/img/main/검정.mp4"
-import video2 from "../assets/img/main/검정2.mp4"
+import video from "../assets/img/main/BLACK2.mp4"
 
 
 const MainVideo = () => {
@@ -16,7 +15,7 @@ const MainVideo = () => {
       subtitle: "토큰증권 조각 투자 플랫폼",
       description: "혁신적인 스타트업에 투자하고 미래의 성장을 함께하세요",
       type: 'video',
-      content: video2,
+      content: video,
     },
     {
       title: "소액으로 시작하는 투자",
@@ -37,7 +36,7 @@ const MainVideo = () => {
       subtitle: "미래 유니콘을 발굴하세요",
       description: "잠재력 있는 스타트업을 발굴하고 성장의 기회를 함께하세요",
       type: 'video',
-      content: video2,
+      content: video,
     },
   ];
 

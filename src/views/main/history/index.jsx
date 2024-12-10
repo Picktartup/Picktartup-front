@@ -5,6 +5,7 @@ import CompletedInvest from "./components/CompletedInvest";
 import Menubar from "./components/Menubar";
 import { extractUserIdFromToken, isTokenExpired } from "utils/jwtUtils";
 
+
 const ProfileOverview = () => {
   const [selectedMenu, setSelectedMenu] = useState("contractActive");
   const [tableData, setTableData] = useState([]);

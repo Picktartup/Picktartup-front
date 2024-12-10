@@ -129,7 +129,7 @@ const AnnualFinancialMetrics = ({ data }) => {
               <th className="border px-4 py-2 text-left">구분</th>
               {processedData.map(item => (
                 <th key={item.year} className="border px-4 py-2 text-center">
-                  {item.year}년{item.year > 2021 ? ' (개별)' : ''}
+                  {item.year}년{item.year > 2021 ? '' : ''}
                 </th>
               ))}
             </tr>

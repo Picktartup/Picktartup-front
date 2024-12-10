@@ -349,7 +349,7 @@ const SSIIndicator = ({ ssiData = {} }) => {
           <h3 className="font-bold text-amber-800 text-lg mb-2">투자자 유의사항</h3>
           <ul className="text-base text-amber-700 space-y-2">
             <li>
-              본 SSI(Smart Startup Index) 지표는 픽타트업의 연구에 기반하여 개발된 참고 지표입니다.
+              본 SSI(Smart Startup Index) 지표는 <strong>픽타트업의 연구에 기반하여 개발된 참고 지표</strong>입니다.
             </li>
             <li>
               투자 판단에 참고용으로 활용하되, 최종적인 투자 결정은 <strong>본인의 판단과 책임하에 이루어져야 합니다.</strong>

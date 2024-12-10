@@ -198,7 +198,7 @@ const DetailPage = () => {
                     onClick={() => scrollToSection(section.id)}
                     className={`text-sm font-medium transition-colors ${
                       activeSection === section.id
-                        ? "text-gray-900 font-bold border-b-2 border-blue-500"
+                        ? "text-gray-900 font-bold border-b-2 border-purple-500"
                         : "text-gray-500 hover:text-gray-900"
                     }`}
                   >
@@ -209,7 +209,7 @@ const DetailPage = () => {
             </div>
             <button
               onClick={openModal}
-              className="bg-violet-600 text-white px-4 py-2 text-sm rounded-lg shadow-sm hover:bg-blue-700 font-bold"
+              className="bg-violet-600 text-white px-4 py-2 text-sm rounded-lg shadow-sm hover:bg-purple-700 font-bold"
             >
               투자하기
             </button>

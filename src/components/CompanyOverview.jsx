@@ -66,7 +66,7 @@ const CompanyOverview = ({
         <div className="bg-gray-50 p-4 rounded-lg hover:bg-gray-100 transition-colors">
           <div className="flex items-center gap-4">
             <div className="bg-white p-3 rounded-full shadow-sm">
-              <User className="w-6 h-6 text-blue-600" />
+              <User className="w-6 h-6 text-purple-600" />
             </div>
             <div>
               <p className="text-sm font-medium text-gray-500">대표이사</p>
@@ -81,7 +81,7 @@ const CompanyOverview = ({
         <div className="bg-gray-50 p-4 rounded-lg hover:bg-gray-100 transition-colors">
           <div className="flex items-center gap-4">
             <div className="bg-white p-3 rounded-full shadow-sm">
-              <Globe className="w-6 h-6 text-blue-600" />
+              <Globe className="w-6 h-6 text-purple-600" />
             </div>
             <div>
               <p className="text-sm font-medium text-gray-500">홈페이지</p>
@@ -89,7 +89,7 @@ const CompanyOverview = ({
                 href={page}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-lg font-bold text-blue-600 hover:text-blue-800"
+                className="text-lg font-bold text-gray-900 hover:text-purple-800"
               >
                 {page}
               </a>
@@ -101,7 +101,7 @@ const CompanyOverview = ({
         <div className="bg-gray-50 p-4 rounded-lg hover:bg-gray-100 transition-colors">
           <div className="flex items-center gap-4">
             <div className="bg-white p-3 rounded-full shadow-sm">
-              <MapPin className="w-6 h-6 text-blue-600" />
+              <MapPin className="w-6 h-6 text-purple-600" />
             </div>
             <div>
               <p className="text-sm font-medium text-gray-500">주소</p>
@@ -114,7 +114,7 @@ const CompanyOverview = ({
         <div className="bg-gray-50 p-4 rounded-lg hover:bg-gray-100 transition-colors">
           <div className="flex items-center gap-4">
             <div className="bg-white p-3 rounded-full shadow-sm">
-              <Calendar className="w-6 h-6 text-blue-600" />
+              <Calendar className="w-6 h-6 text-purple-600" />
             </div>
             <div>
               <p className="text-sm font-medium text-gray-500">설립일</p>
@@ -127,7 +127,7 @@ const CompanyOverview = ({
         <div className="bg-gray-50 p-4 rounded-lg hover:bg-gray-100 transition-colors">
           <div className="flex items-center gap-4">
             <div className="bg-white p-3 rounded-full shadow-sm">
-              <TrendingUp className="w-6 h-6 text-blue-600" />
+              <TrendingUp className="w-6 h-6 text-purple-600" />
             </div>
             <div>
               <p className="text-sm font-medium text-gray-500">투자 상태</p>
@@ -155,7 +155,7 @@ const CompanyOverview = ({
         <div className="bg-gray-50 p-4 rounded-lg hover:bg-gray-100 transition-colors">
           <div className="flex items-center gap-4">
             <div className="bg-white p-3 rounded-full shadow-sm">
-              <DollarSign className="w-6 h-6 text-blue-600" />
+              <DollarSign className="w-6 h-6 text-purple-600" />
             </div>
             <div>
               <p className="text-sm font-medium text-gray-500">매출액 (최근 연도)</p>
