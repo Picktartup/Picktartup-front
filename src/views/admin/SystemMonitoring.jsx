@@ -207,7 +207,7 @@ const useServiceHealth = (service, timeRange) => {
     };
 
     fetchHealth();
-    const interval = setInterval(fetchHealth, 5000);
+    const interval = setInterval(fetchHealth, 30000);
     return () => clearInterval(interval);
   }, [service.namespace, timeRange]);
 
@@ -268,7 +268,7 @@ const ServiceCard = ({ service, timeRange }) => {
 
   const getServiceDashboardUrl = () => {
     const { from, to } = calculateTimeRange(timeRange);
-    return `http://192.168.0.142:32647/d-solo/85a562078cdf77779eaa1add43ccec1e/kubernetes-compute-resources-namespace-pods?orgId=1&from=${from}&to=${to}&timezone=utc&var-datasource=default&var-cluster=&var-namespace=${service.namespace}&refresh=10s&panelId=7&__feature.dashboardSceneSolo`;
+    return `http://192.168.0.142:32647/d-solo/85a562078cdf77779eaa1add43ccec1e/kubernetes-compute-resources-namespace-pods?orgId=1&from=${from}&to=${to}&timezone=utc&var-datasource=default&var-cluster=&var-namespace=${service.namespace}&refresh=30s&panelId=7&__feature.dashboardSceneSolo`;
   };
 
   return (
@@ -395,14 +395,14 @@ const SystemMonitoring = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setLastUpdated(new Date());
-    }, 5000);
+    }, 30000);
     return () => clearInterval(interval);
   }, []);
 
   const getMainDashboardUrl = () => {
     const { from, to } = calculateTimeRange(timeRange);
     
-    return `http://192.168.0.142:32647/d/3138fa155d5915769fbded898ac09fd9/kubernetes-kubelet?orgId=1&from=${from}&to=${to}&timezone=utc&var-datasource=default&var-cluster=&var-instance=$__all&refresh=60s`;
+    return `http://192.168.0.142:32647/d/3138fa155d5915769fbded898ac09fd9/kubernetes-kubelet?orgId=1&from=${from}&to=${to}&timezone=utc&var-datasource=default&var-cluster=&var-instance=$__all&refresh=30s`; 
   };
 
   const renderContent = () => {
