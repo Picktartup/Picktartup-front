@@ -22,19 +22,19 @@ const Menubar = ({ onSelectMenu }) => {
         </button>
         <button
           className={`text-[18px] flex-grow font-bold text-center ${
-            selectedMenu === "history" ? "text-navy-700" : "text-gray-700"
-          } hover:text-navy-700`}
-          onClick={() => handleMenuClick("history")}
-        >
-          거래 내역
-        </button>
-        <button
-          className={`text-[18px] flex-grow font-bold text-center ${
             selectedMenu === "exchange" ? "text-navy-700" : "text-gray-700"
           } hover:text-navy-700`}
           onClick={() => handleMenuClick("exchange")}
         >
           현금화 신청
+        </button>
+        <button
+          className={`text-[18px] flex-grow font-bold text-center ${
+            selectedMenu === "history" ? "text-navy-700" : "text-gray-700"
+          } hover:text-navy-700`}
+          onClick={() => handleMenuClick("history")}
+        >
+          결제 내역
         </button>
       </div>
     </Card>

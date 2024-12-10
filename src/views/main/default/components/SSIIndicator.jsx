@@ -1,6 +1,8 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
 import { Users, Box, Lightbulb, TrendingUp, AlertTriangle, ChevronDown, ChevronUp, Info, Book, HelpCircle } from 'lucide-react';
 import { RadarChart, Radar, PolarGrid, PolarAngleAxis, ResponsiveContainer, Tooltip } from 'recharts';
+import { isTokenExpired } from "utils/jwtUtils";
 
 const ssiFramework = {
   overview: {
@@ -179,6 +181,19 @@ const ssiFramework = {
 const SSIIndicator = ({ ssiData = {} }) => {
   const [showContent, setShowContent] = useState(false);
   const [currentStage, setCurrentStage] = useState('seed');
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+    if (token && !isTokenExpired(token)) {
+      setShowContent(true);
+    }
+  }, []);
+
+  const handleLogin = () => {
+    navigate("/auth/sign-in");
+  };
 
   const getGradeColor = (grade) => {
     const colors = {
@@ -510,8 +525,8 @@ const SSIIndicator = ({ ssiData = {} }) => {
             기업 분석자료를 확인하기 위해서는 로그인이 필요합니다.
           </p>
           <button
-            onClick={() => setShowContent(true)}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold"
+            onClick={handleLogin}
+            className="bg-violet-600 hover:bg-violet-700 text-white px-6 py-2 rounded-lg font-semibold"
           >
             로그인하기
           </button>

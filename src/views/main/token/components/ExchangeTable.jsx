@@ -76,7 +76,7 @@ const ExchangeTable = ({ balance }) => {
   };
 
   return (
-    <div className="pt-2 px-6 bg-white rounded-lg mx-2 md:mx-10vw">
+    <div className="pt-2 px-6 bg-white rounded-lg mx-2 md:mx-15vw">
       <h2 className="text-xl font-semibold mb-4">보유 토큰 현금화</h2>
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700">

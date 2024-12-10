@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { UserCircle, Wallet, Shield, CheckCircle, CreditCard, Coins, LineChart, FileCheck, Lock, History, Timer, Repeat, Search, Key, FileText } from 'lucide-react';
 
 const Card = ({ title, icon, description }) => (
-    <div className="flex flex-col items-center p-3 bg-white rounded-lg shadow-sm">
+    <div className="flex flex-col items-center p-3 bg-white rounded-lg">
         <div className="text-purple-500 mb-2">
-            {React.cloneElement(icon, { className: "w-8 h-8" })}
+            {React.cloneElement(icon, { className: "w-10 h-10" })}
         </div>
         <h3 className="font-bold text-center text-base mb-2">{title}</h3>
         <p className="text-sm text-gray-600 text-center">{description}</p>
@@ -24,8 +24,7 @@ const InvestmentProcess = () => {
             subtitle: '회원가입과 함께 자동으로 블록체인 지갑이 생성됩니다!',
             cards: [
                 { title: '간편 회원가입', icon: <UserCircle />, description: '3분만에 빠른 회원가입' },
-                { title: '자동 지갑생성', icon: <Wallet />, description: '블록체인 지갑 자동생성' },
-                { title: '투자 준비', icon: <CheckCircle />, description: '즉시 투자 가능' }
+                { title: '자동 지갑생성', icon: <Wallet />, description: '블록체인 지갑 자동 생성' },
             ]
         },
         {
@@ -33,9 +32,8 @@ const InvestmentProcess = () => {
             title: '토큰 구매',
             subtitle: '투자를 위한 토큰을 구매하세요',
             cards: [
-                { title: '토큰 구매', icon: <CreditCard />, description: '원하는 만큼 구매가능' },
+                { title: '토큰 구매', icon: <CreditCard />, description: '원하는 만큼 구매 가능' },
                 { title: '즉시 지급', icon: <Coins />, description: '구매 즉시 지갑으로 지급' },
-                { title: '구매 완료', icon: <CheckCircle />, description: '투자 준비 완료' }
             ]
         },
         {
@@ -45,7 +43,6 @@ const InvestmentProcess = () => {
             cards: [
                 { title: '투자처 검색', icon: <Search />, description: '원하는 스타트업 검색' },
                 { title: '계약서 확인', icon: <FileText />, description: '투자 계약서 검토' },
-                { title: '투자 진행', icon: <CheckCircle />, description: '투자 실행' }
             ]
         },
         {
@@ -53,9 +50,8 @@ const InvestmentProcess = () => {
             title: '계약 체결',
             subtitle: '목표 달성 시 자동 계약 체결',
             cards: [
-                { title: '자동 계약', icon: <FileCheck />, description: '목표액 달성시 자동체결' },
-                { title: '안전한 기록', icon: <Lock />, description: '블록체인 영구보관' },
-                { title: '이력 관리', icon: <History />, description: '투자내역 실시간확인' }
+                { title: '자동 계약', icon: <FileCheck />, description: '목표액 달성 시 자동 체결' },
+                { title: '안전한 이력 관리', icon: <History />, description: '투자 내역 실시간 확인' },
             ]
         },
         {
@@ -63,15 +59,14 @@ const InvestmentProcess = () => {
             title: '투자금 회수',
             subtitle: '계약 기간 종료 후 자동으로 투자금이 회수됩니다',
             cards: [
-                { title: '계약 만료', icon: <Timer />, description: '계약기간 종료확인' },
-                { title: '수익금 입금', icon: <Wallet />, description: '투자금 자동입금' },
-                { title: '자유로운 활용', icon: <Repeat />, description: '재투자/출금 선택' }
+                { title: '수익금 입금', icon: <Wallet />, description: '투자금 자동 입금' },
+                { title: '자유로운 활용', icon: <Repeat />, description: '재투자/출금 선택' },
             ]
         }
     ];
 
     return (
-        <div className="max-w-5xl mx-auto p-6 bg-gray-50">
+        <div className="max-w-5xl mx-auto p-6 bg-white-50">
             <div className="mb-6">
                 <h1 className="text-2xl font-bold mb-2">투자 프로세스 A to Z</h1>
                 <p className="text-gray-600">투자의 모든 과정을 5단계로 쉽게 알아보세요!</p>
@@ -103,12 +98,12 @@ const InvestmentProcess = () => {
                 </div>
 
                 <div className="w-2/3">
-                    <div className="bg-white rounded-lg p-6 shadow-sm">
+                    <div className="bg-white rounded-lg p-6">
                         <div className="inline-block px-3 py-1 bg-purple-50 text-purple-500 rounded mb-4">
                             {activeStep}. {steps[activeStep - 1].title}
                         </div>
                         <h3 className="text-lg font-bold mb-6">{steps[activeStep - 1].subtitle}</h3>
-                        <div className="grid grid-cols-3 gap-4">
+                        <div className="grid grid-cols-2 gap-2 p-6">
                             {steps[activeStep - 1].cards.map((card, index) => (
                                 <Card key={index} {...card} />
                             ))}
