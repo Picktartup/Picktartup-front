@@ -16,7 +16,7 @@ const StartupProfile = ({ investmentData }) => {
         <div className="flex-shrink-0 flex flex-col items-center space-y-4 w-full md:w-64">
           <div className="w-16 h-16 rounded-full overflow-hidden">
             <img 
-              src={investmentData.logoUrl} 
+              src={investmentData.startupLogo} 
               alt={investmentData.startupName} 
               className="w-full h-full object-cover"
             />
