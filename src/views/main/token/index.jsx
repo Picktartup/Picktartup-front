@@ -105,8 +105,8 @@ const Tables = () => {
 
   return (
     <div>
-      <h1 className="p-8 text-2xl font-bold text-gray-800 mt-1 mb-2">보유 토큰</h1>
-      <div className="flex items-center space-x-4 px-4 pb-4">
+      <h1 className="p-8 text-2xl font-bold text-gray-800 mt-1 mb-1">보유 토큰</h1>
+      <div className="flex justify-center items-center space-x-4 px-4 pb-6">
         <VideoWithTransparency className="w-1/3 md:w-1/4 hidden md:inline" />
         <div className="text-center border-r border-gray-300 pr-8">
           <h2 className="text-md font-medium text-gray-600 mb-2">총 보유 토큰</h2>

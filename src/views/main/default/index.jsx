@@ -107,7 +107,7 @@ const MarketplaceContent = () => {
        <div className="text-center mt-12">
          <button
            onClick={() => navigate("/main/investment")}
-           className="group inline-flex items-center gap-2 px-6 py-3 bg-white rounded-xl border border-gray-200 hover:border-blue-500 transition-all text-gray-600 hover:text-blue-600"
+           className="group inline-flex items-center gap-2 px-6 py-3 bg-white rounded-xl border border-gray-200 hover:border-violet-500 transition-all text-gray-600 hover:text-violet-600"
          >
            더 많은 스타트업 보기
            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />

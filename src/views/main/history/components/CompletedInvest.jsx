@@ -91,7 +91,7 @@ function CompletedInvest({ tableData }) {
       cell: (info) => (
         <p className="text-sm font-bold text-center text-navy-700 dark:text-white">
           {info.getValue() !== null
-           ? `${info.getValue()}%`
+           ? `${info.getValue()}% PCK` 
            : `미정`}
         </p>
       ),

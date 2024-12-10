@@ -17,11 +17,13 @@ const InvestmentModal = ({ isOpen, onClose, startupId }) => {
   const [step, setStep] = useState(1);
   const [tokenAmount, setTokenAmount] = useState("");
   const [pdfUrl, setPdfUrl] = useState("");
+  const [numPages, setNumPages] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
   const [isAgreed, setIsAgreed] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [signatureUrl, setSignatureUrl] = useState("");
   const [walletPassword, setWalletPassword] = useState("");
-  const [authToken, setAuthToken] = useState(null); // 새 상태 추가
+  const [authToken, setAuthToken] = useState(null);
 
   const navigate = useNavigate();
   const signatureRef = useRef(null);
@@ -210,6 +212,19 @@ const InvestmentModal = ({ isOpen, onClose, startupId }) => {
     }
   };
 
+  const onDocumentLoadSuccess = ({ numPages }) => {
+    setNumPages(numPages);
+    setCurrentPage(1);
+  };
+
+  const goToPrevPage = () => {
+    setCurrentPage((prev) => Math.max(prev - 1, 1));
+  };
+
+  const goToNextPage = () => {
+    setCurrentPage((prev) => Math.min(prev + 1, numPages));
+  };
+
   return (
     <Modal isOpen={isOpen} onClose={onClose} size={step === 3 ? "lg" : "md"}>
       {step === 1 && (
@@ -225,7 +240,7 @@ const InvestmentModal = ({ isOpen, onClose, startupId }) => {
             </button>
             <button
               onClick={goToNextStep}
-              className="w-full py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all"
+              className="w-full py-2 px-4 bg-violet-600 text-white rounded-lg hover:bg-violet-700 transition-all"
             >
               확인
             </button>
@@ -245,13 +260,13 @@ const InvestmentModal = ({ isOpen, onClose, startupId }) => {
               id="tokenAmount"
               value={tokenAmount}
               onChange={(e) => setTokenAmount(e.target.value)}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-violet-500 focus:ring-violet-500 sm:text-sm"
               placeholder="토큰 수량 입력"
             />
           </div>
           <button
             onClick={handleInvestmentSubmit}
-            className="w-full py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+            className="w-full py-2 px-4 bg-violet-600 text-white rounded-lg hover:bg-violet-700 transition"
             disabled={isLoading}
           >
             {isLoading ? "로딩 중..." : "다음"}
@@ -264,14 +279,26 @@ const InvestmentModal = ({ isOpen, onClose, startupId }) => {
           <h2 className="text-lg font-bold text-gray-900 mb-4">계약서 확인</h2>
           {pdfUrl ? (
             <div className="h-96 overflow-auto border border-gray-200 rounded-lg mb-4">
-              <Document file={pdfUrl}>
-                <Page pageNumber={1} renderTextLayer={false} renderAnnotationLayer={false} />
+              <Document
+                file={pdfUrl}
+                onLoadSuccess={onDocumentLoadSuccess}
+                className="flex flex-col items-center"
+              >
+                {Array.from(new Array(numPages), (_, index) => (
+                  <Page
+                    key={`page_${index + 1}`}
+                    pageNumber={index + 1}
+                    renderTextLayer={false}
+                    renderAnnotationLayer={false}
+                    className="mb-4 shadow-md"
+                  />
+                ))}
               </Document>
             </div>
           ) : (
             <p>계약서를 불러오는 중입니다...</p>
           )}
-          
+
           <div className="flex items-center mb-4">
             <input
               type="checkbox"
@@ -284,10 +311,9 @@ const InvestmentModal = ({ isOpen, onClose, startupId }) => {
               약관에 동의합니다.
             </label>
           </div>
-          
           <button
             onClick={handleAgreementSubmit}
-            className="w-full py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+            className="w-full py-2 px-4 bg-violet-600 text-white rounded-lg hover:bg-violet-700 transition"
             disabled={isLoading}
           >
             다음
@@ -319,7 +345,7 @@ const InvestmentModal = ({ isOpen, onClose, startupId }) => {
             </button>
             <button
               onClick={handleSignatureSubmit}
-              className="py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+              className="py-2 px-4 bg-violet-600 text-white rounded-lg hover:bg-violet-700 transition"
               disabled={isLoading}
             >
               {isLoading ? "로딩 중..." : "다음"}
@@ -340,13 +366,13 @@ const InvestmentModal = ({ isOpen, onClose, startupId }) => {
               id="walletPassword"
               value={walletPassword}
               onChange={(e) => setWalletPassword(e.target.value)}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-violet-500 focus:ring-violet-500 sm:text-sm"
               placeholder="비밀번호 입력"
             />
           </div>
           <button
             onClick={handleFinalSubmit}
-            className="w-full py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+            className="w-full py-2 px-4 bg-violet-600 text-white rounded-lg hover:bg-violet-700 transition"
             disabled={isLoading}
           >
             {isLoading ? "로딩 중..." : "투자하기"}

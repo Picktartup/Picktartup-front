@@ -90,7 +90,7 @@ function ActiveInvest({ tableData }) {
       ),
       cell: (info) => (
         <p className="text-sm font-bold text-center text-navy-700 dark:text-white">
-          {info.getValue()}
+          {info.getValue()} PCK
         </p>
       ),
     }),
