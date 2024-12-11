@@ -56,7 +56,7 @@
 // export default Main;''
 
 
-import video from "../assets/img/main/main.mp4";
+import video from "../assets/img/main/main_vid.mp4";
 import React, { useState, useEffect } from "react";
 import Navbar from "components/navbar";
 
