@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import defaultImage from "assets/img/nfts/default.png";
 import Navbar from "components/navbar";
-import SSIIndicator from "./components/SSIIndicator";
+import SSIIndicator from "./components/SSI";
 import CompanyOverview from "components/CompanyOverview";
 import AnnualFinancialMetrics from "./components/AnnualMetrics";
 import MonthlyMetrics from "./components/MonthlyMetrics";
@@ -247,7 +247,7 @@ const DetailPage = () => {
 
         <section id="ssi" className="bg-white p-6 rounded-lg shadow-md">
           <h2 className="text-xl font-bold text-gray-900 mb-6">SSI 분석</h2>
-          {ssiData && <SSIIndicator ssiData={ssiData} />}
+          {ssiData && < SSIIndicator ssiData={ssiData} />}
         </section>
 
         <section id="articles" className="bg-white p-6 rounded-lg shadow-md">

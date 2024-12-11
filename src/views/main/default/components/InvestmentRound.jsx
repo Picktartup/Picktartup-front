@@ -21,7 +21,7 @@ const CustomTooltip = ({ content, children }) => {
   );
 };
 
-const InvestmentRoundTimeline = ({ startupId }) => {
+const InvestmentRoundTimeline = ({ startupId, onRoundChange }) => {
   const [investmentData, setInvestmentData] = useState([]);
   const [currentRound, setCurrentRound] = useState('');
 
@@ -70,7 +70,13 @@ const InvestmentRoundTimeline = ({ startupId }) => {
         setInvestmentData(sortedData);
 
         const startupData = startupResponse.data.data;
-        setCurrentRound(startupData?.current_round || '정보 없음');
+        const round = startupData?.current_round || '정보 없음'; // 올바르게 정의된 round
+        setCurrentRound(round);
+
+        // 부모 컴포넌트로 라운드 알림
+        if (typeof onRoundChange === 'function') {
+          onRoundChange(round); // 여기서 호출
+        }
       } catch (error) {
         console.error('Error fetching data:', error);
         setCurrentRound('정보 없음');
@@ -78,7 +84,7 @@ const InvestmentRoundTimeline = ({ startupId }) => {
     };
 
     fetchData();
-  }, [startupId]);
+  }, [startupId, onRoundChange]);
 
   const generalRoundDescription = `투자 라운드는 스타트업의 성장 단계를 나타내며, 
     Seed부터 Series C까지 단계별로 투자 규모와 기업 가치가 
@@ -91,7 +97,7 @@ const InvestmentRoundTimeline = ({ startupId }) => {
       <div className="mb-8">
         <div className="flex items-center gap-2 mb-2">
           <TrendingUp className="w-5 h-5 text-purple-600" />
-          <h2 className="text-lg font-bold text-gray-900">현재 투자 라운드</h2>
+          <h2 className="text-lg font-bold text-gray-900">현재 투자 라운드 : {currentRound}</h2>
           <CustomTooltip
             content={
               <div>

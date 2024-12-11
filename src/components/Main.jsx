@@ -11,7 +11,7 @@
 //     const handleScroll = () => {
 //       const videoHeight = window.innerHeight;
 //       const scrollPosition = window.scrollY;
-      
+
 //       // navbar 표시/숨김 처리
 //       if (scrollPosition > videoHeight * 0.1) {
 //         setShowNav(true);
@@ -56,7 +56,7 @@
 // export default Main;''
 
 
-import video from "../assets/img/main/메인.mp4";
+import video from "../assets/img/main/메인 영상1.mp4";
 import React, { useState, useEffect } from "react";
 import Navbar from "components/navbar";
 
@@ -85,24 +85,24 @@ const Main = () => {
     <>
       {/* Navbar 컨테이너 */}
       <div
-        className={`fixed top-0 left-0 right-0 w-full z-50 transition-all duration-300 ease-in-out ${
-          showNav ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0"
-        }`}
+        className={`fixed top-0 left-0 right-0 w-full z-50 transition-all duration-300 ease-in-out ${showNav ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0"
+          }`}
       >
         <Navbar brandText="홈" />
       </div>
 
       {/* 메인 비디오 */}
-      <div
-        className="relative w-screen overflow-hidden"
+      {/* <div
+        className="relative overflow-hidden mx-auto"
         style={{
-          height: "100vh",
-          marginLeft: "calc(-50vw + 50%)",
-          marginRight: "calc(-50vw + 50%)",
-          width: "100vw",
+          width: "80vw", // 너비를 80%로 줄임
+          height: "40vh", // 높이를 40%로 줄임
+          margin: "0 auto", // 가운데 정렬
         }}
-      >
+      > */}
+      <div className="relative w-full max-w-7xl mx-auto overflow-hidden" style={{ height: '600px' }}>
         <video
+
           src={video}
           autoPlay
           loop
